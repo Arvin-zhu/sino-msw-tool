@@ -1,0 +1,53 @@
+@import "../var.less";
+
+.msw_confirm {
+  display: inline-block;
+  position: relative;
+  z-index: 5;
+}
+.msw_confirm_panel {
+  position: absolute;
+  padding: 10px;
+  bottom: 100%;
+  right: 0;
+  margin-bottom: 15px;
+  box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014,
+    0 9px 28px 8px #0000000d;
+  min-width: 200px;
+  background-color: white;
+  border-radius: 4px;
+  z-index: 5px;
+  display: none;
+  &.show {
+    display: block;
+  }
+  button {
+    min-width: 50px !important;
+    height: 24px !important;
+    padding: 0 7px !important;
+    font-size: 14px !important;
+    border-radius: 2px !important;
+  }
+  button.msw_confirm_ok_btn {
+    background-color: @primary !important;
+    border-color: @primary !important;
+    color: white !important;
+    &:hover {
+      background-color: @primary-dark !important;
+    }
+  }
+  .msw_confirm_btn_group {
+    margin-top: 8px;
+    text-align: right;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    border: 5px solid white;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    top: 100%;
+    right: 10px;
+  }
+}

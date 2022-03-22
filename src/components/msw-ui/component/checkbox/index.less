@@ -1,0 +1,30 @@
+@import "../var.less";
+
+.msw_checkbox {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  border: 1px solid @border;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover {
+    border-color: @primary;
+  }
+  &.checked {
+    border-color: @primary;
+  }
+}
+.msw_checkbox_checked_wrap {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+.msw_checkbox_checked_wrap.checked {
+  background-color: @primary;
+}
+.msw_checkbox_checked {
+  width: 16px;
+}

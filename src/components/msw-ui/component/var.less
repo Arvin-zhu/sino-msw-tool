@@ -1,0 +1,117 @@
+.inputAntd {
+  box-sizing: border-box;
+  margin: 0;
+  font-variant: tabular-nums;
+  list-style: none;
+  font-feature-settings: "tnum";
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  min-width: 0;
+  padding: 4px 11px;
+  color: #000000d9;
+  font-size: 14px;
+  line-height: 1.5715;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+  transition: all 0.3s;
+  &::placeholder {
+    color: @placeholder;
+  }
+  &:active,
+  &:focus {
+    border-color: @primary;
+  }
+  &:hover {
+    border-color: @primary;
+    color: @primary;
+  }
+  &:disabled {
+    color: #00000040;
+    background-color: #f5f5f5;
+    border-color: #d9d9d9;
+    box-shadow: none;
+    cursor: not-allowed;
+    opacity: 1;
+  }
+}
+.btnAntd {
+  position: relative;
+  line-height: 1.2;
+  display: inline-block;
+  font-weight: 400;
+  white-space: nowrap;
+  text-align: center;
+  background-image: none;
+  border: 1px solid transparent;
+  box-shadow: 0 2px #00000004;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+  height: 28px;
+  padding: 4px 15px;
+  font-size: 14px;
+  border-radius: 2px;
+  color: #000000d9;
+  border-color: #d9d9d9;
+  background: #fff;
+  &.small {
+    height: 24px;
+    padding: 0 7px;
+    font-size: 14px;
+    border-radius: 2px;
+  }
+  &:disabled {
+    color: #00000040;
+    border-color: #d9d9d9;
+    background: #f5f5f5;
+    text-shadow: none;
+    box-shadow: none;
+    cursor: not-allowed;
+    &:hover {
+      color: #00000040;
+      border-color: #d9d9d9;
+    }
+  }
+}
+.resetUi {
+  button,
+  input,
+  optgroup,
+  select,
+  textarea,
+  html input[type="button"],
+  input[type="reset"],
+  input[type="submit"],
+  button[disabled],
+  html input[disabled],
+  button::-moz-focus-inner,
+  input::-moz-focus-inner,
+  input[type="checkbox"],
+  input[type="radio"],
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="search"],
+  input[type="search"]::-webkit-search-cancel-button,
+  input[type="search"]::-webkit-search-decoration {
+    border: none;
+    background-image: none;
+    background-color: transparent;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+  }
+}
+
+@primary: #247ae6;
+@primary-dark: #0c58c3;
+@placeholder: rgba(0, 0, 0, 0.25);
+@border: rgb(217, 217, 217);
+@error: #ff4d4f;
+@error-dark: #f04042;
