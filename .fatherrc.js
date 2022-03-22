@@ -24,14 +24,14 @@ export default {
                 corejs: 3,
             },
         ],
-        // [
-        //     'babel-plugin-file-loader',
-        //     {
-        //         name: '[hash].[ext]',
-        //         extensions: ['png', 'jpg', 'jpeg', 'gif', 'svg'],
-        //         context: '',
-        //         limit: 30 * 1024,
-        //     },
-        // ],
+        [
+            'babel-plugin-file-loader',
+            {
+                name: '[hash].[ext]',
+                extensions: ['png', 'jpg', 'jpeg', 'gif', 'svg'],
+                context: '',
+                limit: 30 * 1024,
+            },
+        ],
     ]
 };

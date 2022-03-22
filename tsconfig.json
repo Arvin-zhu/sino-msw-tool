@@ -1,31 +1,20 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "esnext",
     "module": "esnext",
-    "lib": ["es2018", "dom"],
-    "declaration": true,
-    "outDir": "./esm",
-    "rootDir": "./src",
-    "importHelpers": true,
-    "downlevelIteration": true,
-    "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "resolveJsonModule": true,
-    "strictFunctionTypes": true,
-    "strictPropertyInitialization": true,
-    "noImplicitThis": true,
-    "alwaysStrict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": false,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
-    "typeRoots": ["typings", "node_modules/@types"],
-    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "importHelpers": true,
+    "jsx": "react",
     "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "jsx": "react"
+    "sourceMap": true,
+    "baseUrl": "./",
+    "strict": true,
+    "paths": {
+      "@/*": ["src/*"],
+      "@@/*": ["src/.umi/*"]
+    },
+    "allowSyntheticDefaultImports": true
   },
   "exclude": [
     "node_modules",

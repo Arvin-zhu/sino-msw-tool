@@ -6,7 +6,8 @@ import { AddMockTextArea } from "./addMockTextArea";
 import { CheckboxMsw } from './checkbox/checkbox';
 import { Confirm } from './confirm/confirm';
 import { SelectData } from './select/select';
-// const EmptyIcon = require('../images/empty.svg');
+// import EmptyIcon from '../images/empty.svg';
+const EmptyIcon  = require('../images/empty.svg');
 import {exportGroupRequestData, judgeHavaGroupHandlers} from "../handlesFnc";
 import {Upload} from "./upload/upload";
 
@@ -23,7 +24,7 @@ export const GroupMockPanel = observer(() => {
     {
       !judgeHavaGroupHandlers(groupData) ? (
         <div className={'msw_table_empty'} style={{borderTop: '1px solid #d9d9d9', marginTop: 10}}>
-          <img src={'../images/empty.svg'} alt={'empty'} />
+          <img src={EmptyIcon} alt={'empty'} />
           <div>暂无拦截的请求</div>
         </div>
       ) : (<>

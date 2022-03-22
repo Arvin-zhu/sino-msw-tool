@@ -1,7 +1,8 @@
 import {observer} from 'mobx-react';
 import React, {ChangeEvent, useCallback, useState} from 'react';
 import {useStores} from '../handles';
-// const EmptyIcon = require('../images/empty.svg')
+// import EmptyIcon from '../images/empty.svg';
+const EmptyIcon  = require('../images/empty.svg');
 import {AddMockTextArea} from './addMockTextArea';
 
 export const AddMockPanel = observer(() => {
@@ -44,7 +45,7 @@ export const AddMockPanel = observer(() => {
       </table>
       {
         !store.unHandleAllRequest?.length &&  <div className={'msw_table_empty'}>
-              <img src={'../images/empty.svg'} alt={'empty'} />
+              <img src={EmptyIcon} alt={'empty'} />
               <div>暂无拦截的请求</div>
           </div>
       }
