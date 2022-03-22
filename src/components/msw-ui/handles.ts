@@ -19,7 +19,6 @@ class HandlerMock {
 		makeAutoObservable(this);
 	}
 	filterKeywords = '';
-	rxDb = null;
 	handleAllRequest: mswReqType[] = [];
 	currentEditGroupRequest: Partial<IGroupDataItem> | undefined;
 	groupRequest: Record<string, {data: IGroupDataItem[], isEnable: boolean}> = {};
