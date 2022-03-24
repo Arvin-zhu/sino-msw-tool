@@ -12,7 +12,8 @@ import {
 	importStorageGroupData,
 	resetHandlers
 } from "./handlesFnc";
-import {IGroupDataItem, mswReqType} from "./handlesType";
+import {groupsRequestType, IGroupDataItem, mswReqType} from "./handlesType";
+
 
 class HandlerMock {
 	constructor() {
@@ -21,7 +22,7 @@ class HandlerMock {
 	filterKeywords = '';
 	handleAllRequest: mswReqType[] = [];
 	currentEditGroupRequest: Partial<IGroupDataItem> | undefined;
-	groupRequest: Record<string, {data: IGroupDataItem[], isEnable: boolean}> = {};
+	groupRequest: groupsRequestType = {};
 	//获取未mock的接口
 	get unHandleAllRequest() {
 		const handledMap: Record<string, boolean> = {};

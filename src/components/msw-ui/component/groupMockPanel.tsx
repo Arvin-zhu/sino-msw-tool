@@ -1,15 +1,14 @@
-import { observer } from 'mobx-react';
-import React, { useCallback, useState } from 'react';
-import { useStores } from '../handles';
-import { IGroupDataItem } from '../handlesType';
-import { AddMockTextArea } from "./addMockTextArea";
-import { CheckboxMsw } from './checkbox/checkbox';
-import { Confirm } from './confirm/confirm';
-import { SelectData } from './select/select';
-// import EmptyIcon from '../images/empty.svg';
-const EmptyIcon  = require('../images/empty.svg');
+import {observer} from 'mobx-react';
+import React, {useCallback, useState} from 'react';
+import {useStores} from '../handles';
+import {IGroupDataItem} from '../handlesType';
+import {AddMockTextArea} from "./addMockTextArea";
+import {CheckboxMsw} from './checkbox/checkbox';
+import {Confirm} from './confirm/confirm';
+const EmptyIcon = require('../images/empty.svg');
 import {exportGroupRequestData, judgeHavaGroupHandlers} from "../handlesFnc";
 import {Upload} from "./upload/upload";
+import {ListData} from "./list/List";
 
 export const GroupMockPanel = observer(() => {
   const {store} = useStores();
@@ -19,7 +18,7 @@ export const GroupMockPanel = observer(() => {
     <div className='msw_group_top'>
       <button disabled={!judgeHavaGroupHandlers(groupData)} onClick={() => !judgeHavaGroupHandlers(groupData) && exportGroupRequestData(store.groupRequest)}>导出配置</button>
       <Upload callBack={(data) => store.importGroupData(data) } btnText={'导入配置'} btnStyle={{marginLeft: 10}} />
-      <button disabled={!judgeHavaGroupHandlers(groupData)} style={{marginLeft: 10}} onClick={() => !judgeHavaGroupHandlers(groupData) && store.saveRequestGroup()}>保存到本地</button>
+      <button disabled={!judgeHavaGroupHandlers(groupData)} style={{marginLeft: 10}} onClick={() => judgeHavaGroupHandlers(groupData) && store.saveRequestGroup()}>保存到本地</button>
     </div>
     {
       !judgeHavaGroupHandlers(groupData) ? (
@@ -69,7 +68,7 @@ const GroupMockPanelItem = observer((props: {groupData: Record<string, {data: IG
     <span>{groupKey}:</span>
     <div className='msw_group_content_item_detail'>
       <div className='msw_group_content_item_input'>
-        <SelectData data={groupData[groupKey]?.data || []} operationClick={operationClick} />
+        <ListData data={groupData[groupKey]?.data || []} operationClick={operationClick} />
       </div>
       <CheckboxMsw checked={groupData[groupKey].isEnable} onChange={(status: boolean) => {
         store.activeGroup(groupKey, status);

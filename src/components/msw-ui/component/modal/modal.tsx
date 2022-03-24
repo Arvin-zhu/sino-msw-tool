@@ -1,6 +1,11 @@
 import React from 'react';
 import './index.less';
 
-export const Modal = () => {
+interface IModalProps {
+	visible: boolean;
+	onCancel?: () => void;
+	onOk?: () => void;
+}
+export const Modal = (props: IModalProps) => {
 	return <div>modal</div>
 }

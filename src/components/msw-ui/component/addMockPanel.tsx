@@ -1,9 +1,9 @@
 import {observer} from 'mobx-react';
-import React, {ChangeEvent, useCallback, useState} from 'react';
+import {ChangeEvent, useCallback, useState} from 'react';
 import {useStores} from '../handles';
-// import EmptyIcon from '../images/empty.svg';
-const EmptyIcon  = require('../images/empty.svg');
+const EmptyIcon = require('../images/empty.svg');
 import {AddMockTextArea} from './addMockTextArea';
+import React from 'react';
 
 export const AddMockPanel = observer(() => {
   const {store} = useStores();

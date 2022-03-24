@@ -92,3 +92,7 @@ export function importStorageGroupData(data: string | object) {
 		return ''
 	}
 }
+
+export function getGroupKeys(data:  Record<string, {data: IGroupDataItem[], isEnable: boolean}>) {
+	return Object.keys(data);
+}

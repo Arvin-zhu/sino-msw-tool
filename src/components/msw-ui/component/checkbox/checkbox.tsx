@@ -1,7 +1,6 @@
 import React from 'react';
-// import gouIcon from '../../images/gou.png';
-import './index.less';
 const gouIcon = require('../../images/gou.png');
+import './index.less';
 
 export const CheckboxMsw = (props: {checked: boolean, onChange: (checked: boolean) => void}) => {
 	const {checked, onChange} = props;
