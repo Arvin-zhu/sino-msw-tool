@@ -50,9 +50,8 @@ class HandlerMock {
     const worker = setupWorker();
     worker.events.on('request:unhandled', (req) => {
       if (filterRequest(req)) {
-        console.log(req, getRequestKey(req), '===req', filterRequest(req));
         if (!existRequest(req, this.handleAllRequest)) {
-          this.handleAllRequest.push(req);
+          this.handleAllRequest.unshift(req);
         } else {
           const findIndex = this.handleAllRequest.findIndex(
             (im) =>
