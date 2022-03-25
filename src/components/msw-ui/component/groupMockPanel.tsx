@@ -22,7 +22,7 @@ export const GroupMockPanel = observer(() => {
         <button
           disabled={!judgeHavaGroupHandlers(groupData)}
           onClick={() =>
-            !judgeHavaGroupHandlers(groupData) &&
+            judgeHavaGroupHandlers(groupData) &&
             exportGroupRequestData(store.groupRequest)
           }
         >
