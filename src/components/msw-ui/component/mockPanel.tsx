@@ -12,9 +12,9 @@ export const MockPanel = observer(() => {
 	useEffect(() => {
 		store.init();
 	}, [])
-	return <div className='container'>
+	return <div className='msw_container'>
 	{
-		!showDetail && <div className='container_circle' onClick={() => setShowDetail(true)}>MSW</div>
+		!showDetail && <div className='msw_container_circle' onClick={() => setShowDetail(true)}>MSW</div>
 	}
 	{
 		showDetail && <div className='msw_detail_panel'>

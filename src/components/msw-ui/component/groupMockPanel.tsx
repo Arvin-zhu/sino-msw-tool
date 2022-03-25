@@ -5,15 +5,14 @@ import {IGroupDataItem} from '../handlesType';
 import {AddMockTextArea} from "./addMockTextArea";
 import {CheckboxMsw} from './checkbox/checkbox';
 import {Confirm} from './confirm/confirm';
-const EmptyIcon = require('../images/empty.svg');
 import {exportGroupRequestData, judgeHavaGroupHandlers} from "../handlesFnc";
 import {Upload} from "./upload/upload";
 import {ListData} from "./list/List";
+const EmptyIcon = require('../images/empty.svg');
 
 export const GroupMockPanel = observer(() => {
   const {store} = useStores();
   const groupData = store.groupRequest || {};
-  console.log(store.groupRequest, '==groupRequest')
   return <div className={'msw_group_content'}>
     <div className='msw_group_top'>
       <button disabled={!judgeHavaGroupHandlers(groupData)} onClick={() => !judgeHavaGroupHandlers(groupData) && exportGroupRequestData(store.groupRequest)}>导出配置</button>

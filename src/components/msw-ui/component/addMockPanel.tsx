@@ -1,9 +1,9 @@
 import {observer} from 'mobx-react';
 import {ChangeEvent, useCallback, useState} from 'react';
 import {useStores} from '../handles';
-const EmptyIcon = require('../images/empty.svg');
 import {AddMockTextArea} from './addMockTextArea';
 import React from 'react';
+const EmptyIcon = require('../images/empty.svg');
 
 export const AddMockPanel = observer(() => {
   const {store} = useStores();
@@ -50,7 +50,7 @@ export const AddMockPanel = observer(() => {
           </div>
       }
       {
-        paginationMock.length > 1 && <div className='pagination_wrap'>
+        paginationMock.length > 1 && <div className='msw_pagination_wrap'>
               <button onClick={() => {
                 pageSize > 1 && setPageSize(page => page - 1)
               }} disabled={pageSize === 1} className='small'>上一页</button>

@@ -26,7 +26,7 @@ export const Upload = (props: {callBack: (data: string) => void; btnText?: strin
       uploadRef.current?.removeEventListener('change', handleUpload);
     }
   }, [])
-  return <button className={'upload_btn'} style={{...btnStyle}} onBlur={() => uploadRef.current && (uploadRef.current.value = '')}>
+  return <button className={'msw_upload_btn'} style={{...btnStyle}} onBlur={() => uploadRef.current && (uploadRef.current.value = '')}>
     {btnText || '上传json'}
     <input type='file' ref={uploadRef} />
   </button>
