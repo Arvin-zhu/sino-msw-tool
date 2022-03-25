@@ -70,7 +70,7 @@ export const AddMockPanel = observer(() => {
         </table>
         {!store.unHandleAllRequest?.length && (
           <div className={'msw_table_empty'}>
-            {/*<img src={EmptyIcon} alt={'empty'} />*/}
+            <img src={EmptyIcon} alt={'empty'} />
             <div>暂无拦截的请求</div>
           </div>
         )}

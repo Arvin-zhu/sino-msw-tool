@@ -47,7 +47,7 @@ class HandlerMock {
       throw new Error('请在测试环境下使用msw mock 工具');
     }
     const worker = setupWorker();
-    worker.on('request:unhandled', (req) => {
+    worker.events.on('request:unhandled', (req) => {
       if (filterRequest(req)) {
         console.log(req, getRequestKey(req), '===req', filterRequest(req));
         if (!existRequest(req, this.handleAllRequest)) {
@@ -64,7 +64,7 @@ class HandlerMock {
         }
       }
     });
-    worker.on('response:bypass', async (res, reqId) => {
+    worker.events.on('response:bypass', async (res, reqId) => {
       try {
         const findReq = this.handleAllRequest.find((im) => im.id === reqId);
         if (findReq) {

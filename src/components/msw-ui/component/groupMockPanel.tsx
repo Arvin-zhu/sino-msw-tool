@@ -48,7 +48,7 @@ export const GroupMockPanel = observer(() => {
           className={'msw_table_empty'}
           style={{ borderTop: '1px solid #d9d9d9', marginTop: 10 }}
         >
-          {/*<img src={EmptyIcon} alt={'empty'} />*/}
+          <img src={EmptyIcon} alt={'empty'} />
           <div>暂无拦截的请求</div>
         </div>
       ) : (
