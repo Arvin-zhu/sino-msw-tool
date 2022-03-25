@@ -34,11 +34,8 @@ export const GroupMockPanel = observer(() => {
           btnStyle={{ marginLeft: 10 }}
         />
         <button
-          disabled={!judgeHavaGroupHandlers(groupData)}
           style={{ marginLeft: 10 }}
-          onClick={() =>
-            judgeHavaGroupHandlers(groupData) && store.saveRequestGroup()
-          }
+          onClick={() => store.saveRequestGroup()}
         >
           保存到本地
         </button>

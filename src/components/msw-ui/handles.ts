@@ -11,6 +11,7 @@ import {
   filterRequest,
   getRequestKey,
   importStorageGroupData,
+  judgeHavaGroupHandlers,
   resetHandlers,
 } from './handlesFnc';
 import { groupsRequestType, IGroupDataItem, mswReqType } from './handlesType';
@@ -160,7 +161,11 @@ class HandlerMock {
     }
   }
   saveRequestGroup() {
-    localStorage.setItem('msw-ui-storage', JSON.stringify(this.groupRequest));
+    if (judgeHavaGroupHandlers(this.groupRequest)) {
+      localStorage.removeItem('msw-ui-storage');
+    } else {
+      localStorage.setItem('msw-ui-storage', JSON.stringify(this.groupRequest));
+    }
     alert('保存成功！');
   }
   importGroupData(data: string) {
