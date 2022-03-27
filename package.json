@@ -1,6 +1,6 @@
 {
   "name": "@sino/msw-tool",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "tool for mock",
   "main": "lib/index.js",
   "module": "es/index.js",
