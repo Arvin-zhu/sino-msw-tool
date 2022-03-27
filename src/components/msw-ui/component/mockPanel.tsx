@@ -1,18 +1,19 @@
 import clsx from 'clsx';
 import { observer } from 'mobx-react';
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 
 import { useStores } from '../handles';
 
 import { AddMockPanel } from './addMockPanel';
 import { GroupMockPanel } from './groupMockPanel';
 
-export const MockPanel = observer(() => {
+export const MockPanel = observer((props: { projectName: string }) => {
+  const { projectName } = props;
   const [showDetail, setShowDetail] = useState(false);
   const [tabActiveIndex, setTabActiveIndex] = useState(0);
   const { store } = useStores();
   useLayoutEffect(() => {
-    store.init();
+    store.init(projectName);
   }, []);
   return (
     <div className="msw_container">
@@ -21,7 +22,7 @@ export const MockPanel = observer(() => {
           className="msw_container_circle"
           onClick={() => setShowDetail(true)}
         >
-          MSW
+          M
         </div>
       )}
       {showDetail && (

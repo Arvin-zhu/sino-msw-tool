@@ -1,8 +1,8 @@
-@import "./var.less";
+@import './var.less';
 
 .msw_container_circle {
-  width: 100px;
-  height: 100px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   background-color: rgb(123, 192, 33);
   display: flex;
@@ -174,19 +174,29 @@
         }
       }
     }
-    input[type="checkbox"] {
+    input[type='checkbox'] {
       margin-left: 10px;
     }
     .msw_group_content_item {
       margin-top: 20px;
       display: flex;
       align-items: center;
+      .msw_group_content_item_label {
+        display: inline-block;
+        max-width: 90px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
       button {
         .inputAntd();
         cursor: pointer;
         display: inline-block;
         width: auto;
         margin-left: 10px;
+      }
+      .msw_error_hint {
+        color: #ff4d4f;
+        font-size: 12px;
       }
       .msw_group_copy_btn:hover {
         color: @primary-dark;

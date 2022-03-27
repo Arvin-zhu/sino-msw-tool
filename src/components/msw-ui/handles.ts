@@ -1,7 +1,7 @@
 import { chunk, cloneDeep } from 'lodash';
 import { makeAutoObservable } from 'mobx';
 import { MobXProviderContext } from 'mobx-react';
-import { setupWorker } from 'msw';
+import { setupWorker, SetupWorkerApi } from 'msw';
 import { useContext } from 'react';
 
 import {
@@ -10,9 +10,9 @@ import {
   existRequest,
   filterRequest,
   getRequestKey,
+  getResetHandlers,
   importStorageGroupData,
   judgeHavaGroupHandlers,
-  resetHandlers,
 } from './handlesFnc';
 import { groupsRequestType, IGroupDataItem, mswReqType } from './handlesType';
 
@@ -21,6 +21,8 @@ class HandlerMock {
     makeAutoObservable(this);
   }
   filterKeywords = '';
+  projectName = '';
+  worker: SetupWorkerApi | null = null;
   handleAllRequest: mswReqType[] = [];
   currentEditGroupRequest: Partial<IGroupDataItem> | undefined;
   groupRequest: groupsRequestType = {};
@@ -43,10 +45,14 @@ class HandlerMock {
     });
   }
   //初始化
-  async init() {
+  async init(projectName: string) {
     if (process.env.NODE_ENV !== 'development') {
       throw new Error('请在测试环境下使用msw mock 工具');
     }
+    if (!projectName) {
+      throw new Error('请定义项目名称');
+    }
+    this.projectName = projectName;
     const worker = setupWorker();
     worker.events.on('request:unhandled', (req) => {
       if (filterRequest(req)) {
@@ -76,10 +82,15 @@ class HandlerMock {
     });
     worker.start();
     window._msw_worker = worker;
-    const storage = localStorage.getItem('msw-ui-storage');
+    this.worker = worker;
+    const storage = localStorage.getItem(projectName + '_msw-ui-storage');
     const storageData = importStorageGroupData(storage || '');
     storageData && (this.groupRequest = storageData);
-    storageData && resetHandlers(storageData);
+    storageData && this.resetHandlers(storageData);
+  }
+  resetHandlers(groupsRequest: groupsRequestType) {
+    const handlers = getResetHandlers(groupsRequest);
+    !!handlers?.length && this.worker?.resetHandlers(...handlers);
   }
   //添加mock
   addSimpleMock(data: IGroupDataItem) {
@@ -98,21 +109,21 @@ class HandlerMock {
       });
       this.groupRequest[data.group].data = [...filterRequest, data];
     }
-    resetHandlers(this.groupRequest);
+    this.resetHandlers(this.groupRequest);
   }
   setFilterKeyword(keyword: string) {
     this.filterKeywords = keyword;
   }
   get paginationMock() {
-    const that = this;
+    // const that = this;
     const filterRequest = this.handleAllRequest.filter((im) => {
-      return getRequestKey(im)?.includes(that.filterKeywords);
+      return getRequestKey(im)?.includes(this.filterKeywords);
     });
     return chunk(filterRequest, 5);
   }
   activeGroup(groupKey: string, active: boolean) {
     activeGroupRequest(groupKey, this.groupRequest, active);
-    resetHandlers(this.groupRequest);
+    this.resetHandlers(this.groupRequest);
   }
   setCurrentEditMock(mock: mswReqType | undefined) {
     this.currentEditGroupRequest = {
@@ -132,14 +143,14 @@ class HandlerMock {
   }
   deleteGroup(groupKey: string) {
     delete this.groupRequest[groupKey];
-    resetHandlers(this.groupRequest);
+    this.resetHandlers(this.groupRequest);
   }
   deleteGroupItem(groupKey: string, requestItem: IGroupDataItem) {
     if (this.groupRequest[groupKey]?.data) {
       this.groupRequest[groupKey].data = this.groupRequest[
         groupKey
       ].data.filter((im) => im !== requestItem);
-      resetHandlers(this.groupRequest);
+      this.resetHandlers(this.groupRequest);
     }
   }
   changeGroupItemStatus(
@@ -156,14 +167,17 @@ class HandlerMock {
           return im;
         }
       );
-      resetHandlers(this.groupRequest);
+      this.resetHandlers(this.groupRequest);
     }
   }
   saveRequestGroup() {
-    if (judgeHavaGroupHandlers(this.groupRequest)) {
-      localStorage.removeItem('msw-ui-storage');
+    if (!judgeHavaGroupHandlers(this.groupRequest)) {
+      localStorage.removeItem(this.projectName + '_msw-ui-storage');
     } else {
-      localStorage.setItem('msw-ui-storage', JSON.stringify(this.groupRequest));
+      localStorage.setItem(
+        this.projectName + '_msw-ui-storage',
+        JSON.stringify(this.groupRequest)
+      );
     }
     alert('保存成功！');
   }

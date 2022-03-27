@@ -2,7 +2,11 @@ import { observer } from 'mobx-react';
 import React, { useCallback, useState } from 'react';
 
 import { useStores } from '../handles';
-import { exportGroupRequestData, judgeHavaGroupHandlers } from '../handlesFnc';
+import {
+  checkGroupNameDuplicate,
+  exportGroupRequestData,
+  judgeHavaGroupHandlers,
+} from '../handlesFnc';
 import { IGroupDataItem } from '../handlesType';
 
 import { AddMockTextArea } from './addMockTextArea';
@@ -77,9 +81,18 @@ const GroupMockPanelItem = observer(
   }) => {
     const { store } = useStores();
     const [copyGroupName, setCopyGroupName] = useState('');
+    const [copyError, setCopyError] = useState('');
     const { groupData, groupKey } = props;
     const onCopyOk = useCallback(() => {
-      store.copyGroup(groupKey, copyGroupName);
+      return new Promise((resolve, reject) => {
+        if (checkGroupNameDuplicate(copyGroupName, store.groupRequest)) {
+          setCopyError('已存在相同组名，请重新更换');
+          reject('组名重复');
+        } else {
+          store.copyGroup(groupKey, copyGroupName);
+          resolve('');
+        }
+      });
     }, [copyGroupName, groupKey, store]);
     const onDeleteOk = useCallback(() => {
       store.deleteGroup(groupKey);
@@ -108,7 +121,9 @@ const GroupMockPanelItem = observer(
     );
     return (
       <div className={'msw_group_content_item'}>
-        <span>{groupKey}:</span>
+        <span className="msw_group_content_item_label" title={groupKey}>
+          {groupKey}:
+        </span>
         <div className="msw_group_content_item_detail">
           <div className="msw_group_content_item_input">
             <ListData
@@ -125,10 +140,16 @@ const GroupMockPanelItem = observer(
           <Confirm
             onOk={onCopyOk}
             content={
-              <input
-                placeholder="group name"
-                onChange={(e) => setCopyGroupName(e.target.value)}
-              />
+              <>
+                <input
+                  placeholder="分组名称"
+                  onChange={(e) => {
+                    setCopyGroupName(e.target.value);
+                    setCopyError('');
+                  }}
+                />
+                <div className="msw_error_hint">{copyError}</div>
+              </>
             }
           >
             <button className="msw_group_copy_btn small">复制</button>
