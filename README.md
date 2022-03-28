@@ -11,6 +11,6 @@
   - 在开发模式下引入
     ```
     {
-      process.env.NODE_ENV === 'development' && <MswUi />
+      process.env.NODE_ENV === 'development' && <MswUi projectName={'...'} />
     }
     ```
