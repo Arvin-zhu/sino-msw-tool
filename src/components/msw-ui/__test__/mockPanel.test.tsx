@@ -10,14 +10,14 @@ describe('mock panel', () => {
   const env = process.env
 
   beforeEach(() => {
-      jest.resetModules()
-      process.env = { ...env }
+    jest.resetModules()
+    process.env = { ...env };
+    process.env.NODE_ENV = 'development';
   })
   afterEach(() => {
       process.env = env
   })
   test('msw 图标加载', () => {
-    process.env.NODE_ENV = 'development';
     render(
       <Provider store={handlerMock}>
         <MockPanel projectName={'adManage'} />
@@ -25,4 +25,15 @@ describe('mock panel', () => {
     );
     expect(screen.getByTestId('msw_circle')).toBeInTheDocument();
   });
+  test('msw 配置层出现', () => {
+    render(
+      <Provider store={handlerMock}>
+        <MockPanel projectName={'adManage'} />
+      </Provider>
+    );
+    const circle_logo = screen.getByTestId('msw_circle');
+    circle_logo.click();
+    expect(circle_logo).not.toBeInTheDocument();
+    expect(screen.getByTestId('msw_detail_container')).toBeInTheDocument();
+  })
 });

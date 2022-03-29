@@ -27,7 +27,7 @@ export const MockPanel = observer((props: { projectName: string }) => {
         </div>
       )}
       {showDetail && (
-        <div className="msw_detail_panel">
+        <div className="msw_detail_panel" data-testid='msw_detail_container'>
           <div className="msw_header">
             <div className="msw_close" onClick={() => setShowDetail(false)}>
               X
