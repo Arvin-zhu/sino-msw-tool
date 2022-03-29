@@ -21,6 +21,7 @@ export const MockPanel = observer((props: { projectName: string }) => {
         <div
           className="msw_container_circle"
           onClick={() => setShowDetail(true)}
+          data-testid='msw_circle'
         >
           M
         </div>

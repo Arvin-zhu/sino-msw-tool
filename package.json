@@ -23,18 +23,29 @@
   "author": "arvin",
   "license": "ISC",
   "peerDependencies": {
-    "react": "^17.0.2",
-    "react-router-dom": "^6.2.2",
+    "mobx": "^6.5.0",
     "msw": "^0.39.2",
-    "mobx": "^6.5.0"
+    "react": "^17.0.2",
+    "react-router-dom": "^6.2.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.17.8",
+    "@babel/plugin-transform-react-jsx": "^7.17.3",
     "@babel/plugin-transform-runtime": "^7.17.0",
+    "@babel/preset-env": "^7.16.11",
+    "@testing-library/jest-dom": "^5.16.3",
+    "@testing-library/react": "^12.1.4",
+    "@types/jest": "^27.4.1",
     "@types/jsoneditor": "^9.5.1",
     "@types/lodash": "^4.14.180",
     "@types/vfile-message": "^2.0.0",
+    "babel-jest": "^27.5.1",
     "father": "^2.30.17",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^27.5.1",
+    "jest-transform-stub": "^2.0.0",
     "rollup-plugin-url": "^3.0.1",
+    "ts-jest": "^27.1.4",
     "typescript": "^4.6.2"
   },
   "dependencies": {
@@ -44,10 +55,10 @@
     "clsx": "^1.1.1",
     "jsoneditor": "^9.7.4",
     "lodash": "^4.17.21",
-    "mobx-react": "^7.3.0",
-    "rxjs": "^7.5.5",
-    "msw": "^0.39.2",
     "mobx": "^6.5.0",
+    "mobx-react": "^7.3.0",
+    "msw": "^0.39.2",
+    "rxjs": "^7.5.5",
     "vfile-message": "^3.1.2"
   }
 }
