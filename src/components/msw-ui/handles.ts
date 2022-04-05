@@ -134,6 +134,7 @@ class HandlerMock {
     };
   }
   setCurrentEditGroupRequest(mock: IGroupDataItem | undefined) {
+    console.log('==clear=set', mock)
     this.currentEditGroupRequest = mock;
   }
   copyGroup(groupKey: string, groupName: string) {

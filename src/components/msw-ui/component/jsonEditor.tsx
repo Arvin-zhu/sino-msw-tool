@@ -53,7 +53,7 @@ export const JsonEditor = observer((data: Partial<IGroupDataItem>) => {
 			status: statusCode,
 			request,
 		});
-		store.setCurrentEditGroupRequest(undefined);
+		store.setCurrentEditGroupRequest(null);
 	}, [request, store, group, statusCode]);
 	const onStatusChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
 		setStatusCode(e.target.value);

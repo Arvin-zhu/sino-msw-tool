@@ -1,3 +1,4 @@
+import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import React, { ChangeEvent, useCallback, useState } from 'react';
 
@@ -99,6 +100,9 @@ export const AddMockPanel = observer(() => {
             </button>
           </div>
         )}
+        {
+          console.log('==clear', toJS(store.currentEditGroupRequest))
+        }
         {store.currentEditGroupRequest && (
           <div style={{ marginTop: 20 }}>
             <AddMockTextArea

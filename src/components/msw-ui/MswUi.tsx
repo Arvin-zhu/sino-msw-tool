@@ -6,6 +6,7 @@ import React from 'react';
 
 import { MockPanel } from './component/mockPanel';
 import { handlerMock } from './handles';
+import { configure } from 'mobx';
 
 declare global {
   interface Window {
@@ -13,6 +14,8 @@ declare global {
     _msw_tool: typeof handlerMock;
   }
 }
+
+configure({ isolateGlobalState: true })
 
 export const MswUi = (props: { projectName: string }) => {
   const { projectName } = props;
