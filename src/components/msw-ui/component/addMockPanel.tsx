@@ -1,4 +1,3 @@
-import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import React, { ChangeEvent, useCallback, useState } from 'react';
 
@@ -10,7 +9,7 @@ const EmptyIcon = require('../images/empty.svg');
 
 export const AddMockPanel = observer(() => {
   const { store } = useStores();
-  const { filterKeywords, paginationMock } = store;
+  const { filterKeywords, paginationMock, currentEditGroupRequest, unHandleAllRequest } = store;
   const [isAdd, setIsAdd] = useState(false);
   const [pageSize, setPageSize] = useState(1);
   const filterChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -69,7 +68,7 @@ export const AddMockPanel = observer(() => {
             })}
           </tbody>
         </table>
-        {!store.unHandleAllRequest?.length && (
+        {!unHandleAllRequest?.length && (
           <div className={'msw_table_empty'}>
             <img src={EmptyIcon} alt={'empty'} />
             <div>暂无拦截的请求</div>
@@ -100,14 +99,11 @@ export const AddMockPanel = observer(() => {
             </button>
           </div>
         )}
-        {
-          console.log('==clear', toJS(store.currentEditGroupRequest))
-        }
-        {store.currentEditGroupRequest && (
+        {!!currentEditGroupRequest && (
           <div style={{ marginTop: 20 }}>
             <AddMockTextArea
               isAdd={isAdd}
-              {...store.currentEditGroupRequest!}
+              {...currentEditGroupRequest!}
             />
           </div>
         )}

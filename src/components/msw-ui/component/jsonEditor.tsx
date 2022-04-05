@@ -53,7 +53,7 @@ export const JsonEditor = observer((data: Partial<IGroupDataItem>) => {
 			status: statusCode,
 			request,
 		});
-		store.setCurrentEditGroupRequest(null);
+		store.setCurrentEditGroupRequest(undefined);
 	}, [request, store, group, statusCode]);
 	const onStatusChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
 		setStatusCode(e.target.value);
@@ -70,7 +70,7 @@ export const JsonEditor = observer((data: Partial<IGroupDataItem>) => {
 				{
 					errorMsg && <span style={{color: 'red'}}>{errorMsg}</span>
 				}
-				<button onClick={saveData}>保存</button>
+				<button onClick={() => saveData()}>保存</button>
 			</div>
 		</div>
 })

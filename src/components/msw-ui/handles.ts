@@ -18,13 +18,13 @@ import { groupsRequestType, IGroupDataItem, mswReqType } from './handlesType';
 
 class HandlerMock {
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this, {}, {autoBind: true});
   }
   filterKeywords = '';
   projectName = '';
   worker: SetupWorkerApi | null = null;
   handleAllRequest: mswReqType[] = [];
-  currentEditGroupRequest: Partial<IGroupDataItem> | undefined;
+  currentEditGroupRequest: Partial<IGroupDataItem> | undefined = undefined;
   groupRequest: groupsRequestType = {};
   //获取未mock的接口
   get unHandleAllRequest() {
@@ -116,7 +116,7 @@ class HandlerMock {
   }
   get paginationMock() {
     // const that = this;
-    const filterRequest = this.handleAllRequest.filter((im) => {
+    const filterRequest = this.unHandleAllRequest.filter((im) => {
       return getRequestKey(im)?.includes(this.filterKeywords);
     });
     return chunk(filterRequest, 5);
@@ -134,7 +134,6 @@ class HandlerMock {
     };
   }
   setCurrentEditGroupRequest(mock: IGroupDataItem | undefined) {
-    console.log('==clear=set', mock)
     this.currentEditGroupRequest = mock;
   }
   copyGroup(groupKey: string, groupName: string) {
