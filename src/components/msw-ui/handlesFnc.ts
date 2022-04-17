@@ -63,8 +63,11 @@ export function getRequestKey(req: mswReqType | undefined) {
   return req.method + req.url.host + req.url.pathname;
 }
 
-export function getRequestKeyFormatShow(req: mswReqType | undefined) {
+export function getRequestKeyFormatShow(req: mswReqType | undefined, short?: string) {
   if (!req) return;
+  if (short && req.url.pathname?.length > 35) {
+    return `${req.url.pathname.slice(0, 10)}......${req.url.pathname.slice(-25)}`
+  }
   return req.url.pathname;
 }
 
