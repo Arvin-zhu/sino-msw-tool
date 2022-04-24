@@ -21,7 +21,7 @@ export const GroupMockPanel = observer(() => {
   const { store } = useStores();
   const groupData = store.groupRequest || {};
   return (
-    <div className={'msw_group_content'}>
+    <div className={'msw_group_content'} style={{paddingBottom: 350}}>
       <div className="msw_group_top">
         <button
           disabled={!judgeHavaGroupHandlers(groupData)}
