@@ -1,0 +1,39 @@
+.msw_content_left_item {
+	.msw_content_left_item_inner {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		width: 100%;
+	}
+	.msw_downIcon {
+		width: 10px;
+		vertical-align: middle;
+		transform: rotate(-90deg);
+		transform-origin: center center;
+		transition: transform .3s ease;
+		margin-top: -2px;
+	}
+	.msw_dowIcon_expand {
+		transform: rotate(0deg);
+	}
+	.msw_moreIcon_wrap {
+		display: none;
+		cursor: pointer;
+		padding: 0px 3px;
+	}
+	.msw_moreIcon {
+		height: 16px;
+	}
+	&:hover {
+		.msw_moreIcon_wrap {
+			display: block;
+		}	
+	}
+	.msw_content_left_item_name {
+		white-space: noWrap;
+		display: inline-block;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		vertical-align: middle;
+	}
+}

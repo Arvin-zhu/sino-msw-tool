@@ -1,12 +1,23 @@
+@import '../var.less';;
 .msw_upload_btn {
   position: relative;
+  .btnAntd();
+  cursor: pointer;
+  background-color: @inputBcg;
+  color: white;
+  border-color: @border;
+  height: 38px;
   input {
     position: absolute;
+    cursor: pointer;
     left: 0;
     top: 0;
     right: 0;
-    height: 32px;
+    height: 38px;
     padding: 0px;
     opacity: 0;
+  }
+  input.small {
+    height: 24px;
   }
 }

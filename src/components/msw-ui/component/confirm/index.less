@@ -3,20 +3,27 @@
 .msw_confirm {
   display: inline-block;
   position: relative;
-  z-index: 5;
+  .msw_dropdown_mask {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right:0;
+    background-color: transparent !important;
+    z-index: 3 !important;
+  }
 }
 .msw_confirm_panel {
   position: absolute;
   padding: 10px;
-  bottom: 100%;
-  right: 0;
+  top: 100%;
   margin-bottom: 15px;
   box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014,
     0 9px 28px 8px #0000000d;
   min-width: 200px;
-  background-color: white;
+  background-color: #1c2755;
   border-radius: 4px;
-  z-index: 5px;
+  z-index: 15;
   display: none;
   &.show {
     display: block;
@@ -27,6 +34,8 @@
     padding: 0 7px !important;
     font-size: 14px !important;
     border-radius: 2px !important;
+    background-color: white;
+    transition: all .3s ease;
   }
   button.msw_confirm_ok_btn {
     background-color: @primary !important;
@@ -34,6 +43,7 @@
     color: white !important;
     &:hover {
       background-color: @primary-dark !important;
+      border-color: @primary-dark !important;
     }
   }
   .msw_confirm_btn_group {
@@ -43,11 +53,36 @@
   &::after {
     content: "";
     position: absolute;
-    border: 5px solid white;
+    border: 5px solid #1c2755;
     border-left-color: transparent;
     border-right-color: transparent;
-    border-bottom-color: transparent;
+    border-top-color: transparent; 
+  }
+  &.msw_confirm_panel_right {
+    left: 0;
+  }
+  &.msw_confirm_panel_right::after {
+    bottom: 100%;
+    left: 10px;
+  }
+  &.msw_confirm_panel_left {
+    right: 0;
+  }
+  &.msw_confirm_panel_left::after {
+      bottom: 100%;
+      right: 10px;
+  }
+  &.msw_confirm_panel_topRight {
+    bottom: 100%;
+    right: 0px;
+    top: auto;
+    margin-bottom: 3px;
+  }
+  &.msw_confirm_panel_topRight::after {
     top: 100%;
     right: 10px;
+    border-bottom-color: transparent;
+    border-top-color: #1c2755;
   }
+  
 }

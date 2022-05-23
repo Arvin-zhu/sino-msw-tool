@@ -6,6 +6,7 @@ import React from 'react';
 
 import { MockPanel } from './component/mockPanel';
 import { handlerMock } from './handles';
+
 import { configure } from 'mobx';
 
 declare global {
@@ -15,13 +16,18 @@ declare global {
   }
 }
 
-configure({ isolateGlobalState: true })
+configure({ isolateGlobalState: true });
 
-export const MswUi = (props: { projectName: string }) => {
-  const { projectName } = props;
+export type mswPlacement = 'rightBottom' | 'leftBottom';
+
+export const MswUi = (props: {
+  projectName: string;
+  placement: mswPlacement;
+}) => {
+  const { projectName, placement = 'rightBottom' } = props;
   return (
     <Provider store={handlerMock}>
-      <MockPanel projectName={projectName} />
+      <MockPanel projectName={projectName} placement={placement} />
     </Provider>
   );
 };

@@ -6,7 +6,7 @@
   color: #000000d9;
   font-size: 14px;
   line-height: 1.5715;
-  background-color: #fff;
+  background-color: @inputBcg;
   background-image: none;
   border-radius: 2px;
   transition: all 0.3s;
@@ -48,10 +48,13 @@
   top: 100%;
   left: 0;
   right: 0;
+  margin-top: 5px;
+  border: 1px solid @border;
+  border-radius: 4px;
   z-index: 6;
   max-height: 300px;
   overflow: auto;
-  background-color: white;
+  background-color: @inputBcg;
   display: none;
   box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014,
     0 9px 28px 8px #0000000d;
@@ -66,9 +69,13 @@
   justify-content: space-between;
   padding: 3px 11px;
   transition: all .3s ease;
+  border-bottom: 1px solid @border;
   cursor: pointer;
+  &:last-child {
+    border-bottom: none;
+  }
   &:hover {
-    background: #F0F6FF;
+    background: darken(@inputBcg, 5%);
   }
   .msw_select_dropdown_item_operation_label {
     max-width: 125px;

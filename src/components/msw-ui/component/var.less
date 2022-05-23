@@ -1,3 +1,13 @@
+@primary: #247ae6;
+@primary-dark: #0c58c3;
+@placeholder: rgba(0, 0, 0, 0.25);
+@border: rgb(34, 46, 62);
+@error: #ff4d4f;
+@error-dark: #f04042;
+
+@inputBcg: #131629;
+
+
 .inputAntd {
   box-sizing: border-box;
   margin: 0;
@@ -9,29 +19,29 @@
   width: 100%;
   min-width: 0;
   padding: 4px 11px;
-  color: #000000d9;
+  color: white;
   font-size: 14px;
   line-height: 1.5715;
-  background-color: #fff;
+  background-color: @inputBcg;
   background-image: none;
-  border: 1px solid #d9d9d9;
+  border: 1px solid rgb(34, 46, 62);
   border-radius: 2px;
   transition: all 0.3s;
   &::placeholder {
-    color: @placeholder;
+    color: rgba(255, 255, 255, 0.5)
   }
   &:active,
   &:focus {
-    border-color: @primary;
+    border-color: @border;
   }
   &:hover {
-    border-color: @primary;
-    color: @primary;
+    border-color: @border;
+    color: white;
   }
   &:disabled {
     color: #00000040;
-    background-color: #f5f5f5;
-    border-color: #d9d9d9;
+    background-color:  @inputBcg;
+    border-color: @border; 
     box-shadow: none;
     cursor: not-allowed;
     opacity: 1;
@@ -109,9 +119,10 @@
   }
 }
 
-@primary: #247ae6;
-@primary-dark: #0c58c3;
-@placeholder: rgba(0, 0, 0, 0.25);
-@border: rgb(217, 217, 217);
-@error: #ff4d4f;
-@error-dark: #f04042;
+.ellipsis {
+  white-space: noWrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+

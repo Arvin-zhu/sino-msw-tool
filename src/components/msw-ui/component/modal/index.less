@@ -1,0 +1,47 @@
+@import '../var.less';
+.msw_modal {
+	.msw_modal_mask {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		left: 0;
+		top: 0;
+		background-color: rgba(0, 0, 0, 0.5);
+		z-index: 8;
+	}
+	.msw_modal_inner {
+		position: absolute;
+		min-width: 400px;
+		padding: 20px;
+		border-radius: 4px;
+		border: 1px solid @border;
+		background-color: #1c2755;
+		top: 50px;
+		z-index: 9;
+		color: white;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+	button {
+    min-width: 50px !important;
+    height: 24px !important;
+    padding: 0 7px !important;
+    font-size: 14px !important;
+    border-radius: 2px !important;
+    background-color: white;
+    transition: all .3s ease;
+  }
+  button.msw_modal_ok_btn {
+    background-color: @primary !important;
+    border-color: @primary !important;
+    color: white !important;
+    &:hover {
+      background-color: @primary-dark !important;
+      border-color: @primary-dark !important;
+    }
+  }
+  .msw_modal_btn_group {
+    margin-top: 16px;
+    text-align: right;
+  }
+}

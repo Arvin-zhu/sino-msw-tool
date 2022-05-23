@@ -1,0 +1,67 @@
+@import '../var.less';
+.msw_panelRight_wrap {
+	height: 100%;
+	position: relative;
+	overflow: auto;
+	.msw_request_conflict {
+		color: #F89108;
+		padding: 10px;
+		border-bottom: 1px solid @border;
+		.msw_conflictDetail_btn {
+			color: @primary;
+			cursor: pointer;
+		}
+	}	
+	.closeBtn {
+		.btnAntd();
+		background-color: #3f4e60;
+		border-color: #3f4e60;
+		color: white;
+	}
+}
+.msw_panelRight_top {
+	padding: 10px;
+	border-bottom: 1px solid @border;
+	.msw_btn {
+		margin-right: 10px;
+		font-size: 14px;
+		color: white;
+	}
+	.msw_btn-handling {
+		background-color: #42AD00;
+		border-color: #42AD00;
+		opacity: 0.5;
+	}
+	.msw_btn-unHandle {
+		background-color: #F89108;
+		border-color:#F89108;
+		opacity: 0.5;
+	}
+	.msw_btn.active {
+		opacity: 1;
+	}
+}
+.msw_panel_statusBar {
+	padding: 10px;
+	color: white;
+	font-size: 14px;
+	border-bottom: 1px solid @border;
+	display: flex;
+	justify-content: space-between;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	img {
+		vertical-align: middle;
+	}
+	.exportBtn {
+		border: 1px solid @border;
+		padding-left: 7px;
+		padding-right: 7px;
+	}
+	.msw_panel_statusBar_home {
+		cursor: pointer;
+		margin-right: 10px;
+	}
+}

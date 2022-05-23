@@ -1,0 +1,53 @@
+@import '../var.less';
+.msw_noHost_changeData {
+	text-align: center;
+	color: white;
+	padding-top: 20px;
+}
+.msw_hostChange_item {
+	color: white;
+}
+.msw_hostChange_wrap {
+	padding: 20px;
+}
+.msw_hostChange_item {
+	display: flex;
+	margin-bottom: 20px;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	flex-shrink: 0;
+	img {
+		width: 20px;
+		margin: 0 10px;
+	}
+	input {
+		width: 500px;
+	}
+	.msw_hostOld {
+		width: 500px;
+		border: 1px solid @border;
+		border-radius: 4px;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		line-height: 38px;
+		padding: 0 11px;
+		background-color: #131629;
+		cursor: not-allowed;
+	}
+}
+.msw_hostChange_saveBtn {
+	.btnAntd();
+	margin-right: 18px;
+	color: white;
+	margin-left: 10px;
+	background-color: #3f4e60;
+	border-color: #3f4e60;
+	&:hover,
+	&:focus,
+	&:active {
+		background: darken(#3f4e60, 10%);
+		border-color: darken(#3f4e60, 10%);
+	}
+}

@@ -1,6 +1,6 @@
 {
   "name": "@sino/msw-tool",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "tool for mock",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -36,6 +36,7 @@
     "@testing-library/react-hooks": "^7.0.2",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.4.1",
+    "@types/jquery": "^3.5.14",
     "@types/jsoneditor": "^9.5.1",
     "@types/lodash": "^4.14.180",
     "@types/vfile-message": "^2.0.0",
@@ -53,12 +54,14 @@
     "@svgr/webpack": "^6.2.1",
     "babel-plugin-file-loader": "^2.0.0",
     "clsx": "^1.1.1",
+    "jquery": "^3.6.0",
     "jsoneditor": "^9.7.4",
     "lodash": "^4.17.21",
     "mobx": "^6.5.0",
     "mobx-react": "^7.3.0",
     "msw": "^0.39.2",
     "rxjs": "^7.5.5",
-    "vfile-message": "^3.1.2"
+    "vfile-message": "^3.1.2",
+    "yux-storage": "^1.1.4"
   }
 }
