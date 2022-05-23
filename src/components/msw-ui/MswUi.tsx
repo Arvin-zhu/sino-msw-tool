@@ -22,7 +22,7 @@ export type mswPlacement = 'rightBottom' | 'leftBottom';
 
 export const MswUi = (props: {
   projectName: string;
-  placement: mswPlacement;
+  placement?: mswPlacement;
 }) => {
   const { projectName, placement = 'rightBottom' } = props;
   return (
