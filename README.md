@@ -6,10 +6,15 @@
 - 先安装msw
   - npm install msw@0.39.2 --save-dev
   - yarn add msw@0.39.2 --dev
+- 安装msw-tool
+	- yarn add @sino/msw-tool --dev
 - 执行msw初始化([文档](https://mswjs.io/docs/getting-started/integrate/browser))
   - npx msw init <PUBLIC_DIR> --save
   - 在开发模式下引入
     ```
+    import MswUi from '@sino/msw-tool';
+    ......
+    ......
     {
       process.env.NODE_ENV === 'development' && <MswUi projectName={'...'} />
     }
