@@ -28,7 +28,7 @@
       "@@@/*": ["docs/*"]
     },
     "allowSyntheticDefaultImports": true,
-    "typeRoots": ["typings", "node_modules/@types"]
+    "typeRoots": ["typings", "node_modules/@types", "src/types"]
   },
   "include": ["src/**/*", "dosc/**/*"],
   "exclude": [
