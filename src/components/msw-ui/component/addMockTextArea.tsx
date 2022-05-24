@@ -149,67 +149,71 @@ export const AddMockTextArea = observer((data: Partial<IGroupDataItem>) => {
       <div className="msw_detail_section_title">配置：</div>
       <div style={{ padding: 10 }}>
         <div className="msw_mock_detail_wrap_config">
-          <div className={'msw_group_input_wrap'}>
-            <span>模块</span>
-            <div className="msw_detailConfig_item">
-              <SelectData
-                placeholder="选择或输入新增"
-                data={Array.from(
-                  new Set([...getCollectionKeys(store.groupRequest)])
-                )}
-                onChange={changeCollectionName}
-                value={collectionName}
-              />
+          <div className="msw_mock_detail_wrap_config_inner">
+            <div className={'msw_group_input_wrap'}>
+              <span>模块</span>
+              <div className="msw_detailConfig_item">
+                <SelectData
+                  placeholder="选择或输入新增"
+                  data={Array.from(
+                    new Set([...getCollectionKeys(store.groupRequest)])
+                  )}
+                  onChange={changeCollectionName}
+                  value={collectionName}
+                />
+              </div>
             </div>
-          </div>
-          <div className={'msw_group_input_wrap'}>
-            <span>组名：</span>
-            <div className="msw_detailConfig_item">
-              <SelectData
-                placeholder="选择或输入新增"
-                data={getGroupKeys(store.groupRequest, collectionName)}
-                onChange={changeGroupName}
-                value={groupName}
-              />
+            <div className={'msw_group_input_wrap'}>
+              <span>组名：</span>
+              <div className="msw_detailConfig_item">
+                <SelectData
+                  placeholder="选择或输入新增"
+                  data={getGroupKeys(store.groupRequest, collectionName)}
+                  onChange={changeGroupName}
+                  value={groupName}
+                />
+              </div>
             </div>
-          </div>
-          <div className={'msw_group_input_wrap'}>
-            <span>请求别名：</span>
-            <div className="msw_detailConfig_item">
-              <Input
-                placeholder="请输入请求别名"
-                onChange={(e) => changeAliasName(e.target.value)}
-                value={requestAlias}
-              />
+            <div className={'msw_group_input_wrap'}>
+              <span>请求别名：</span>
+              <div className="msw_detailConfig_item">
+                <Input
+                  placeholder="请输入请求别名"
+                  onChange={(e) => changeAliasName(e.target.value)}
+                  value={requestAlias}
+                />
+              </div>
             </div>
-          </div>
-          <div
-            className={'msw_group_input_wrap'}
-            style={{ marginLeft: 0, marginTop: 10 }}
-          >
-            <span>状态：</span>
-            <div className="msw_detailConfig_item">
-              <Input
-                placeholder="请输入状态码"
-                onChange={onStatusChange}
-                value={statusCode || ''}
-              />
+            <div
+              className={'msw_group_input_wrap'}
+              style={{ marginLeft: 0, marginTop: 10 }}
+            >
+              <span>状态：</span>
+              <div className="msw_detailConfig_item">
+                <Input
+                  placeholder="请输入状态码"
+                  onChange={onStatusChange}
+                  value={statusCode || ''}
+                />
+              </div>
             </div>
-          </div>
-          <div className={'msw_group_input_wrap'} style={{ marginTop: 10 }}>
-            <span>延迟：</span>
-            <div className="msw_detailConfig_item">
-              <Input
-                placeholder="请输入延迟毫秒数"
-                onChange={(e) => setDelayRes(e.target.value)}
-                value={delayRes}
-              />
+            <div className={'msw_group_input_wrap'} style={{ marginTop: 10 }}>
+              <span>延迟：</span>
+              <div className="msw_detailConfig_item">
+                <Input
+                  placeholder="请输入延迟毫秒数"
+                  onChange={(e) => setDelayRes(e.target.value)}
+                  value={delayRes}
+                />
+              </div>
             </div>
-          </div>
-          <div className={'msw_group_input_wrap'} style={{ marginTop: 10 }}>
-            <span>上传数据：</span>
-            <div className="msw_detailConfig_item">
-              <Upload callBack={(jsonData) => editor.current?.set(jsonData)} />
+            <div className={'msw_group_input_wrap'} style={{ marginTop: 10 }}>
+              <span>上传数据：</span>
+              <div className="msw_detailConfig_item">
+                <Upload
+                  callBack={(jsonData) => editor.current?.set(jsonData)}
+                />
+              </div>
             </div>
           </div>
         </div>

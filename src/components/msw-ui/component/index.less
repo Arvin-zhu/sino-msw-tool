@@ -24,8 +24,10 @@
   position: fixed;
   bottom: 0;
   right: 0;
+  left: 0;
   top: 0;
-  z-index: 99999;
+  overflow: auto;
+  z-index: 9999999;
   &.msw_container-left {
     left: 0;
     right: auto;
@@ -33,9 +35,9 @@
 }
 .msw_detail_panel {
   background-color: rgb(11, 21, 33);
-  width: 1366px;
   height: 100%;
   overflow: auto;
+  min-width: 1280px;
   box-shadow: 0px 12px 48px 16px rgba(0, 0, 0, 0.03),
     0px 9px 28px 0px rgba(0, 0, 0, 0.05), 0px 6px 16px -8px rgba(0, 0, 0, 0.08);
 }
@@ -447,11 +449,14 @@
     padding-bottom: 0;
   }
   .msw_mock_detail_wrap_config {
-    padding: 10px;
     border: 1px solid @border;
+  }
+  .msw_mock_detail_wrap_config_inner {
+    padding: 10px;
     display: flex;
     flex-shrink: 0;
     flex-wrap: wrap;
+    width: 1250px;
   }
   .msw_group_input_wrap {
     margin-left: 10px;
@@ -485,4 +490,65 @@
 }
 .jsoneditor-poweredBy {
   display: none;
+}
+
+@media screen and (min-width: 1650px) {
+  .msw_container {
+    .msw_table_module {
+      width: 250px;
+    }
+    .msw_content table.msw_request_table .msw_table_module_handle {
+      width: 550px;
+    }
+    .msw_table_module_unHandle {
+      width: 750px;
+    }
+  }
+}
+@media screen and (max-width: 1650px) {
+  .msw_container {
+    .msw_table_module {
+      width: 180px;
+    }
+    .msw_content table.msw_request_table .msw_table_module_handle {
+      width: 550px; 
+    }
+    .msw_table_module_unHandle {
+      width: 750px;
+    }
+  }
+}
+
+@media screen and (max-width: 1500px) {
+  .msw_container {
+    .msw_table_module {
+      width: 120px;
+    }
+    .msw_content table.msw_request_table .msw_table_module_handle {
+      width: 500px; 
+    }
+    .msw_table_module_unHandle {
+      width: 750px;
+    }
+    .msw_hostChange_item .msw_hostOld {
+      width: 400px;
+    }
+  }
+}
+@media screen and (max-width: 1330px) {
+  .msw_container {
+    .msw_table_module {
+      width: 120px;
+    }
+    .msw_content table.msw_request_table .msw_table_module_handle {
+      width: 400px; 
+    }
+    .msw_table_module_unHandle {
+      width: 750px;
+    }
+  }
+}
+
+@media screen and (max-width: 1370px) {
+  
 }

@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { observer } from 'mobx-react';
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 
@@ -20,7 +21,7 @@ export const AddMockPanel = observer(
       changeGroupItemStatus,
       deleteGroupItem,
       currentHostSwitch,
-      showConflictDetail
+      showConflictDetail,
     } = store;
     const [pageSize, setPageSize] = useState(1);
     const filterChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -88,24 +89,26 @@ export const AddMockPanel = observer(
                     </tr>
                   </thead>
                   <tbody>
-                    {paginationMock?.[pageSize - 1]?.map(im => {
+                    {paginationMock?.[pageSize - 1]?.map((im) => {
                       return (
                         <tr key={im.request.id + im.collection + im.group}>
                           {tableTab === 'handled' && (
                             <>
-                              <td
-                                className="msw_table_module"
-                                style={{ width: 130 }}
-                                title={im.collection}
-                              >
-                                {im.collection}
+                              <td>
+                                <div
+                                  className="msw_table_module"
+                                  title={im.collection}
+                                >
+                                  {im.collection}
+                                </div>
                               </td>
-                              <td
-                                className="msw_table_module"
-                                style={{ width: 130 }}
-                                title={im.group}
-                              >
-                                {im.group}
+                              <td>
+                                <div
+                                  className="msw_table_module"
+                                  title={im.group}
+                                >
+                                  {im.group}
+                                </div>
                               </td>
                             </>
                           )}
@@ -115,17 +118,18 @@ export const AddMockPanel = observer(
                                 display: 'inline-block',
                                 width: 50,
                                 marginRight: 10,
-                                color: '#F89108'
+                                color: '#F89108',
                               }}
                             >
                               {im.request.method}
                             </span>
                             <span
-                              className="msw_table_request"
+                              className={clsx('msw_table_request', {
+                                msw_table_module_handle: tableTab === 'handled',
+                                msw_table_module_unHandle:
+                                  tableTab === 'unHandle',
+                              })}
                               title={im.request.url.href}
-                              style={{
-                                width: tableTab !== 'unHandle' ? 550 : 750
-                              }}
                             >
                               {im.request.url.href}
                             </span>
@@ -178,7 +182,7 @@ export const AddMockPanel = observer(
                   <div className="msw_pagination_wrap">
                     <button
                       onClick={() => {
-                        pageSize > 1 && setPageSize(page => page - 1);
+                        pageSize > 1 && setPageSize((page) => page - 1);
                       }}
                       disabled={pageSize === 1}
                       className="small"
@@ -188,7 +192,7 @@ export const AddMockPanel = observer(
                     <button
                       onClick={() => {
                         pageSize < paginationMock?.length &&
-                          setPageSize(page => page + 1);
+                          setPageSize((page) => page + 1);
                       }}
                       disabled={
                         !(

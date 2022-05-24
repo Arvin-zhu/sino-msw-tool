@@ -27,7 +27,7 @@ export const PanelLeft = observer(() => {
     $('.msw_content_left_item_wrap').on(
       'click',
       '.msw_moreIcon_wrap',
-      function() {
+      function () {
         const $menuItem = $(this).closest('.msw_dropdown_children'),
           $submenuWrapper = $($menuItem)
             .closest('.msw_dropdown')
@@ -37,7 +37,7 @@ export const PanelLeft = observer(() => {
           $submenuWrapper.css({
             position: 'fixed',
             top: menuItemPos?.top ? menuItemPos.top + 16 : 0,
-            left: (menuItemPos?.left || 0) + 25
+            left: (menuItemPos?.left || 0) + 25,
           });
       }
     );
@@ -47,7 +47,7 @@ export const PanelLeft = observer(() => {
   }, []);
   return (
     <div className="msw_content_left_item_wrap">
-      {groupRequest?.collection?.map(im => {
+      {groupRequest?.collection?.map((im) => {
         return <MswContentLeftItem item={im} />;
       })}
     </div>
@@ -67,7 +67,7 @@ const MswContentLeftItem = observer(
         if (value === 'delete') {
           MswModal.show({
             title: '确认要删除吗？',
-            onOk: () => deleteCollection(item.name)
+            onOk: () => deleteCollection(item.name),
           });
         }
         if (value === 'enable' || value === 'disable') {
@@ -89,7 +89,7 @@ const MswContentLeftItem = observer(
               <span
                 className={clsx('msw_content_left_item_name')}
                 title={item.name}
-                style={{ maxWidth: 160 }}
+                // style={{ maxWidth: 160 }}
               >
                 <MswDot
                   color={
@@ -108,7 +108,7 @@ const MswContentLeftItem = observer(
         </div>
         {expand && (
           <div>
-            {Object.keys(data).map(im => {
+            {Object.keys(data).map((im) => {
               return (
                 <MswContentLeftGroupItem
                   key={im}
@@ -150,7 +150,7 @@ const MswContentLeftGroupItem = observer(
         if (value === 'delete') {
           MswModal.show({
             title: '确认要删除吗？',
-            onOk: () => deleteGroup(collectionName, groupName)
+            onOk: () => deleteGroup(collectionName, groupName),
           });
         }
         if (value === 'enable' || value === 'disable') {
@@ -171,7 +171,7 @@ const MswContentLeftGroupItem = observer(
           className="msw_content_left_item"
           style={{
             paddingLeft: 20,
-            borderBottom: 'none'
+            borderBottom: 'none',
           }}
         >
           <LisItem
@@ -181,7 +181,6 @@ const MswContentLeftGroupItem = observer(
               <span
                 className={clsx('msw_content_left_item_name')}
                 title={groupName}
-                style={{ maxWidth: 150 }}
               >
                 <MswDot
                   color={
@@ -200,7 +199,7 @@ const MswContentLeftGroupItem = observer(
         </div>
         {expand && (
           <div>
-            {groupData.data?.map(im => {
+            {groupData.data?.map((im) => {
               return (
                 <MswContentLeftGroupRequestItem key={im.request.id} item={im} />
               );
@@ -233,7 +232,7 @@ const MswContentLeftGroupRequestItem = observer(
     const {
       setCurrentEditGroupRequest,
       deleteGroupItem,
-      changeGroupItemStatus
+      changeGroupItemStatus,
     } = store;
     const [nameEditModal, setNameEditModal] = useState(false);
     const menuChange = useCallback(
@@ -241,7 +240,7 @@ const MswContentLeftGroupRequestItem = observer(
         if (value === 'delete') {
           MswModal.show({
             title: '确认要删除吗？',
-            onOk: () => deleteGroupItem(item)
+            onOk: () => deleteGroupItem(item),
           });
         }
         if (value === 'enable' || value === 'disable') {
@@ -261,22 +260,20 @@ const MswContentLeftGroupRequestItem = observer(
         <div className="msw_content_left_item_inner">
           <span
             onClick={() => setCurrentEditGroupRequest(item)}
-            style={{ cursor: 'pointer', display: 'block', width: '100%' }}
+            className="msw_content_left_item_title_wrap"
           >
-            <span style={{ fontSize: 12, color: 'rgb(255, 178, 0)' }}>
-              {item.request.method?.toUpperCase()}
-            </span>
-            <span style={{ paddingLeft: 5 }}>
-              <span
-                className={clsx('msw_content_left_item_name')}
-                title={item.name}
-                style={{ maxWidth: 120 }}
-              >
-                <MswDot
-                  color={!item.disabled ? '#42AD00' : '#F04042'}
-                  style={{ marginRight: 5 }}
-                />
-                {item.name || '接口未命名'}
+            <span className={clsx('msw_content_left_item_name')}>
+              <span style={{ fontSize: 12, color: 'rgb(255, 178, 0)' }}>
+                {item.request.method?.toUpperCase()}
+              </span>
+              <span className="msw_content_left_item_title msw_content_left_item_request_title">
+                <span title={item.name}>
+                  <MswDot
+                    color={!item.disabled ? '#42AD00' : '#F04042'}
+                    style={{ marginRight: 5 }}
+                  />
+                  {item.name || '接口未命名'}
+                </span>
               </span>
             </span>
           </span>
@@ -315,17 +312,17 @@ const LisItem = (props: {
   return (
     <div className="msw_content_left_item_inner">
       <span
+        className="msw_content_left_item_title_wrap"
         onClick={() => setExpand?.(!expand)}
-        style={{ cursor: 'pointer', display: 'block', width: '100%' }}
       >
         <img
           src={downIcon}
           className={clsx('msw_downIcon', {
-            msw_dowIcon_expand: expand
+            msw_dowIcon_expand: expand,
           })}
           alt=""
         />
-        <span style={{ paddingLeft: 5 }}>{name}</span>
+        <span className="msw_content_left_item_title">{name}</span>
       </span>
       <Dropdown
         placement="right"

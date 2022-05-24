@@ -31,12 +31,17 @@ export const ConflictRequest = observer(
                 {data[im].map((im) => {
                   return (
                     <tr key={im.request.id + im.collection + im.group}>
-                      <td className="msw_table_module" title={im.collection}>
-                        {im.collection}
+                      <td>
+                        <div className="msw_table_module" title={im.collection}>
+                          {im.collection}
+                        </div>
                       </td>
-                      <td className="msw_table_module" title={im.group}>
-                        {im.group}
+                      <td>
+                        <div className="msw_table_module" title={im.group}>
+                          {im.group}
+                        </div>
                       </td>
+
                       <td>
                         <span
                           style={{
@@ -49,7 +54,7 @@ export const ConflictRequest = observer(
                           {im.request.method}
                         </span>
                         <span
-                          className="msw_table_request"
+                          className="msw_table_request msw_table_module_handle"
                           title={im.request.url.href}
                         >
                           {im.request.url.href}
