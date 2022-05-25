@@ -27,7 +27,7 @@ export const PanelLeft = observer(() => {
     $('.msw_content_left_item_wrap').on(
       'click',
       '.msw_moreIcon_wrap',
-      function () {
+      function() {
         const $menuItem = $(this).closest('.msw_dropdown_children'),
           $submenuWrapper = $($menuItem)
             .closest('.msw_dropdown')
@@ -37,7 +37,7 @@ export const PanelLeft = observer(() => {
           $submenuWrapper.css({
             position: 'fixed',
             top: menuItemPos?.top ? menuItemPos.top + 16 : 0,
-            left: (menuItemPos?.left || 0) + 25,
+            left: (menuItemPos?.left || 0) + 25
           });
       }
     );
@@ -47,8 +47,8 @@ export const PanelLeft = observer(() => {
   }, []);
   return (
     <div className="msw_content_left_item_wrap">
-      {groupRequest?.collection?.map((im) => {
-        return <MswContentLeftItem item={im} />;
+      {groupRequest?.collection?.map(im => {
+        return <MswContentLeftItem item={im} key={im.name} />;
       })}
     </div>
   );
@@ -67,7 +67,7 @@ const MswContentLeftItem = observer(
         if (value === 'delete') {
           MswModal.show({
             title: '确认要删除吗？',
-            onOk: () => deleteCollection(item.name),
+            onOk: () => deleteCollection(item.name)
           });
         }
         if (value === 'enable' || value === 'disable') {
@@ -108,7 +108,7 @@ const MswContentLeftItem = observer(
         </div>
         {expand && (
           <div>
-            {Object.keys(data).map((im) => {
+            {Object.keys(data).map(im => {
               return (
                 <MswContentLeftGroupItem
                   key={im}
@@ -150,7 +150,7 @@ const MswContentLeftGroupItem = observer(
         if (value === 'delete') {
           MswModal.show({
             title: '确认要删除吗？',
-            onOk: () => deleteGroup(collectionName, groupName),
+            onOk: () => deleteGroup(collectionName, groupName)
           });
         }
         if (value === 'enable' || value === 'disable') {
@@ -171,7 +171,7 @@ const MswContentLeftGroupItem = observer(
           className="msw_content_left_item"
           style={{
             paddingLeft: 20,
-            borderBottom: 'none',
+            borderBottom: 'none'
           }}
         >
           <LisItem
@@ -199,7 +199,7 @@ const MswContentLeftGroupItem = observer(
         </div>
         {expand && (
           <div>
-            {groupData.data?.map((im) => {
+            {groupData.data?.map(im => {
               return (
                 <MswContentLeftGroupRequestItem key={im.request.id} item={im} />
               );
@@ -232,7 +232,7 @@ const MswContentLeftGroupRequestItem = observer(
     const {
       setCurrentEditGroupRequest,
       deleteGroupItem,
-      changeGroupItemStatus,
+      changeGroupItemStatus
     } = store;
     const [nameEditModal, setNameEditModal] = useState(false);
     const menuChange = useCallback(
@@ -240,7 +240,7 @@ const MswContentLeftGroupRequestItem = observer(
         if (value === 'delete') {
           MswModal.show({
             title: '确认要删除吗？',
-            onOk: () => deleteGroupItem(item),
+            onOk: () => deleteGroupItem(item)
           });
         }
         if (value === 'enable' || value === 'disable') {
@@ -318,7 +318,7 @@ const LisItem = (props: {
         <img
           src={downIcon}
           className={clsx('msw_downIcon', {
-            msw_dowIcon_expand: expand,
+            msw_dowIcon_expand: expand
           })}
           alt=""
         />
