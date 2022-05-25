@@ -1,6 +1,6 @@
-import { DefaultRequestBody, MockedRequest, rest, RestHandler } from 'msw';
+import { DefaultRequestBody, MockedRequest, rest, RestHandler } from "msw";
 
-import { groupsRequestType, IGroupDataItem, mswReqType } from './handlesType';
+import { groupsRequestType, IGroupDataItem, mswReqType } from "./handlesType";
 
 export function filterRequest(req: mswReqType) {
   return !req.destination && req.url.host !== window.location.host;
@@ -120,18 +120,24 @@ export function judgeHavaGroupHandlers(groupMock: groupsRequestType) {
 }
 
 export function exportGroupRequestData(groupRequest: groupsRequestType) {
-  const link = document.createElement('a');
-  link.download = 'config.json';
-  link.href = 'data:text/plain,' + JSON.stringify(groupRequest);
-  link.click();
-  link.remove();
+  const eleLink = document.createElement("a");
+  eleLink.download = "msw_tool_config.json";
+  eleLink.style.display = "none";
+  // 字符内容转变成blob地址
+  const blob = new Blob([JSON.stringify(groupRequest)]);
+  eleLink.href = URL.createObjectURL(blob);
+  // 触发点击
+  document.body.appendChild(eleLink);
+  eleLink.click();
+  // 然后移除
+  document.body.removeChild(eleLink);
 }
 export function importStorageGroupData(data: string | Record<string, unknown>) {
   if (!data) return;
   try {
     if (data) {
       const request: groupsRequestType =
-        typeof data === 'string' ? JSON.parse(data) : data;
+        typeof data === "string" ? JSON.parse(data) : data;
       request.collection?.forEach((collectionItem) => {
         const group = collectionItem.data;
         Object.keys(group).forEach((im) => {
@@ -144,7 +150,7 @@ export function importStorageGroupData(data: string | Record<string, unknown>) {
       return request;
     }
   } catch (e) {
-    console.error('导入失败', e);
+    console.error("导入失败", e);
     return undefined;
   }
 }
@@ -222,7 +228,7 @@ export function versionDataTransfer(data: groupsRequestType) {
     return {
       collection: [
         {
-          name: '未知模块',
+          name: "未知模块",
           data,
         },
       ],
@@ -318,10 +324,10 @@ export function editMock(
   if (group) {
     group.data = group.data.filter((im) => im !== requestItem);
   }
-  requestItem.collection = newRequestItemData.collection || '';
-  requestItem.delay = newRequestItemData.delay || '0';
-  requestItem.group = newRequestItemData.group || '';
-  requestItem.name = newRequestItemData.name || '';
+  requestItem.collection = newRequestItemData.collection || "";
+  requestItem.delay = newRequestItemData.delay || "0";
+  requestItem.group = newRequestItemData.group || "";
+  requestItem.name = newRequestItemData.name || "";
   requestItem.status = newRequestItemData.status;
   requestItem.request.responseJson = newRequestItemData.request?.responseJson;
   addMock(groupRequest, requestItem);

@@ -28,6 +28,7 @@
   height: 60px;
   overflow: auto;
   z-index: 9999999;
+  .fontDefault();
   &.msw_container-left {
     left: 10px;
     right: auto;
@@ -44,8 +45,8 @@
 .msw_detail_panel {
   background-color: rgb(11, 21, 33);
   height: 100%;
-  overflow: auto;
-  min-width: 1280px;
+  overflow: hidden;
+  min-width: 1200px;
   box-shadow: 0px 12px 48px 16px rgba(0, 0, 0, 0.03),
     0px 9px 28px 0px rgba(0, 0, 0, 0.05), 0px 6px 16px -8px rgba(0, 0, 0, 0.08);
 }
@@ -64,7 +65,8 @@
     height: 100%;
     padding-top: 0;
     overflow: auto;
-    padding-bottom: 180px;
+    padding-bottom: 120px;
+    box-sizing: border-box;
   }
   .msw_content_left_item {
     padding: 5px 10px;
@@ -83,7 +85,7 @@
   }
   .msw_content_right {
     flex: 1;
-    height: 100%;
+    height: calc(100% - 45px);
     overflow: auto;
     position: relative;
     padding-top: 45px;
@@ -351,6 +353,9 @@
   .msw_handle_noRequest {
     color: white;
     text-align: center;
+    a {
+      color: @primary;
+    }
   }
   .msw_pagination_wrap {
     margin-top: 10px;
@@ -464,7 +469,7 @@
     display: flex;
     flex-shrink: 0;
     flex-wrap: wrap;
-    width: 1250px;
+    width: 1200px;
   }
   .msw_group_input_wrap {
     margin-left: 10px;
@@ -541,6 +546,9 @@
     .msw_hostChange_item .msw_hostOld {
       width: 400px;
     }
+    .msw_hostChange_item input {
+      width: 400px;
+    }
   }
 }
 @media screen and (max-width: 1330px) {
@@ -551,12 +559,40 @@
     .msw_content table.msw_request_table .msw_table_module_handle {
       width: 400px; 
     }
-    .msw_table_module_unHandle {
+    .msw_content table.msw_request_table .msw_table_module_unHandle {
       width: 750px;
+    }
+    .msw_hostChange_item .msw_hostOld {
+      width: 350px;
+    }
+    .msw_hostChange_item input {
+      width: 350px;
     }
   }
 }
 
-@media screen and (max-width: 1370px) {
-  
+@media screen and (max-width: 1270px) {
+  .msw_container {
+    .msw_table_module {
+      width: 100px;
+    }
+    .msw_content table.msw_request_table .msw_table_module_handle {
+      width: 400px; 
+    }
+    .msw_content table.msw_request_table .msw_table_module_unHandle {
+      width: 750px;
+    }
+    .msw_content .msw_detailConfig_item {
+      width: 220px;
+    }
+    .msw_mock_detail_wrap .msw_mock_detail_wrap_config_inner {
+      width: 1100px;
+    }
+    .msw_hostChange_item .msw_hostOld {
+      width: 350px;
+    }
+    .msw_hostChange_item input {
+      width: 350px;
+    }
+  }
 }

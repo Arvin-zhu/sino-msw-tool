@@ -61,8 +61,18 @@
 		padding-left: 7px;
 		padding-right: 7px;
 	}
+	button {
+		.btnAntd();
+		color: white;
+		background-color: transparent;
+		border: 1px solid @border;
+		&:hover {
+			border-color: rgba(255, 255, 255, 0.5) !important;
+		}
+	}
 	.msw_panel_statusBar_home {
 		cursor: pointer;
 		margin-right: 10px;
+		transition: opacity .3s ease;
 	}
 }

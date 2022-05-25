@@ -1,9 +1,9 @@
-import { chunk, cloneDeep } from 'lodash';
-import { makeAutoObservable } from 'mobx';
-import { MobXProviderContext } from 'mobx-react';
-import { setupWorker, SetupWorkerApi } from 'msw';
-import { useContext } from 'react';
-import yuxStorage from 'yux-storage';
+import { chunk, cloneDeep } from "lodash";
+import { makeAutoObservable } from "mobx";
+import { MobXProviderContext } from "mobx-react";
+import { setupWorker, SetupWorkerApi } from "msw";
+import { useContext } from "react";
+import yuxStorage from "yux-storage";
 
 import {
   activeCollection,
@@ -18,17 +18,17 @@ import {
   getResetHandlers,
   importStorageGroupData,
   saveSwitchHostData,
-  versionDataTransfer
-} from './handlesFnc';
-import { groupsRequestType, IGroupDataItem, mswReqType } from './handlesType';
+  versionDataTransfer,
+} from "./handlesFnc";
+import { groupsRequestType, IGroupDataItem, mswReqType } from "./handlesType";
 
 class HandlerMock {
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
   }
-  filterKeywords = '';
-  projectName = '';
-  handleTableTab = 'unHandle';
+  filterKeywords = "";
+  projectName = "";
+  handleTableTab = "unHandle";
   worker: SetupWorkerApi | null = null;
   handleAllRequest: mswReqType[] = [];
   showConflictDetail = false;
@@ -39,9 +39,9 @@ class HandlerMock {
   get unHandleAllRequest() {
     const handledMap: Record<string, boolean> = {};
     const collections = this.groupRequest.collection;
-    collections.forEach(collectionItem => {
-      Object.values(collectionItem.data).forEach(requestGroupItem => {
-        requestGroupItem.data.forEach(requestItem => {
+    collections.forEach((collectionItem) => {
+      Object.values(collectionItem.data).forEach((requestGroupItem) => {
+        requestGroupItem.data.forEach((requestItem) => {
           if (!requestItem.disabled) {
             handledMap[getRequestKey(requestItem.request)!] = true;
           }
@@ -49,17 +49,17 @@ class HandlerMock {
       });
     });
     return this.handleAllRequest
-      .filter(im => {
+      .filter((im) => {
         return !handledMap[getRequestKey(im)!];
       })
       .map(
-        im =>
+        (im) =>
           ({
             request: im,
-            group: '',
-            type: 'basic',
-            name: '',
-            collection: ''
+            group: "",
+            type: "basic",
+            name: "",
+            collection: "",
           } as IGroupDataItem)
       );
   }
@@ -67,9 +67,9 @@ class HandlerMock {
   get handledAllRequest() {
     const collections = this.groupRequest.collection;
     const handledRequest: IGroupDataItem[] = [];
-    collections.forEach(collectionItem => {
-      Object.values(collectionItem.data).forEach(requestGroupItem => {
-        requestGroupItem.data.forEach(requestItem => {
+    collections.forEach((collectionItem) => {
+      Object.values(collectionItem.data).forEach((requestGroupItem) => {
+        requestGroupItem.data.forEach((requestItem) => {
           if (!requestItem.disabled) {
             handledRequest.push(requestItem);
           }
@@ -80,21 +80,21 @@ class HandlerMock {
   }
   //初始化
   async init(projectName: string) {
-    if (process.env.NODE_ENV !== 'development') {
-      throw new Error('请在测试环境下使用msw mock 工具');
+    if (process.env.NODE_ENV !== "development") {
+      throw new Error("请在测试环境下使用msw mock 工具");
     }
     if (!projectName) {
-      throw new Error('请定义项目名称');
+      throw new Error("请定义项目名称");
     }
     this.projectName = projectName;
     const worker = setupWorker();
-    worker.events.on('request:unhandled', req => {
+    worker.events.on("request:unhandled", (req) => {
       if (filterRequest(req)) {
         if (!existRequest(req, this.handleAllRequest)) {
           this.handleAllRequest.unshift(req);
         } else {
           const findIndex = this.handleAllRequest.findIndex(
-            im => getRequestKey(im) === getRequestKey(req)
+            (im) => getRequestKey(im) === getRequestKey(req)
           );
           if (findIndex !== -1) {
             this.handleAllRequest.splice(findIndex, 1, req);
@@ -102,9 +102,9 @@ class HandlerMock {
         }
       }
     });
-    worker.events.on('response:bypass', async (res, reqId) => {
+    worker.events.on("response:bypass", async (res, reqId) => {
       try {
-        const findReq = this.handleAllRequest.find(im => im.id === reqId);
+        const findReq = this.handleAllRequest.find((im) => im.id === reqId);
         if (findReq) {
           findReq.responseJson = await res.json();
         }
@@ -116,13 +116,13 @@ class HandlerMock {
     window._msw_worker = worker;
     this.worker = worker;
     try {
-      const storage = await yuxStorage.getItem(projectName + '_msw-ui-storage');
-      let storageData = importStorageGroupData(storage || '');
+      const storage = await yuxStorage.getItem(projectName + "_msw-ui-storage");
+      let storageData = importStorageGroupData(storage || "");
       storageData = storageData ? versionDataTransfer(storageData) : undefined;
       storageData && (this.groupRequest = storageData);
       storageData && this.resetHandlers(storageData);
     } catch (e) {
-      console.error('msw init error:', e);
+      console.error("msw init error:", e);
     }
   }
   resetHandlers(groupsRequest: groupsRequestType) {
@@ -144,12 +144,12 @@ class HandlerMock {
   }
   get paginationMock() {
     let filterRequest: IGroupDataItem[] = [];
-    if (this.handleTableTab === 'unHandle') {
-      filterRequest = this.unHandleAllRequest.filter(im => {
+    if (this.handleTableTab === "unHandle") {
+      filterRequest = this.unHandleAllRequest.filter((im) => {
         return getRequestKey(im.request)?.includes(this.filterKeywords);
       });
     } else {
-      filterRequest = this.handledAllRequest.filter(im => {
+      filterRequest = this.handledAllRequest.filter((im) => {
         return getRequestKey(im.request)?.includes(this.filterKeywords);
       });
     }
@@ -172,7 +172,7 @@ class HandlerMock {
   }
   deleteGroup(collectionName: string, groupKey: string) {
     const collection = this.groupRequest.collection?.find(
-      im => im.name === collectionName
+      (im) => im.name === collectionName
     );
     const group = collection?.data;
     if (group) {
@@ -183,20 +183,20 @@ class HandlerMock {
   }
   deleteCollection(collectionName: string) {
     this.groupRequest.collection = this.groupRequest.collection.filter(
-      im => im.name !== collectionName
+      (im) => im.name !== collectionName
     );
     this.resetHandlers(this.groupRequest);
     this.saveRequestGroup();
   }
   deleteGroupItem(requestItem: IGroupDataItem) {
     const collection = this.groupRequest.collection.find(
-      im => im.name === requestItem.collection
+      (im) => im.name === requestItem.collection
     );
     const group = collection?.data;
     const groupKey = requestItem.group;
     if (group?.[groupKey]?.data) {
       group[groupKey].data = group[groupKey].data.filter(
-        im => im !== requestItem
+        (im) => im !== requestItem
       );
       this.resetHandlers(this.groupRequest);
       this.saveRequestGroup();
@@ -213,7 +213,7 @@ class HandlerMock {
   }
   saveRequestGroup() {
     yuxStorage.setItem(
-      this.projectName + '_msw-ui-storage',
+      this.projectName + "_msw-ui-storage",
       JSON.stringify(this.groupRequest)
     );
   }
@@ -225,28 +225,28 @@ class HandlerMock {
       this.saveRequestGroup();
     }
   }
-  changeHandleTabTab(type: 'unHandle' | 'handled') {
+  changeHandleTabTab(type: "unHandle" | "handled") {
     this.handleTableTab = type;
   }
   addCollection(name: string) {
     const trimName = name.trim();
     if (!trimName) {
-      return { status: false, msg: '名称不能为空' };
+      return { status: false, msg: "名称不能为空" };
     }
     if (collectionRepeat(trimName, this.groupRequest)) {
-      return { status: false, msg: '名称重复' };
+      return { status: false, msg: "名称重复" };
     }
     if (!this.groupRequest.collection) {
       this.groupRequest.collection = [];
     }
     this.groupRequest.collection.push({
       name: trimName,
-      data: {}
+      data: {},
     });
     this.saveRequestGroup();
     return {
       status: true,
-      msg: ''
+      msg: "",
     };
   }
   setCurrentHostChange(status: boolean) {
@@ -267,7 +267,7 @@ class HandlerMock {
   }
   checkNameEditRepeat(
     data: {
-      level: 'collection' | 'group' | 'request';
+      level: "collection" | "group" | "request";
       collectionName?: string;
       groupName?: string;
       request?: IGroupDataItem;
@@ -276,27 +276,27 @@ class HandlerMock {
   ) {
     const { level, collectionName, groupName } = data;
     let repeat = false;
-    if (level === 'collection' && newName) {
-      const collectionNames = this.groupRequest.collection.map(im => im.name);
+    if (level === "collection" && newName) {
+      const collectionNames = this.groupRequest.collection.map((im) => im.name);
       if (collectionNames.includes(newName)) {
         repeat = true;
       }
     }
-    if (level === 'group' && newName && collectionName) {
+    if (level === "group" && newName && collectionName) {
       const collection = this.groupRequest.collection.find(
-        collection => collection.name === collectionName
+        (collection) => collection.name === collectionName
       );
       if (collection?.data) {
         repeat = Object.keys(collection.data).includes(newName);
       }
     }
-    if (level === 'request' && collectionName && groupName && newName) {
+    if (level === "request" && collectionName && groupName && newName) {
       const collection = this.groupRequest.collection.find(
-        collection => collection.name === collectionName
+        (collection) => collection.name === collectionName
       );
       const group = collection?.data?.[groupName];
       const requestsName =
-        group?.data?.map(requestItem => {
+        group?.data?.map((requestItem) => {
           return requestItem.name;
         }) || [];
       repeat = requestsName.includes(newName);
@@ -306,7 +306,7 @@ class HandlerMock {
 
   saveEditName(
     data: {
-      level: 'collection' | 'group' | 'request';
+      level: "collection" | "group" | "request";
       collectionName?: string;
       groupName?: string;
       request?: IGroupDataItem;
@@ -314,40 +314,40 @@ class HandlerMock {
     newName: string
   ) {
     const { level, collectionName, groupName, request } = data;
-    if (level === 'collection' && collectionName) {
+    if (level === "collection" && collectionName) {
       const collection = this.groupRequest.collection.find(
-        collection => collection.name === collectionName
+        (collection) => collection.name === collectionName
       );
       if (collection) {
         collection.name = newName;
         const groups = collection.data;
-        Object.keys(groups).forEach(groupKey => {
-          groups[groupKey].data.forEach(requestItem => {
+        Object.keys(groups).forEach((groupKey) => {
+          groups[groupKey].data.forEach((requestItem) => {
             requestItem.collection = newName;
           });
         });
       }
     }
-    if (level === 'group' && collectionName && groupName) {
+    if (level === "group" && collectionName && groupName) {
       const collection = this.groupRequest.collection.find(
-        collection => collection.name === collectionName
+        (collection) => collection.name === collectionName
       );
       const group = collection?.data[groupName];
       if (group) {
-        group.data?.forEach(requestItem => {
+        group.data?.forEach((requestItem) => {
           requestItem.group = newName;
         });
         delete collection.data[groupName];
         collection.data[newName] = group;
       }
     }
-    if (level === 'request' && collectionName && groupName && request) {
+    if (level === "request" && collectionName && groupName && request) {
       const collection = this.groupRequest.collection.find(
-        collection => collection.name === collectionName
+        (collection) => collection.name === collectionName
       );
       const group = collection?.data[groupName];
       const request: IGroupDataItem | undefined = group?.data.find(
-        requestItem => requestItem.name === request?.name
+        (requestItem) => requestItem.name === request?.name
       );
       if (request && group) {
         request.name = newName;
@@ -358,7 +358,7 @@ class HandlerMock {
   }
   saveCopy(
     data: {
-      level: 'collection' | 'group' | 'request';
+      level: "collection" | "group" | "request";
       collectionName?: string;
       groupName?: string;
       request?: IGroupDataItem;
@@ -366,16 +366,16 @@ class HandlerMock {
     newName: string
   ) {
     const { level, collectionName, groupName, request } = data;
-    if (level === 'collection' && collectionName) {
+    if (level === "collection" && collectionName) {
       const collection = this.groupRequest.collection.find(
-        collection => collection.name === collectionName
+        (collection) => collection.name === collectionName
       );
       if (collection) {
         const cpCollection = cloneDeep(collection);
         cpCollection.name = newName;
         const groups = cpCollection.data;
-        Object.keys(groups).forEach(groupKey => {
-          groups[groupKey].data.forEach(requestItem => {
+        Object.keys(groups).forEach((groupKey) => {
+          groups[groupKey].data.forEach((requestItem: IGroupDataItem) => {
             requestItem.collection = newName;
             requestItem.disabled = true;
           });
@@ -383,27 +383,27 @@ class HandlerMock {
         this.groupRequest.collection.push(cpCollection);
       }
     }
-    if (level === 'group' && collectionName && groupName) {
+    if (level === "group" && collectionName && groupName) {
       const collection = this.groupRequest.collection.find(
-        collection => collection.name === collectionName
+        (collection) => collection.name === collectionName
       );
       const group = collection?.data[groupName];
       if (group) {
         const cpGroup = cloneDeep(group);
-        cpGroup.data?.forEach(requestItem => {
+        cpGroup.data?.forEach((requestItem: IGroupDataItem) => {
           requestItem.group = newName;
           requestItem.disabled = true;
         });
         collection.data[newName] = cpGroup;
       }
     }
-    if (level === 'request' && collectionName && groupName && request) {
+    if (level === "request" && collectionName && groupName && request) {
       const collection = this.groupRequest.collection.find(
-        collection => collection.name === collectionName
+        (collection) => collection.name === collectionName
       );
       const group = collection?.data[groupName];
       const request: IGroupDataItem | undefined = group?.data.find(
-        requestItem => requestItem.name === request?.name
+        (requestItem) => requestItem.name === request?.name
       );
       if (request && group) {
         const cpRequest = cloneDeep(request);
