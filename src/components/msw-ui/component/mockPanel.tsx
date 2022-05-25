@@ -24,13 +24,14 @@ export const MockPanel = observer(
     return (
       <div
         className={clsx('msw_container', {
-          'msw_container-left': placement === 'leftBottom'
+          'msw_container-left': placement === 'leftBottom',
+          'msw_container-show': showDetail,
         })}
       >
         {!showDetail && (
           <div
             className={clsx('msw_container_circle', {
-              'msw_container_circle-leftBottom': placement === 'leftBottom'
+              'msw_container_circle-leftBottom': placement === 'leftBottom',
             })}
             onClick={() => setShowDetail(true)}
             data-testid="msw_circle"
@@ -88,7 +89,7 @@ function MockDetail(props: {
                 <div>
                   <Input
                     value={newCollectionName}
-                    onChange={e => {
+                    onChange={(e) => {
                       setNewCollectionName(e.target.value);
                       setAddCollectionError('');
                     }}
