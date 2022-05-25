@@ -12,7 +12,7 @@
   - npx msw init <PUBLIC_DIR> --save
   - 在开发模式下引入
     ```
-    import MswUi from '@sino/msw-tool';
+    import {MswUi, initMsw} from '@sino/msw-tool';
     ......
     ......
     //initMsw参数为项目名称，作为本地存储的key
