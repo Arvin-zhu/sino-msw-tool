@@ -20,14 +20,20 @@ configure({ isolateGlobalState: true });
 
 export type mswPlacement = 'rightBottom' | 'leftBottom';
 
-export const MswUi = (props: {
-  projectName: string;
-  placement?: mswPlacement;
-}) => {
-  const { projectName, placement = 'rightBottom' } = props;
+export const MswUi = (props: { placement?: mswPlacement }) => {
+  const { placement = 'rightBottom' } = props;
   return (
     <Provider store={handlerMock}>
-      <MockPanel projectName={projectName} placement={placement} />
+      <MockPanel placement={placement} />
     </Provider>
   );
+};
+
+export const initMsw = (projectName: string) => {
+  if (process.env.NODE_ENV === 'development') {
+    return handlerMock.init(projectName).catch(e => {
+      throw new Error('mswError:' + e);
+    });
+  }
+  return Promise.resolve();
 };

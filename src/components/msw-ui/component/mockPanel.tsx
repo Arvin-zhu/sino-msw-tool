@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { observer } from 'mobx-react';
-import React, { useCallback, useLayoutEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { useStores } from '../handles';
 import { mswPlacement } from '../MswUi';
@@ -12,40 +12,34 @@ import { PanelRight } from './panelRight/panelRight';
 
 const addBtn = require('../images/add.png');
 
-export const MockPanel = observer(
-  (props: { projectName: string; placement?: mswPlacement }) => {
-    const { projectName, placement } = props;
-    const [showDetail, setShowDetail] = useState(false);
-    const { store } = useStores();
-    useLayoutEffect(() => {
-      store.init(projectName);
-    }, []);
+export const MockPanel = observer((props: { placement?: mswPlacement }) => {
+  const { placement } = props;
+  const [showDetail, setShowDetail] = useState(false);
 
-    return (
-      <div
-        className={clsx('msw_container', {
-          'msw_container-left': placement === 'leftBottom',
-          'msw_container-show': showDetail
-        })}
-      >
-        {!showDetail && (
-          <div
-            className={clsx('msw_container_circle', {
-              'msw_container_circle-leftBottom': placement === 'leftBottom'
-            })}
-            onClick={() => setShowDetail(true)}
-            data-testid="msw_circle"
-          >
-            M
-          </div>
-        )}
-        <div style={{ display: showDetail ? 'block' : 'none', height: '100%' }}>
-          <MockDetail setShowDetail={setShowDetail} />
+  return (
+    <div
+      className={clsx('msw_container', {
+        'msw_container-left': placement === 'leftBottom',
+        'msw_container-show': showDetail
+      })}
+    >
+      {!showDetail && (
+        <div
+          className={clsx('msw_container_circle', {
+            'msw_container_circle-leftBottom': placement === 'leftBottom'
+          })}
+          onClick={() => setShowDetail(true)}
+          data-testid="msw_circle"
+        >
+          M
         </div>
+      )}
+      <div style={{ display: showDetail ? 'block' : 'none', height: '100%' }}>
+        <MockDetail setShowDetail={setShowDetail} />
       </div>
-    );
-  }
-);
+    </div>
+  );
+});
 
 function MockDetail(props: {
   setShowDetail: React.Dispatch<React.SetStateAction<boolean>>;

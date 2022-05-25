@@ -15,7 +15,16 @@
     import MswUi from '@sino/msw-tool';
     ......
     ......
-    {
-      process.env.NODE_ENV === 'development' && <MswUi projectName={'...'} />
-    }
+    //initMsw参数为项目名称，作为本地存储的key
+    initMsw("creation_front").then(() => {
+      ReactDOM.render(
+        <React.StrictMode>
+          {process.env.NODE_ENV === "development" && (
+            <MswUi />
+          )}
+          <App />
+        </React.StrictMode>,
+        document.getElementById("root")
+      );
+    });
     ```
