@@ -9,7 +9,7 @@
 - 安装msw-tool
 	- yarn add @sino/msw-tool --dev
 - 执行msw初始化([文档](https://mswjs.io/docs/getting-started/integrate/browser))
-  - npx msw init <PUBLIC_DIR> --save
+  - npx msw init <PUBLIC_DIR> --save （umi项目需要新建public目录）
   - 在开发模式下引入
     ```
     //在create-react-app中
