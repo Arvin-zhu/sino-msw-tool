@@ -123,7 +123,8 @@ class HandlerMock {
       storageData && this.resetHandlers(storageData);
       return Promise.resolve();
     } catch (e) {
-      return Promise.reject('msw init error:' + e);
+      console.error('msw-tool 数据初始化失败:' + e);
+      return Promise.resolve();
     }
   }
   resetHandlers(groupsRequest: groupsRequestType) {
