@@ -12,19 +12,16 @@
   - npx msw init <PUBLIC_DIR> --save
   - 在开发模式下引入
     ```
-    import {MswUi, initMsw} from '@sino/msw-tool';
+    import {MswUi} from '@sino/msw-tool';
     ......
     ......
-    //initMsw参数为项目名称，作为本地存储的key
-    initMsw("creation_front").then(() => {
-      ReactDOM.render(
-        <React.StrictMode>
-          {process.env.NODE_ENV === "development" && (
-            <MswUi />
-          )}
+    ReactDOM.render(
+      <React.StrictMode>
+        {/* projectname为项目名称 */}
+        <MswUi projectName="creation_front">
           <App />
-        </React.StrictMode>,
-        document.getElementById("root")
-      );
-    });
+        </MswUi>
+      </React.StrictMode>,
+      document.getElementById("root")
+    );
     ```
