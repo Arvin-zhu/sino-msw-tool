@@ -36,7 +36,7 @@
 		overflow: hidden;
 		line-height: 38px;
 		padding: 0 11px;
-		background-color: #131629;
+		background-color: @main-bcg;
 		cursor: not-allowed;
 	}
 }
@@ -44,12 +44,12 @@
 	.btnAntd();
 	color: white;
 	margin-left: 10px;
-	background-color: #3f4e60;
-	border-color: #3f4e60;
+	background-color: @main-gray;
+	border-color: @main-gray;
 	&:hover,
 	&:focus,
 	&:active {
-		background: darken(#3f4e60, 10%);
-		border-color: darken(#3f4e60, 10%);
+		background: darken(@main-gray, 10%);
+		border-color: darken(@main-gray, 10%);
 	}
 }

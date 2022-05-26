@@ -4,7 +4,7 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background-color: #131629;
+  background-color: @main-bcg;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -117,7 +117,7 @@
       min-width: 50px;
     }
     input {
-      background-color: #131629;
+      background-color: @main-bcg;
     }
   }
   .msw_detailConfig_item {
@@ -160,7 +160,7 @@
     margin-top: 10px;
     border-radius: 4px;
     width: 100%;
-    background-color: #131629;
+    background-color: @main-bcg;
     color: white;
     button {
       .btnAntd();
@@ -188,10 +188,10 @@
       padding: 4px 8px;
     }
     th {
-      background: #131629;
+      background: @main-bcg;
     }
     tr:hover {
-      background-color: darken(#131629, 10%);
+      background-color: darken(@main-bcg, 10%);
     }
     .msw_mock_btn {
       background-color: #F89108;
@@ -414,13 +414,13 @@
         .btnAntd();
         color: white;
         margin-left: 10px;
-        background-color: #3f4e60;
-        border-color: #3f4e60;
+        background-color: @main-gray;
+        border-color: @main-gray;
         &:hover,
         &:focus,
         &:active {
-          background: darken(#3f4e60, 10%);
-          border-color: darken(#3f4e60, 10%);
+          background: darken(@main-gray, 10%);
+          border-color: darken(@main-gray, 10%);
         }
       }
     }
