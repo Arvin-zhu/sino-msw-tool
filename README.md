@@ -63,3 +63,10 @@ msw-tool 是基于msw(Mock Service Worker)而开发的插件，旨在提高开�
 
 7. 关于https，需要注意的事项
 https证书无效的时候，msw是无法拦截请求的，具体可以查看https://mswjs.io/docs/recipes/using-local-https
+8. 关于Create React App (version 3)
+   - 如果使用的是Create-React-App v3版本创建的项目，需要删除以下代码
+      ```
+      // src/index.js
+      // Create-React-App v3版本创建的会默认去掉所有service的注册，这样会导致工具无效
+      serviceWorker.unregister()
+      ```
