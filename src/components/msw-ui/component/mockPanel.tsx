@@ -52,8 +52,8 @@ function MockDetail(props: {
     return new Promise((resolve, reject) => {
       const result = store.addCollection(newCollectionName);
       if (result.status) {
-        resolve('');
         setNewCollectionName('');
+        resolve('');
       } else {
         setAddCollectionError(result.msg);
         reject(result.msg);
