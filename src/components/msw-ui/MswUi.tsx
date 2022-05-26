@@ -1,8 +1,8 @@
 import { Provider } from 'mobx-react';
 import { SetupWorkerApi } from 'msw';
 
+import React, { useLayoutEffect, useState } from 'react';
 import './component/index.less';
-import React from 'react';
 
 import { MockPanel } from './component/mockPanel';
 import { handlerMock } from './handles';
@@ -20,15 +20,28 @@ configure({ isolateGlobalState: true });
 
 export type mswPlacement = 'rightBottom' | 'leftBottom';
 
-export const MswUi = (props: { placement?: mswPlacement }) => {
-  const { placement = 'rightBottom' } = props;
+export const MswUi: React.FC<{
+  placement?: mswPlacement;
+  projectName: string;
+}> = props => {
+  const { placement = 'rightBottom', projectName } = props;
+  const [loading, setLoading] = useState(true);
+  useLayoutEffect(() => {
+    initMsw(projectName).then(() => {
+      setLoading(false);
+    });
+  }, [projectName]);
   return (
-    <Provider store={handlerMock}>
-      <MockPanel placement={placement} />
-    </Provider>
+    <>
+      {process.env.NODE_ENV === 'development' && (
+        <Provider store={handlerMock}>
+          <MockPanel placement={placement} />
+        </Provider>
+      )}
+      {loading ? null : props.children}
+    </>
   );
 };
-
 export const initMsw = (projectName: string) => {
   if (process.env.NODE_ENV === 'development') {
     return handlerMock.init(projectName).catch(e => {
