@@ -23,6 +23,7 @@ export type mswPlacement = 'rightBottom' | 'leftBottom';
 export const MswUi: React.FC<{
   placement?: mswPlacement;
   projectName: string;
+  children: any;
 }> = props => {
   const { placement = 'rightBottom', projectName } = props;
   const [loading, setLoading] = useState(true);
