@@ -55,7 +55,7 @@ export const AddMockPanel = observer(
         </div>
       );
     }
-    if (!handledAllRequest?.length && tableTab === "handled") {
+    if (!handledAllRequest?.length && tableTab === "handled" && !currentHostSwitch && !currentEditGroupRequest) {
       return (
         <div className="msw_handle_noRequest">
           <div style={{ paddingTop: 10 }}>暂无拦截中的请求</div>
