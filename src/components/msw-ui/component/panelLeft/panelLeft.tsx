@@ -1,53 +1,53 @@
-import clsx from 'clsx';
-import { observer } from 'mobx-react';
-import React, { useCallback, useEffect, useState } from 'react';
-import './index.less';
+import clsx from "clsx";
+import { observer } from "mobx-react";
+import React, { useCallback, useEffect, useState } from "react";
+import "./index.less";
 
-import { useStores } from '../../handles';
-import { checkEnableInCollection, checkEnableInGroup } from '../../handlesFnc';
-import { groupsRequestTypeItem, IGroupDataItem } from '../../handlesType';
-import { operationArr, operationRequestArr } from '../consts';
-import { MswDot } from '../dot/dot';
-import { Dropdown } from '../dropdown/dropdown';
-import { Menu } from '../menu/menu';
+import { useStores } from "../../handles";
+import { checkEnableInCollection, checkEnableInGroup } from "../../handlesFnc";
+import { groupsRequestTypeItem, IGroupDataItem } from "../../handlesType";
+import { operationArr, operationRequestArr } from "../consts";
+import { MswDot } from "../dot/dot";
+import { Dropdown } from "../dropdown/dropdown";
+import { Menu } from "../menu/menu";
 
-import $ from 'jquery';
+import $ from "jquery";
 
-import { MswModal } from '../modal/modal';
+import { MswModal } from "../modal/modal";
 
-import { CopyModal, NameEditModal } from './components/nameEdit/nameEdit';
+import { CopyModal, NameEditModal } from "./components/nameEdit/nameEdit";
 
-const downIcon = require('../../images/down.png');
-const moreIcon = require('../../images/more.png');
+const downIcon = require("../../images/down.png");
+const moreIcon = require("../../images/more.png");
 
 export const PanelLeft = observer(() => {
   const { store } = useStores();
   const { groupRequest } = store;
   useEffect(() => {
-    $('.msw_content_left_item_wrap').on(
-      'click',
-      '.msw_moreIcon_wrap',
-      function() {
-        const $menuItem = $(this).closest('.msw_dropdown_children'),
+    $(".msw_content_left_item_wrap").on(
+      "click",
+      ".msw_moreIcon_wrap",
+      function () {
+        const $menuItem = $(this).closest(".msw_dropdown_children"),
           $submenuWrapper = $($menuItem)
-            .closest('.msw_dropdown')
-            .find('.msw_dropdown_panel');
+            .closest(".msw_dropdown")
+            .find(".msw_dropdown_panel");
         const menuItemPos = $menuItem.offset();
         $menuItem &&
           $submenuWrapper.css({
-            position: 'fixed',
+            position: "fixed",
             top: menuItemPos?.top ? menuItemPos.top + 16 : 0,
-            left: (menuItemPos?.left || 0) + 25
+            left: (menuItemPos?.left || 0) + 25,
           });
       }
     );
     return () => {
-      $('.msw_content_left_item_wrap').off('click');
+      $(".msw_content_left_item_wrap").off("click");
     };
   }, []);
   return (
     <div className="msw_content_left_item_wrap">
-      {groupRequest?.collection?.map(im => {
+      {groupRequest?.collection?.map((im) => {
         return <MswContentLeftItem item={im} key={im.name} />;
       })}
     </div>
@@ -60,21 +60,25 @@ const MswContentLeftItem = observer(
     const [expand, setExpand] = useState(false);
     const { store } = useStores();
     const [nameEditModal, setNameEditModal] = useState(false);
+    const [copyModal, setCopyModal] = useState(false);
     const { deleteCollection, groupRequest, changeCollectionStatus } = store;
     const data = item?.data || {};
     const menuChange = useCallback(
       (value: string) => {
-        if (value === 'delete') {
+        if (value === "delete") {
           MswModal.show({
-            title: '确认要删除吗？',
-            onOk: () => deleteCollection(item.name)
+            title: "确认要删除吗？",
+            onOk: () => deleteCollection(item.name),
           });
         }
-        if (value === 'enable' || value === 'disable') {
-          changeCollectionStatus(item.name, value === 'enable');
+        if (value === "enable" || value === "disable") {
+          changeCollectionStatus(item.name, value === "enable");
         }
-        if (value === 'editName') {
+        if (value === "editName") {
           setNameEditModal(true);
+        }
+        if (value === "copy") {
+          setCopyModal(true);
         }
       },
       [item]
@@ -87,15 +91,15 @@ const MswContentLeftItem = observer(
             expand={expand}
             name={
               <span
-                className={clsx('msw_content_left_item_name')}
+                className={clsx("msw_content_left_item_name")}
                 title={item.name}
                 // style={{ maxWidth: 160 }}
               >
                 <MswDot
                   color={
                     checkEnableInCollection(item.name, groupRequest)
-                      ? '#42AD00'
-                      : '#F04042'
+                      ? "#42AD00"
+                      : "#F04042"
                   }
                   style={{ marginRight: 5 }}
                 />
@@ -103,12 +107,12 @@ const MswContentLeftItem = observer(
               </span>
             }
             menuChange={menuChange}
-            operationArr={operationArr}
+            operationArr={[...operationArr, { label: "复制", value: "copy" }]}
           />
         </div>
         {expand && (
           <div>
-            {Object.keys(data).map(im => {
+            {Object.keys(data).map((im) => {
               return (
                 <MswContentLeftGroupItem
                   key={im}
@@ -125,6 +129,12 @@ const MswContentLeftItem = observer(
           collectionName={item.name}
           visible={nameEditModal}
           setVisible={setNameEditModal}
+        />
+        <CopyModal
+          level="collection"
+          collectionName={item.name}
+          visible={copyModal}
+          setVisible={setCopyModal}
         />
       </>
     );
@@ -147,19 +157,19 @@ const MswContentLeftGroupItem = observer(
     const { deleteGroup, groupRequest, activeGroup } = store;
     const menuChange = useCallback(
       (value: string) => {
-        if (value === 'delete') {
+        if (value === "delete") {
           MswModal.show({
-            title: '确认要删除吗？',
-            onOk: () => deleteGroup(collectionName, groupName)
+            title: "确认要删除吗？",
+            onOk: () => deleteGroup(collectionName, groupName),
           });
         }
-        if (value === 'enable' || value === 'disable') {
-          activeGroup(collectionName, groupName, value === 'enable');
+        if (value === "enable" || value === "disable") {
+          activeGroup(collectionName, groupName, value === "enable");
         }
-        if (value === 'editName') {
+        if (value === "editName") {
           setNameEditModal(true);
         }
-        if (value === 'copy') {
+        if (value === "copy") {
           setCopyModal(true);
         }
       },
@@ -171,7 +181,7 @@ const MswContentLeftGroupItem = observer(
           className="msw_content_left_item"
           style={{
             paddingLeft: 20,
-            borderBottom: 'none'
+            borderBottom: "none",
           }}
         >
           <LisItem
@@ -179,14 +189,14 @@ const MswContentLeftGroupItem = observer(
             expand={expand}
             name={
               <span
-                className={clsx('msw_content_left_item_name')}
+                className={clsx("msw_content_left_item_name")}
                 title={groupName}
               >
                 <MswDot
                   color={
                     checkEnableInGroup(collectionName, groupName, groupRequest)
-                      ? '#42AD00'
-                      : '#F04042'
+                      ? "#42AD00"
+                      : "#F04042"
                   }
                   style={{ marginRight: 5 }}
                 />
@@ -194,14 +204,17 @@ const MswContentLeftGroupItem = observer(
               </span>
             }
             menuChange={menuChange}
-            operationArr={[...operationArr, { label: '复制', value: 'copy' }]}
+            operationArr={[...operationArr, { label: "复制", value: "copy" }]}
           />
         </div>
         {expand && (
           <div>
-            {groupData.data?.map(im => {
+            {groupData.data?.map((im) => {
               return (
-                <MswContentLeftGroupRequestItem key={im.request.id} item={im} />
+                <MswContentLeftGroupRequestItem
+                  key={im.request.id + im.name}
+                  item={im}
+                />
               );
             })}
           </div>
@@ -232,21 +245,21 @@ const MswContentLeftGroupRequestItem = observer(
     const {
       setCurrentEditGroupRequest,
       deleteGroupItem,
-      changeGroupItemStatus
+      changeGroupItemStatus,
     } = store;
     const [nameEditModal, setNameEditModal] = useState(false);
     const menuChange = useCallback(
       (value: string) => {
-        if (value === 'delete') {
+        if (value === "delete") {
           MswModal.show({
-            title: '确认要删除吗？',
-            onOk: () => deleteGroupItem(item)
+            title: "确认要删除吗？",
+            onOk: () => deleteGroupItem(item),
           });
         }
-        if (value === 'enable' || value === 'disable') {
-          changeGroupItemStatus(item, value === 'enable');
+        if (value === "enable" || value === "disable") {
+          changeGroupItemStatus(item, value === "enable");
         }
-        if (value === 'editName') {
+        if (value === "editName") {
           setNameEditModal(true);
         }
       },
@@ -255,24 +268,30 @@ const MswContentLeftGroupRequestItem = observer(
     return (
       <div
         className="msw_content_left_item"
-        style={{ paddingLeft: 30, borderBottom: 'none' }}
+        style={{ paddingLeft: 30, borderBottom: "none" }}
       >
         <div className="msw_content_left_item_inner">
           <span
             onClick={() => setCurrentEditGroupRequest(item)}
             className="msw_content_left_item_title_wrap"
           >
-            <span className={clsx('msw_content_left_item_name')}>
-              <span style={{ fontSize: 12, color: 'rgb(255, 178, 0)' }}>
+            <span className={clsx("msw_content_left_item_name")}>
+              <span
+                style={{
+                  fontSize: 12,
+                  color: "rgb(255, 178, 0)",
+                  verticalAlign: "middle",
+                }}
+              >
                 {item.request.method?.toUpperCase()}
               </span>
               <span className="msw_content_left_item_title msw_content_left_item_request_title">
                 <span title={item.name}>
                   <MswDot
-                    color={!item.disabled ? '#42AD00' : '#F04042'}
+                    color={!item.disabled ? "#42AD00" : "#F04042"}
                     style={{ marginRight: 5 }}
                   />
-                  {item.name || '接口未命名'}
+                  {item.name || "接口未命名"}
                 </span>
               </span>
             </span>
@@ -317,8 +336,8 @@ const LisItem = (props: {
       >
         <img
           src={downIcon}
-          className={clsx('msw_downIcon', {
-            msw_dowIcon_expand: expand
+          className={clsx("msw_downIcon", {
+            msw_dowIcon_expand: expand,
           })}
           alt=""
         />

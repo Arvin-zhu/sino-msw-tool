@@ -1,16 +1,16 @@
-import clsx from 'clsx';
-import { observer } from 'mobx-react';
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import clsx from "clsx";
+import { observer } from "mobx-react";
+import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 
-import { useStores } from '../handles';
-import { IGroupDataItem } from '../handlesType';
+import { useStores } from "../handles";
+import { IGroupDataItem } from "../handlesType";
 
-import { AddMockTextArea } from './addMockTextArea';
-import { Confirm } from './confirm/confirm';
-import { HostChange } from './hostChange/hostChange';
+import { AddMockTextArea } from "./addMockTextArea";
+import { Confirm } from "./confirm/confirm";
+import { HostChange } from "./hostChange/hostChange";
 
 export const AddMockPanel = observer(
-  (props: { tableTab: 'unHandle' | 'handled' }) => {
+  (props: { tableTab: "unHandle" | "handled" }) => {
     const { store } = useStores();
     const { tableTab } = props;
     const {
@@ -22,7 +22,7 @@ export const AddMockPanel = observer(
       changeGroupItemStatus,
       deleteGroupItem,
       currentHostSwitch,
-      showConflictDetail
+      showConflictDetail,
     } = store;
     const [pageSize, setPageSize] = useState(1);
     const filterChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -31,13 +31,13 @@ export const AddMockPanel = observer(
     }, []);
     useEffect(() => {
       setPageSize(1);
-      store.setFilterKeyword('');
+      store.setFilterKeyword("");
     }, [tableTab]);
     const shouldNotShowTable =
       !currentEditGroupRequest && !showConflictDetail && !currentHostSwitch;
     if (
       !unHandleAllRequest?.length &&
-      tableTab === 'unHandle' &&
+      tableTab === "unHandle" &&
       shouldNotShowTable
     ) {
       return (
@@ -46,7 +46,7 @@ export const AddMockPanel = observer(
           <div>
             如果使用的是https,请确认https签名是否有效，
             <a
-              target={'_blank'}
+              target={"_blank"}
               href="https://mswjs.io/docs/recipes/using-local-https"
               rel="noreferrer"
             >
@@ -58,7 +58,7 @@ export const AddMockPanel = observer(
     }
     if (
       !handledAllRequest?.length &&
-      tableTab === 'handled' &&
+      tableTab === "handled" &&
       shouldNotShowTable
     ) {
       return (
@@ -72,27 +72,28 @@ export const AddMockPanel = observer(
         <div>
           {shouldNotShowTable && (
             <div style={{ padding: 10 }}>
-              <div className={'msw_addMock_filter'}>
+              <div className={"msw_addMock_filter"}>
                 <span>过滤: </span>
                 <input
                   value={filterKeywords}
                   onChange={filterChange}
-                  placeholder={'过滤拦截的请求'}
+                  placeholder={"过滤拦截的请求"}
                 />
               </div>
               <table className="msw_request_table">
                 <thead>
                   <tr>
-                    {tableTab !== 'unHandle' && (
+                    {tableTab !== "unHandle" && (
                       <>
                         <th>模块</th>
                         <th>组</th>
+                        <th>别名</th>
                       </>
                     )}
                     <th>
-                      {tableTab === 'unHandle'
-                        ? '未拦截的请求'
-                        : '拦截中的请求'}
+                      {tableTab === "unHandle"
+                        ? "未拦截的请求"
+                        : "拦截中的请求"}
                     </th>
                     <th>操作</th>
                   </tr>
@@ -100,8 +101,10 @@ export const AddMockPanel = observer(
                 <tbody>
                   {paginationMock?.[pageSize - 1]?.map((im: IGroupDataItem) => {
                     return (
-                      <tr key={im.request.id + im.collection + im.group}>
-                        {tableTab === 'handled' && (
+                      <tr
+                        key={im.request.id + im.collection + im.group + im.name}
+                      >
+                        {tableTab === "handled" && (
                           <>
                             <td>
                               <div
@@ -119,23 +122,29 @@ export const AddMockPanel = observer(
                                 {im.group}
                               </div>
                             </td>
+                            <td>
+                              <div className="msw_table_module" title={im.name}>
+                                {im.name}
+                              </div>
+                            </td>
                           </>
                         )}
                         <td>
                           <span
                             style={{
-                              display: 'inline-block',
+                              display: "inline-block",
                               width: 50,
                               marginRight: 10,
-                              color: '#F89108'
+                              color: "#F89108",
                             }}
                           >
                             {im.request.method}
                           </span>
                           <span
-                            className={clsx('msw_table_request', {
-                              msw_table_module_handle: tableTab === 'handled',
-                              msw_table_module_unHandle: tableTab === 'unHandle'
+                            className={clsx("msw_table_request", {
+                              msw_table_module_handle: tableTab === "handled",
+                              msw_table_module_unHandle:
+                                tableTab === "unHandle",
                             })}
                             title={im.request.url.href}
                           >
@@ -143,19 +152,19 @@ export const AddMockPanel = observer(
                           </span>
                         </td>
                         <td>
-                          <div style={{ textAlign: 'center' }}>
+                          <div style={{ textAlign: "center" }}>
                             <button
                               className="msw_mock_btn small"
                               onClick={() => {
                                 store.setCurrentEditGroupRequest(im);
                               }}
                             >
-                              {tableTab === 'unHandle' ? 'mock' : '编辑'}
+                              {tableTab === "unHandle" ? "mock" : "编辑"}
                             </button>
-                            {tableTab === 'handled' && (
+                            {tableTab === "handled" && (
                               <Confirm
                                 content={
-                                  <div style={{ textAlign: 'left' }}>
+                                  <div style={{ textAlign: "left" }}>
                                     确定要删除吗
                                   </div>
                                 }
@@ -169,7 +178,7 @@ export const AddMockPanel = observer(
                                 </button>
                               </Confirm>
                             )}
-                            {tableTab === 'handled' && (
+                            {tableTab === "handled" && (
                               <button
                                 className="small msw_mock_btn msw_mock_canCelHandler_btn"
                                 onClick={() => {
@@ -190,7 +199,7 @@ export const AddMockPanel = observer(
                 <div className="msw_pagination_wrap">
                   <button
                     onClick={() => {
-                      pageSize > 1 && setPageSize(page => page - 1);
+                      pageSize > 1 && setPageSize((page) => page - 1);
                     }}
                     disabled={pageSize === 1}
                     className="small"
@@ -200,7 +209,7 @@ export const AddMockPanel = observer(
                   <button
                     onClick={() => {
                       pageSize < paginationMock?.length &&
-                        setPageSize(page => page + 1);
+                        setPageSize((page) => page + 1);
                     }}
                     disabled={
                       !(
@@ -219,9 +228,9 @@ export const AddMockPanel = observer(
           {currentEditGroupRequest && (
             <AddMockTextArea
               key={
-                (currentEditGroupRequest?.collection || 'collection') +
-                (currentEditGroupRequest?.group || 'group') +
-                (currentEditGroupRequest?.name || 'request')
+                (currentEditGroupRequest?.collection || "collection") +
+                (currentEditGroupRequest?.group || "group") +
+                (currentEditGroupRequest?.name || "request")
               }
               {...currentEditGroupRequest!}
             />

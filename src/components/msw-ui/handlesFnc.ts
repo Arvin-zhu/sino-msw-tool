@@ -1,3 +1,4 @@
+import { get } from "lodash";
 import { DefaultRequestBody, MockedRequest, rest, RestHandler } from "msw";
 
 import { groupsRequestType, IGroupDataItem, mswReqType } from "./handlesType";
@@ -15,7 +16,9 @@ export function existInGroup(
   mocks: Record<string, { data: IGroupDataItem[] }>
 ) {
   return !!mocks[mock.group]?.data.find(
-    (im) => getRequestKey(im.request) === getRequestKey(mock.request)
+    (im) =>
+      getRequestKey(im.request) + im.name ===
+      getRequestKey(mock.request) + mock.name
   );
 }
 
@@ -303,7 +306,10 @@ export function addMock(groupRequest: groupsRequestType, data: IGroupDataItem) {
     } else {
       const filterRequest = currentCollection.data[data.group].data.filter(
         (im) => {
-          return getRequestKey(im.request) !== getRequestKey(data.request);
+          return (
+            getRequestKey(im.request) + im.name !==
+            getRequestKey(data.request) + data.name
+          );
         }
       );
       currentCollection.data[data.group].data = [data, ...filterRequest];
@@ -321,16 +327,24 @@ export function editMock(
     (collection) => collection.name === requestItem.collection
   );
   const group = collection?.data[requestItem.group];
-  if (group) {
-    group.data = group.data.filter((im) => im !== requestItem);
+  //如果不是移动的逻辑就直接修改
+  if (
+    requestItem.group === newRequestItemData.group &&
+    requestItem.collection === newRequestItemData.collection
+  ) {
+    requestItem.collection = newRequestItemData.collection || "";
+    requestItem.delay = newRequestItemData.delay || "0";
+    requestItem.group = newRequestItemData.group || "";
+    requestItem.name = newRequestItemData.name || "";
+    requestItem.status = newRequestItemData.status;
+    requestItem.request.responseJson = newRequestItemData.request?.responseJson;
+  } else {
+    //如果是移动的逻辑，那么需要清除该分组下面request，然后执行添加逻辑
+    if (group) {
+      group.data = group.data.filter((im) => im !== requestItem);
+    }
+    addMock(groupRequest, newRequestItemData);
   }
-  requestItem.collection = newRequestItemData.collection || "";
-  requestItem.delay = newRequestItemData.delay || "0";
-  requestItem.group = newRequestItemData.group || "";
-  requestItem.name = newRequestItemData.name || "";
-  requestItem.status = newRequestItemData.status;
-  requestItem.request.responseJson = newRequestItemData.request?.responseJson;
-  addMock(groupRequest, requestItem);
 }
 
 export function getConflictRequest(groupRequest: groupsRequestType) {
@@ -361,4 +375,33 @@ export function getConflictRequest(groupRequest: groupsRequestType) {
     }
   });
   return requestKey;
+}
+
+export function checkRequestDuplicateInGroup(
+  groupRequest: groupsRequestType,
+  request: IGroupDataItem
+) {
+  const collection = groupRequest.collection.find(
+    (collection) => collection.name === request.collection
+  );
+  const group = collection?.data?.[request.group]?.data;
+  const groupRequestName = group?.map((request) => request.name);
+  if (groupRequestName?.includes(request.name)) {
+    return true;
+  }
+  return false;
+}
+
+export function checkCurrentEditInGroupRequest(
+  groupRequest: groupsRequestType,
+  currentEditItem?: IGroupDataItem
+) {
+  if (!currentEditItem) {
+    return false;
+  }
+  const collection = groupRequest.collection.find(
+    (collection) => collection.name === currentEditItem.collection
+  );
+  const group = collection?.data?.[currentEditItem.group]?.data;
+  return !!group?.find((request) => request === currentEditItem);
 }
