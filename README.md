@@ -2,9 +2,6 @@
 msw-tool 是基于msw(Mock Service Worker)而开发的插件，旨在提高开发效率，不侵入业务代码，方便多分支业务场景灵活切换，通过msw 提供的api，监听所有请求的接口，并能够获取已经响应的接口数据，开发者能够即时修改任何响应数据，即时生效
 
 # 使用
-- 先安装msw
-  - npm install msw@0.39.2 --save-dev
-  - yarn add msw@0.39.2 --dev
 - 安装msw-tool
 	- yarn add @sino/msw-tool --dev
 - 执行msw初始化([文档](https://mswjs.io/docs/getting-started/integrate/browser))
