@@ -130,7 +130,7 @@ class HandlerMock {
   }
   resetHandlers(groupsRequest: groupsRequestType) {
     const handlers = getResetHandlers(groupsRequest);
-    !!handlers?.length && this.worker?.resetHandlers(...handlers);
+    this.worker?.resetHandlers(...handlers);
   }
   //添加mock
   addSimpleMock(data: IGroupDataItem, isEdit?: boolean) {
