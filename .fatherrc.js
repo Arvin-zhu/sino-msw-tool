@@ -1,23 +1,24 @@
+import url from 'rollup-plugin-url';
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from 'rollup-plugin-commonjs';
 export default {
     target: 'browser',
     entry: 'src/index.ts',
-    esm: 'babel',
-    cjs: 'babel',
+    esm: 'rollup',
+    cjs: 'rollup',
     runtimeHelpers: true,
-    autoprefixer: {
-        browsers: ['ie>9', 'Safari >= 6'],
-    },
     doc: {
         themeConfig: { mode: 'light' },
         base: '/',
         menu: []
     },
     extractCSS: true,
-    lessInBabelMode: {
+    lessInRollupMode: {
         modifyVars: {},
         javascriptEnabled: true,
     },
-    extraBabelPlugins: [
+    externalsExclude: ['mobx', 'mobx-react'],
+    extraRollupPlugins: [
         [
             '@babel/plugin-transform-runtime',
             {
@@ -33,5 +34,15 @@ export default {
                 limit: 30 * 1024,
             },
         ],
+        [
+            url({
+                limit: 10 * 1024,
+                emitFiles: true
+                })
+        ],
+        [
+            resolve(),
+            commonjs()
+        ]
     ]
 };

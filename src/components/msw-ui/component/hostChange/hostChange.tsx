@@ -8,8 +8,8 @@ import {
   initHostStringArrToMap,
 } from "../../handlesFnc";
 import { Input } from "../input/input";
-
-const hostTransfer = require("../../images/transferPlat.png");
+//@ts-ignore
+import  hostTransfer from "../../images/transferPlat.png";
 
 export const HostChange = observer(() => {
   const { store } = useStores();

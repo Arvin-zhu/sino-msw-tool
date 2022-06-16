@@ -9,9 +9,10 @@ import { AddMockPanel } from "../addMockPanel";
 import { Upload } from "../upload/upload";
 
 import { ConflictRequest } from "./components/conflictRequest/conflictRequest";
-
-const homeIcon = require("../../images/home.png");
-const transferPlat = require("../../images/transferPlat.png");
+//@ts-ignore
+import homeIcon from  "../../images/home.png";
+//@ts-ignore
+import transferPlat from "../../images/transferPlat.png";
 export const PanelRight = observer(
   (props: { setShowDetail: React.Dispatch<React.SetStateAction<boolean>> }) => {
     const { setShowDetail } = props;

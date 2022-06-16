@@ -9,8 +9,8 @@ import { Confirm } from './confirm/confirm';
 import { Input } from './input/input';
 import { PanelLeft } from './panelLeft/panelLeft';
 import { PanelRight } from './panelRight/panelRight';
-
-const addBtn = require('../images/add.png');
+//@ts-ignore
+import addBtn from '../images/add.png';
 
 export const MockPanel = observer((props: { placement?: mswPlacement }) => {
   const { placement } = props;

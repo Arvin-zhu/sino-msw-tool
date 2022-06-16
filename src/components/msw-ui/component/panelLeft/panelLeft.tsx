@@ -16,9 +16,10 @@ import $ from 'jquery';
 import { MswModal } from '../modal/modal';
 
 import { CopyModal, NameEditModal } from './components/nameEdit/nameEdit';
-
-const downIcon = require('../../images/down.png');
-const moreIcon = require('../../images/more.png');
+//@ts-ignore
+import  downIcon from '../../images/down.png';
+//@ts-ignore
+import  moreIcon from '../../images/more.png';
 
 export const PanelLeft = observer(() => {
   const { store } = useStores();
