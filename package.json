@@ -1,6 +1,6 @@
 {
   "name": "@sino/msw-tool-inner-test",
-  "version": "0.1.6",
+  "version": "0.1.8",
   "description": "tool for mock",
   "module": "dist/index.js",
   "types": "dist/src/index.d.ts",
@@ -29,6 +29,7 @@
     "@babel/plugin-transform-react-jsx": "^7.17.3",
     "@babel/plugin-transform-runtime": "^7.17.0",
     "@babel/preset-env": "^7.16.11",
+    "@rollup/plugin-node-resolve": "^13.3.0",
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^12.1.4",
     "@testing-library/react-hooks": "^7.0.2",
@@ -51,7 +52,6 @@
   "dependencies": {
     "@babel/runtime": "^7.17.8",
     "@babel/runtime-corejs3": "^7.18.2",
-    "@rollup/plugin-node-resolve": "^13.3.0",
     "@svgr/webpack": "^6.2.1",
     "babel-plugin-file-loader": "^2.0.0",
     "clsx": "^1.1.1",

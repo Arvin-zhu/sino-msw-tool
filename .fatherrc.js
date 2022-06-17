@@ -12,7 +12,7 @@ export default {
         base: '/',
         menu: []
     },
-    extractCSS: true,
+    extractCSS: false,
     lessInRollupMode: {
         modifyVars: {},
         javascriptEnabled: true,
