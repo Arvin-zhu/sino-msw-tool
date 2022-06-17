@@ -1,9 +1,9 @@
-import { observer } from 'mobx-react';
-import React from 'react';
+import { observer } from "mobx-react";
+import React from "react";
 
-import { useStores } from '../../../../handles';
-import { IGroupDataItem } from '../../../../handlesType';
-import './index.less';
+import { useStores } from "../../../../handles";
+import { IGroupDataItem } from "../../../../handlesType";
+import "./index.less";
 
 export const ConflictRequest = observer(
   (props: { data: Record<string, IGroupDataItem[]> }) => {
@@ -11,7 +11,7 @@ export const ConflictRequest = observer(
     const { changeGroupItemStatus } = store;
     const { data } = props;
     return (
-      <div style={{ padding: '0 10px', paddingTop: 10 }}>
+      <div style={{ padding: "0 10px", paddingTop: 10 }}>
         {Object.keys(data)?.map((im) => {
           return (
             <table
@@ -23,6 +23,7 @@ export const ConflictRequest = observer(
                 <tr>
                   <th>模块</th>
                   <th>组</th>
+                  <th>别名</th>
                   <th>url</th>
                   <th>操作</th>
                 </tr>
@@ -30,7 +31,9 @@ export const ConflictRequest = observer(
               <tbody>
                 {data[im].map((im) => {
                   return (
-                    <tr key={im.request.id + im.collection + im.group}>
+                    <tr
+                      key={im.request.id + im.collection + im.group + im.name}
+                    >
                       <td>
                         <div className="msw_table_module" title={im.collection}>
                           {im.collection}
@@ -41,14 +44,19 @@ export const ConflictRequest = observer(
                           {im.group}
                         </div>
                       </td>
+                      <td>
+                        <div className="msw_table_module" title={im.name}>
+                          {im.name}
+                        </div>
+                      </td>
 
                       <td>
                         <span
                           style={{
-                            display: 'inline-block',
+                            display: "inline-block",
                             width: 50,
                             marginRight: 10,
-                            color: '#F89108',
+                            color: "#F89108",
                           }}
                         >
                           {im.request.method}

@@ -1,13 +1,13 @@
-import { DefaultRequestBody, MockedRequest, rest, RestHandler } from "msw";
+import { DefaultRequestBody, MockedRequest, rest, RestHandler } from 'msw';
 
-import { groupsRequestType, IGroupDataItem, mswReqType } from "./handlesType";
+import { groupsRequestType, IGroupDataItem, mswReqType } from './handlesType';
 
 export function filterRequest(req: mswReqType) {
   return !req.destination && req.url.host !== window.location.host;
 }
 
 export function existRequest(req: mswReqType, reqs: mswReqType[]) {
-  return !!reqs.find((im) => getRequestKey(im) === getRequestKey(req));
+  return !!reqs.find(im => getRequestKey(im) === getRequestKey(req));
 }
 
 export function existInGroup(
@@ -15,17 +15,19 @@ export function existInGroup(
   mocks: Record<string, { data: IGroupDataItem[] }>
 ) {
   return !!mocks[mock.group]?.data.find(
-    (im) => getRequestKey(im.request) === getRequestKey(mock.request)
+    im =>
+      getRequestKey(im.request) + im.name ===
+      getRequestKey(mock.request) + mock.name
   );
 }
 
 export function getResetHandlers(groupsRequest: groupsRequestType) {
   //创建handlers,进行动态拦截
   let handlers: RestHandler<MockedRequest<DefaultRequestBody>>[] = [];
-  groupsRequest.collection?.forEach((_collection) => {
+  groupsRequest.collection?.forEach(_collection => {
     const group = _collection.data;
-    Object.keys(group).forEach((_groupKey) => {
-      group[_groupKey]?.data.forEach((request) => {
+    Object.keys(group).forEach(_groupKey => {
+      group[_groupKey]?.data.forEach(request => {
         if (!request.disabled) {
           const handler = rest[
             request.request.method.toLowerCase() as keyof typeof rest
@@ -55,11 +57,11 @@ export function activeGroupRequest(
   active: boolean
 ) {
   const collection = groupsRequest.collection.find(
-    (collectionItem) => collectionItem.name === collectionKey
+    collectionItem => collectionItem.name === collectionKey
   );
   const group = collection?.data[groupKey];
   if (group) {
-    group.data = group.data?.map((im) => {
+    group.data = group.data?.map(im => {
       im.disabled = !active;
       return im;
     });
@@ -72,12 +74,12 @@ export function activeCollection(
   active: boolean
 ) {
   const collection = groupsRequest.collection.find(
-    (im) => im.name === collectionKey
+    im => im.name === collectionKey
   );
   if (collection?.data) {
-    Object.keys(collection.data).forEach((groupKey) => {
+    Object.keys(collection.data).forEach(groupKey => {
       const groups = collection.data[groupKey];
-      groups.data.forEach((im) => {
+      groups.data.forEach(im => {
         im.disabled = !active;
       });
     });
@@ -108,9 +110,9 @@ export function judgeHavaGroupHandlers(groupMock: groupsRequestType) {
     return hasData;
   }
   const collection = groupMock.collection;
-  collection.forEach((im) => {
+  collection.forEach(im => {
     const group = im.data;
-    Object.keys(group).forEach((groupKey) => {
+    Object.keys(group).forEach(groupKey => {
       if (group[groupKey].data?.length) {
         hasData = true;
       }
@@ -120,9 +122,9 @@ export function judgeHavaGroupHandlers(groupMock: groupsRequestType) {
 }
 
 export function exportGroupRequestData(groupRequest: groupsRequestType) {
-  const eleLink = document.createElement("a");
-  eleLink.download = "msw_tool_config.json";
-  eleLink.style.display = "none";
+  const eleLink = document.createElement('a');
+  eleLink.download = 'msw_tool_config.json';
+  eleLink.style.display = 'none';
   // 字符内容转变成blob地址
   const blob = new Blob([JSON.stringify(groupRequest)]);
   eleLink.href = URL.createObjectURL(blob);
@@ -137,11 +139,11 @@ export function importStorageGroupData(data: string | Record<string, unknown>) {
   try {
     if (data) {
       const request: groupsRequestType =
-        typeof data === "string" ? JSON.parse(data) : data;
-      request.collection?.forEach((collectionItem) => {
+        typeof data === 'string' ? JSON.parse(data) : data;
+      request.collection?.forEach(collectionItem => {
         const group = collectionItem.data;
-        Object.keys(group).forEach((im) => {
-          group[im].data.forEach((ik) => {
+        Object.keys(group).forEach(im => {
+          group[im].data.forEach(ik => {
             //url 字符串转化为URL对象
             ik.request.url = new URL(ik.request.url);
           });
@@ -150,19 +152,19 @@ export function importStorageGroupData(data: string | Record<string, unknown>) {
       return request;
     }
   } catch (e) {
-    console.error("导入失败", e);
+    console.error('导入失败', e);
     return undefined;
   }
 }
 
 export function checkEnableInCollection(name: string, data: groupsRequestType) {
   const collection = data.collection?.find(
-    (collection) => collection.name === name
+    collection => collection.name === name
   );
   const group = collection?.data;
   if (group) {
-    return Object.keys(group).some((groupKey) => {
-      return group[groupKey].data.some((groupItem) => {
+    return Object.keys(group).some(groupKey => {
+      return group[groupKey].data.some(groupItem => {
         if (!groupItem.disabled) {
           return true;
         }
@@ -179,11 +181,11 @@ export function checkEnableInGroup(
   data: groupsRequestType
 ) {
   const collection = data.collection?.find(
-    (collection) => collection.name === collectionName
+    collection => collection.name === collectionName
   );
   const group = collection?.data;
   if (group) {
-    return group[groupName].data.some((groupItem) => {
+    return group[groupName].data.some(groupItem => {
       if (!groupItem.disabled) {
         return true;
       }
@@ -195,14 +197,13 @@ export function checkEnableInGroup(
 
 export function getGroupKeys(data: groupsRequestType, collectionName: string) {
   const collection = data.collection;
-  const groups =
-    collection?.find((im) => im.name === collectionName)?.data || {};
+  const groups = collection?.find(im => im.name === collectionName)?.data || {};
   return Object.keys(groups);
 }
 
 export function getCollectionKeys(data: groupsRequestType) {
   const collection = data.collection;
-  return collection?.map((im) => im.name) || [];
+  return collection?.map(im => im.name) || [];
 }
 
 export function checkGroupNameDuplicate(
@@ -218,32 +219,32 @@ export function collectionRepeat(
   groupRequest: groupsRequestType
 ) {
   const collection = groupRequest.collection;
-  const nameCollection = collection?.map((im) => im.name);
+  const nameCollection = collection?.map(im => im.name);
   return nameCollection?.includes(name);
 }
 
 export function versionDataTransfer(data: groupsRequestType) {
   //数据不兼容处理
   if (!data?.version) {
-    return {
+    return ({
       collection: [
         {
-          name: "未知模块",
-          data,
-        },
+          name: '未知模块',
+          data
+        }
       ],
-      version: 2,
-    } as any as groupsRequestType;
+      version: 2
+    } as any) as groupsRequestType;
   }
   return data;
 }
 
 export function getAllHostsFromCollections(groupRequest: groupsRequestType) {
   let hostArray: string[] = [];
-  groupRequest.collection.forEach((collection) => {
+  groupRequest.collection.forEach(collection => {
     const groups = collection.data;
-    Object.keys(groups).forEach((groupKey) => {
-      groups[groupKey].data.forEach((requestItem) => {
+    Object.keys(groups).forEach(groupKey => {
+      groups[groupKey].data.forEach(requestItem => {
         hostArray = [...hostArray, requestItem.request.url.host];
       });
     });
@@ -253,7 +254,7 @@ export function getAllHostsFromCollections(groupRequest: groupsRequestType) {
 
 export function initHostStringArrToMap(hosts: string[]) {
   const hostMap: Record<string, any> = {};
-  hosts?.forEach((im) => (hostMap[im] = im));
+  hosts?.forEach(im => (hostMap[im] = im));
   return hostMap;
 }
 
@@ -261,12 +262,12 @@ export function saveSwitchHostData(
   changeObj: Record<string, any>,
   groupRequest: groupsRequestType
 ) {
-  groupRequest.collection.forEach((collectionItem) => {
+  groupRequest.collection.forEach(collectionItem => {
     const groups = collectionItem.data;
     if (groups) {
-      Object.keys(groups).forEach((groupKey) => {
+      Object.keys(groups).forEach(groupKey => {
         const group = groups[groupKey];
-        group?.data.forEach((requestItem) => {
+        group?.data.forEach(requestItem => {
           requestItem.request.url.host =
             changeObj[requestItem.request.url.host];
         });
@@ -277,7 +278,7 @@ export function saveSwitchHostData(
 
 export function addMock(groupRequest: groupsRequestType, data: IGroupDataItem) {
   const currentCollection = groupRequest.collection.find(
-    (im) => im.name === data.collection
+    im => im.name === data.collection
   );
   if (!currentCollection) {
     groupRequest.collection = [
@@ -285,11 +286,11 @@ export function addMock(groupRequest: groupsRequestType, data: IGroupDataItem) {
         name: data.collection,
         data: {
           [data.group]: {
-            data: [data],
-          },
-        },
+            data: [data]
+          }
+        }
       },
-      ...groupRequest.collection,
+      ...groupRequest.collection
     ];
   } else {
     if (!currentCollection?.data[data.group]) {
@@ -298,12 +299,15 @@ export function addMock(groupRequest: groupsRequestType, data: IGroupDataItem) {
     if (!existInGroup(data, currentCollection.data)) {
       currentCollection.data[data.group].data = [
         data,
-        ...currentCollection.data[data.group].data,
+        ...currentCollection.data[data.group].data
       ];
     } else {
       const filterRequest = currentCollection.data[data.group].data.filter(
-        (im) => {
-          return getRequestKey(im.request) !== getRequestKey(data.request);
+        im => {
+          return (
+            getRequestKey(im.request) + im.name !==
+            getRequestKey(data.request) + data.name
+          );
         }
       );
       currentCollection.data[data.group].data = [data, ...filterRequest];
@@ -318,36 +322,44 @@ export function editMock(
 ) {
   if (!requestItem) return;
   const collection = groupRequest.collection.find(
-    (collection) => collection.name === requestItem.collection
+    collection => collection.name === requestItem.collection
   );
   const group = collection?.data[requestItem.group];
-  if (group) {
-    group.data = group.data.filter((im) => im !== requestItem);
+  //如果不是移动的逻辑就直接修改
+  if (
+    requestItem.group === newRequestItemData.group &&
+    requestItem.collection === newRequestItemData.collection
+  ) {
+    requestItem.collection = newRequestItemData.collection || '';
+    requestItem.delay = newRequestItemData.delay || '0';
+    requestItem.group = newRequestItemData.group || '';
+    requestItem.name = newRequestItemData.name || '';
+    requestItem.status = newRequestItemData.status;
+    requestItem.request.responseJson = newRequestItemData.request?.responseJson;
+  } else {
+    //如果是移动的逻辑，那么需要清除该分组下面request，然后执行添加逻辑
+    if (group) {
+      group.data = group.data.filter(im => im !== requestItem);
+    }
+    addMock(groupRequest, newRequestItemData);
   }
-  requestItem.collection = newRequestItemData.collection || "";
-  requestItem.delay = newRequestItemData.delay || "0";
-  requestItem.group = newRequestItemData.group || "";
-  requestItem.name = newRequestItemData.name || "";
-  requestItem.status = newRequestItemData.status;
-  requestItem.request.responseJson = newRequestItemData.request?.responseJson;
-  addMock(groupRequest, requestItem);
 }
 
 export function getConflictRequest(groupRequest: groupsRequestType) {
   const requestKey: Record<string, IGroupDataItem[]> = {};
-  groupRequest.collection.forEach((collectionItem) => {
+  groupRequest.collection.forEach(collectionItem => {
     const groups = collectionItem.data;
     if (groups) {
-      Object.keys(groups).forEach((groupKey) => {
+      Object.keys(groups).forEach(groupKey => {
         const group = groups[groupKey];
-        group.data?.forEach((request) => {
+        group.data?.forEach(request => {
           if (!request.disabled) {
             if (!requestKey[getRequestKey(request.request)!]) {
               requestKey[getRequestKey(request.request)!] = [request];
             } else {
               requestKey[getRequestKey(request.request)!] = [
                 ...requestKey[getRequestKey(request.request)!],
-                request,
+                request
               ];
             }
           }
@@ -355,10 +367,39 @@ export function getConflictRequest(groupRequest: groupsRequestType) {
       });
     }
   });
-  Object.keys(requestKey).forEach((key) => {
+  Object.keys(requestKey).forEach(key => {
     if (requestKey[key]?.length < 2) {
       delete requestKey[key];
     }
   });
   return requestKey;
+}
+
+export function checkRequestDuplicateInGroup(
+  groupRequest: groupsRequestType,
+  request: IGroupDataItem
+) {
+  const collection = groupRequest.collection.find(
+    collection => collection.name === request.collection
+  );
+  const group = collection?.data?.[request.group]?.data;
+  const groupRequestName = group?.map(request => request.name);
+  if (groupRequestName?.includes(request.name)) {
+    return true;
+  }
+  return false;
+}
+
+export function checkCurrentEditInGroupRequest(
+  groupRequest: groupsRequestType,
+  currentEditItem?: IGroupDataItem
+) {
+  if (!currentEditItem) {
+    return false;
+  }
+  const collection = groupRequest.collection.find(
+    collection => collection.name === currentEditItem.collection
+  );
+  const group = collection?.data?.[currentEditItem.group]?.data;
+  return !!group?.find(request => request === currentEditItem);
 }
