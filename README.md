@@ -69,5 +69,5 @@ https证书无效的时候，msw是无法拦截请求的，具体可以查看[ht
       ```
 9. 关于http协议下，报错Refused to set unsafe header "cookie"
      - 这是由于浏览器对service worker的安全限制，导致msw库失效
-     - 解决方法：在chrome中打开chrome://flags/#unsafely-treat-insecure-origin-as-secure，将本地开发地址填写进去（如果有端口，需要把端口也加进去，比如：http://local.sinoclick.com:7220）
+     - 解决方法：在chrome中打开[chrome://flags/#unsafely-treat-insecure-origin-as-secure](chrome://flags/#unsafely-treat-insecure-origin-as-secure)，将本地开发地址填写进去（如果有端口，需要把端口也加进去，比如：http://local.sinoclick.com:7220）
 ![alt img](./docImg/imageHttpError.png)
