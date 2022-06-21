@@ -59,7 +59,7 @@ msw-tool 是基于msw(Mock Service Worker)而开发的插件，旨在提高开�
 ![alt img](./docImg/image2022-5-23_23-26-27.png)
 
 7. 关于https，需要注意的事项
-https证书无效的时候，msw是无法拦截请求的，具体可以查看https://mswjs.io/docs/recipes/using-local-https
+https证书无效的时候，msw是无法拦截请求的，具体可以查看[https://mswjs.io/docs/recipes/using-local-https](https://mswjs.io/docs/recipes/using-local-https)
 8. 关于Create React App (version 3)
    - 如果使用的是Create-React-App v3版本创建的项目，需要删除以下代码
       ```
@@ -67,3 +67,7 @@ https证书无效的时候，msw是无法拦截请求的，具体可以查看htt
       // Create-React-App v3版本创建的会默认去掉所有service的注册，这样会导致工具无效
       serviceWorker.unregister()
       ```
+9. 关于http协议下，报错Refused to set unsafe header "cookie"
+     - 这是由于浏览器对service worker的安全限制，导致msw库失效
+     - 解决方法：在chrome中打开chrome://flags/#unsafely-treat-insecure-origin-as-secure，将本地开发地址填写进去（如果有端口，需要把端口也加进去，比如：http://local.sinoclick.com:7220）
+![alt img](./docImg/imageHttpError.png)
