@@ -134,23 +134,29 @@ export function exportGroupRequestData(groupRequest: groupsRequestType) {
   // 然后移除
   document.body.removeChild(eleLink);
 }
+export function importStorageSwaggerDocs(data: string) {
+  if (!data) return '';
+  try {
+    return JSON.parse(data);
+  } catch (e) {
+    return '';
+  }
+}
 export function importStorageGroupData(data: string | Record<string, unknown>) {
   if (!data) return;
   try {
-    if (data) {
-      const request: groupsRequestType =
-        typeof data === 'string' ? JSON.parse(data) : data;
-      request.collection?.forEach(collectionItem => {
-        const group = collectionItem.data;
-        Object.keys(group).forEach(im => {
-          group[im].data.forEach(ik => {
-            //url 字符串转化为URL对象
-            ik.request.url = new URL(ik.request.url);
-          });
+    const request: groupsRequestType =
+      typeof data === 'string' ? JSON.parse(data) : data;
+    request.collection?.forEach(collectionItem => {
+      const group = collectionItem.data;
+      Object.keys(group).forEach(im => {
+        group[im].data.forEach(ik => {
+          //url 字符串转化为URL对象
+          ik.request.url = new URL(ik.request.url);
         });
       });
-      return request;
-    }
+    });
+    return request;
   } catch (e) {
     console.error('导入失败', e);
     return undefined;

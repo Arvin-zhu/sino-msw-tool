@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import ReactDOM from 'react-dom';
 import './index.less';
+import {Button} from "../button";
 
 interface IModalProps {
   onCancel?: () => void;
@@ -8,18 +9,28 @@ interface IModalProps {
   hide?: () => void;
   title: string | React.ReactNode;
   visible?: boolean;
+  width?: number;
+  error?: string | React.ReactNode;
 }
 export const Modal = (props: IModalProps) => {
-  const { onCancel, onOk, title, hide, visible = true } = props;
+  const { onCancel, onOk, title, hide, visible = true, width=400, error: errorMsg } = props;
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(errorMsg);
+  useEffect(() => {
+    setError(errorMsg);
+  }, [errorMsg])
   return (
     <React.Fragment>
       {visible ? (
         <div className="msw_modal">
           <div className="msw_modal_mask" onClick={() => hide?.()}></div>
-          <div className="msw_modal_inner">
+          <div className="msw_modal_inner" style={{width}}>
             <div>{title}</div>
             <div className="msw_modal_btn_group">
-              <button
+              {
+                error && <span className={'msw_modal_errorMsg'}>{error}</span>
+              }
+              <Button
                 onClick={(e) => {
                   e.stopPropagation();
                   onCancel?.();
@@ -32,27 +43,29 @@ export const Modal = (props: IModalProps) => {
                 }}
               >
                 取消
-              </button>
-              <button
-                onClick={(e) => {
+              </Button>
+              <Button isLoading={loading} onClick={
+                e => {
                   e.stopPropagation();
                   const result = onOk?.();
                   if (result instanceof Promise) {
+                    setLoading(true);
                     result
                       .then((res) => {
                         hide?.();
                       })
                       .catch((e) => {
                         console.log(e);
-                      });
+                      }).finally(() => setLoading(false));
                   } else {
                     hide?.();
                   }
-                }}
-                className="msw_modal_ok_btn"
+                }
+              }
+              className="msw_modal_ok_btn"
               >
                 确定
-              </button>
+              </Button>
             </div>
           </div>
         </div>

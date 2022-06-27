@@ -8,9 +8,10 @@ export const Input = (props: {
   className?: string;
   value?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const { onChange, value, placeholder, style, className } = props;
+  const { onChange, value, onBlur, placeholder, style, className } = props;
   return (
     <input
       value={value}
@@ -18,6 +19,7 @@ export const Input = (props: {
       onChange={(e) => onChange?.(e)}
       placeholder={placeholder}
       style={style}
+      onBlur={e => onBlur?.(e)}
       className={clsx('msw-input', className)}
     />
   );

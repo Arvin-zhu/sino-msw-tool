@@ -1,0 +1,27 @@
+@import "../var.less";
+
+.msw_btn {
+  .btnAntd();
+  &.msw_btn_disabled {
+    cursor: not-allowed;
+  }
+  .loading {
+    animation: rotate 1s linear infinite;
+  }
+}
+.msw_btn_content_wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+    transform-origin: center center;
+  }
+  to {
+    transform: rotate(360deg);
+    transform-origin: center center;
+  }
+}

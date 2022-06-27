@@ -1,26 +1,14 @@
 import JSONEditor from "jsoneditor";
 import "jsoneditor/dist/jsoneditor.min.css";
-import { cloneDeep } from "lodash";
-import { observer } from "mobx-react";
-import React, {
-  ChangeEvent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import {cloneDeep} from "lodash";
+import {observer} from "mobx-react";
+import React, {ChangeEvent, useCallback, useEffect, useRef, useState,} from "react";
 
-import { useStores } from "../handles";
-import {
-  checkRequestDuplicateInGroup,
-  getCollectionKeys,
-  getGroupKeys,
-} from "../handlesFnc";
-import { IGroupDataItem } from "../handlesType";
-
-import { Input } from "./input/input";
-import { SelectData } from "./select/select";
-import { Upload } from "./upload/upload";
+import {useStores} from "../handles";
+import {checkRequestDuplicateInGroup,} from "../handlesFnc";
+import {IGroupDataItem} from "../handlesType";
+import {AddMockTextAreaComponent} from "./addMockTextAreaComponent";
+import { SwaggerUrlInputModal} from "./addMockTextAreaComponent/components/swaggerUrlInput";
 
 export const AddMockTextArea = observer((data: Partial<IGroupDataItem>) => {
   const {
@@ -36,7 +24,6 @@ export const AddMockTextArea = observer((data: Partial<IGroupDataItem>) => {
   const { addSimpleMock, setCurrentEditGroupRequest, groupRequest } = store;
   const editor = useRef<JSONEditor | null>(null);
   const editorContainer = useRef<HTMLDivElement | null>(null);
-  const editorContainerRoot = useRef<HTMLDivElement | null>(null);
   const [statusCode, setStatusCode] = useState<string | undefined>(
     status || "200"
   );
@@ -46,6 +33,7 @@ export const AddMockTextArea = observer((data: Partial<IGroupDataItem>) => {
   const [requestAlias, setRequestAlias] = useState(name || "");
   const [delayRes, setDelayRes] = useState(delay);
   const [urlInput, setUrlInput] = useState(request?.url.href || "");
+  const [showSwaggerModal, setShowSwaggerModal] = useState(false);
   const isEdit = !!name;
   const changeGroupName = useCallback((value: string) => {
     setGroupName(value);
@@ -183,6 +171,9 @@ export const AddMockTextArea = observer((data: Partial<IGroupDataItem>) => {
       name,
     ]
   );
+  const setTextJson = useCallback((data) => {
+    editor.current?.set(data)
+  }, [])
   useEffect(() => {
     setErrorMsg("");
   }, [delayRes, groupName, statusCode, collectionName, requestAlias, urlInput]);
@@ -190,112 +181,30 @@ export const AddMockTextArea = observer((data: Partial<IGroupDataItem>) => {
     setStatusCode(e.target.value);
   }, []);
   return (
-    <div className={"msw_mock_detail_wrap"}>
-      <div className="msw_mock_detail_wrap_top">
-        <div className="msw_mock_detail_wrap_top_url">
-          <div className="msw_mock_detail_wrap_top_url_method">
-            {request?.method.toUpperCase()}
-          </div>
-          <div className="msw_mock_detail_wrap_top_url_href">
-            <Input
-              value={urlInput}
-              onChange={(e) => setUrlInput(e.target.value)}
-            />
-          </div>
-        </div>
-      </div>
-      <div className="msw_detail_section_title">配置：</div>
-      <div style={{ padding: 10 }}>
-        <div className="msw_mock_detail_wrap_config">
-          <div className="msw_mock_detail_wrap_config_inner">
-            <div className={"msw_group_input_wrap"}>
-              <span>模块</span>
-              <div className="msw_detailConfig_item">
-                <SelectData
-                  placeholder="选择或输入新增"
-                  data={Array.from(
-                    new Set([...getCollectionKeys(store.groupRequest)])
-                  )}
-                  onChange={changeCollectionName}
-                  value={collectionName}
-                />
-              </div>
-            </div>
-            <div className={"msw_group_input_wrap"}>
-              <span>组名：</span>
-              <div className="msw_detailConfig_item">
-                <SelectData
-                  placeholder="选择或输入新增"
-                  data={getGroupKeys(store.groupRequest, collectionName)}
-                  onChange={changeGroupName}
-                  value={groupName}
-                />
-              </div>
-            </div>
-            <div className={"msw_group_input_wrap"}>
-              <span>请求别名：</span>
-              <div className="msw_detailConfig_item">
-                <Input
-                  placeholder="请输入请求别名"
-                  onChange={(e) => changeAliasName(e.target.value)}
-                  value={requestAlias}
-                />
-              </div>
-            </div>
-            <div
-              className={"msw_group_input_wrap"}
-              style={{ marginLeft: 0, marginTop: 10 }}
-            >
-              <span>状态：</span>
-              <div className="msw_detailConfig_item">
-                <Input
-                  placeholder="请输入状态码"
-                  onChange={onStatusChange}
-                  value={statusCode || ""}
-                />
-              </div>
-            </div>
-            <div className={"msw_group_input_wrap"} style={{ marginTop: 10 }}>
-              <span>延迟：</span>
-              <div className="msw_detailConfig_item">
-                <Input
-                  placeholder="请输入延迟毫秒数"
-                  onChange={(e) => setDelayRes(e.target.value)}
-                  value={delayRes}
-                />
-              </div>
-            </div>
-            <div className={"msw_group_input_wrap"} style={{ marginTop: 10 }}>
-              <span>上传数据：</span>
-              <div className="msw_detailConfig_item">
-                <Upload
-                  callBack={(jsonData) => editor.current?.set(jsonData)}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="msw_detail_section_title">响应：</div>
-      <div style={{ padding: 10 }}>
-        <div className="msw_mock_content">
-          {request && (
-            <div ref={editorContainerRoot} className={"msw_jsonEditor_wrap"}>
-              <div ref={editorContainer} style={{ height: 550 }} />
-              <div
-                style={{ marginTop: 10, textAlign: "right" }}
-                className={"msw_save_btn_wrap"}
-              >
-                {errorMsg && <span style={{ color: "red" }}>{errorMsg}</span>}
-                {isEdit && (
-                  <button onClick={() => saveData(true)}>另存副本</button>
-                )}
-                <button onClick={() => saveData()}>保存</button>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
+    <>
+      <AddMockTextAreaComponent
+        ref={editorContainer}
+        request={request}
+        urlInput={urlInput}
+        setUrlInput={setUrlInput}
+        changeGroupName={changeGroupName}
+        changeCollectionName={changeCollectionName}
+        changeAliasName={changeAliasName}
+        collectionName={collectionName}
+        groupName={groupName}
+        requestAlias={requestAlias}
+        onStatusChange={onStatusChange}
+        statusCode={statusCode}
+        setDelayRes={setDelayRes}
+        delayRes={delayRes}
+        errorMsg={errorMsg}
+        isEdit={isEdit}
+        setTextJson={setTextJson}
+        saveData={saveData}
+        setShowSwaggerModal={setShowSwaggerModal}
+      />
+      <SwaggerUrlInputModal setTextJson={setTextJson} request={request} visible={showSwaggerModal} setVisible={setShowSwaggerModal} />
+    </>
+
   );
 });

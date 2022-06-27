@@ -1,10 +1,10 @@
 //swagger-parser-mock源代码
 import swagger from 'swagger-client';
 import primitives from './primitive';
+import utils from './utils';
 var memoizee = require('memoizee')
 // var swagger = require('swagger-client');
 // var swaggerTools = require('swagger-tools').specs.v1
-import utils from './utils';
 // var primitives = require('./primitive')
 function primitive (schema) {
     schema = utils.objectify(schema)
@@ -12,11 +12,9 @@ function primitive (schema) {
     var type = schema.type
     var format = schema.format
     var value = primitives[type + '_' + format] || primitives[type]
-
     if (typeof schema.example === 'undefined') {
         return value || 'Unknown Type: ' + schema.type
     }
-
     return schema.example
 }
 
@@ -44,13 +42,11 @@ function sampleFromSchema (schema) {
         for (var name in props) {
             obj[name] = sampleFromSchema(props[name])
         }
-
         if (additionalProperties === true) {
             obj.additionalProp1 = {}
         } else if (additionalProperties) {
             var additionalProps = utils.objectify(additionalProperties)
             var additionalPropVal = sampleFromSchema(additionalProps)
-
             for (var i = 1; i < 4; i++) {
                 obj['additionalProp' + i] = additionalPropVal
             }
@@ -70,7 +66,6 @@ function sampleFromSchema (schema) {
     if (type === 'file') {
         return
     }
-
     return primitive(schema)
 }
 
@@ -163,7 +158,7 @@ export function parser (url, opts) {
                     }
                     if (!api.parameters) continue
                     for (var parameter of api.parameters) {
-                        schema = utils.inferSchema(parameter)
+                        schema = utils.inferSchema(parameter);
                         parameter.example = schema ? getSampleSchema(schema) : null
                     }
                 }

@@ -17,7 +17,7 @@ import {
   getConflictRequest,
   getRequestKey,
   getResetHandlers,
-  importStorageGroupData,
+  importStorageGroupData, importStorageSwaggerDocs,
   saveSwitchHostData,
   versionDataTransfer,
 } from "./handlesFnc";
@@ -36,6 +36,7 @@ class HandlerMock {
   currentEditGroupRequest: IGroupDataItem | undefined = undefined;
   currentHostSwitch = false;
   groupRequest: groupsRequestType = { collection: [], version: 2 };
+  storageSwagger = '';
   //获取未mock的接口
   get unHandleAllRequest() {
     const handledMap: Record<string, boolean> = {};
@@ -117,6 +118,8 @@ class HandlerMock {
     window._msw_worker = worker;
     this.worker = worker;
     try {
+      const storageSwaggerList = await yuxStorage.getItem(projectName + '_msw-ui-swagger-storage');
+      this.storageSwagger = importStorageSwaggerDocs(storageSwaggerList);
       const storage = await yuxStorage.getItem(projectName + "_msw-ui-storage");
       let storageData = importStorageGroupData(storage || "");
       storageData = storageData ? versionDataTransfer(storageData) : undefined;
@@ -131,6 +134,13 @@ class HandlerMock {
   resetHandlers(groupsRequest: groupsRequestType) {
     const handlers = getResetHandlers(groupsRequest);
     this.worker?.resetHandlers(...handlers);
+  }
+  changeSwaggerUrl(url: string) {
+    this.storageSwagger = url;
+    yuxStorage.setItem(
+      this.projectName + "_msw-ui-swagger-storage",
+      JSON.stringify(url)
+    );
   }
   //添加mock
   addSimpleMock(data: IGroupDataItem, isEdit?: boolean) {
