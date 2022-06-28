@@ -1,3 +1,40 @@
+@import "../../../var.less";
+.msw_swagger_match_multi_label {
+  margin-top: 8px;
+  margin-bottom: 5px;
+}
+.msw_swagger_url_itemWrap {
+  background: @main-bcg;
+  max-height: 300px;
+  overflow: auto;
+  padding: 4px 11px;
+  border-radius: 4px;
+  .msw_swagger_url_item {
+    border-bottom: 1px solid @border;
+    line-height: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .msw_swagger_url_path {
+      max-width: 490px;
+      .ellipsis();
+    }
+    button {
+      background-color: #F89108;
+      border-color:#F89108;
+      color: white;
+      font-size: 12px;
+      transition: all .3s ease;
+      &:hover{
+        background: darken(#F89108, 5%);
+        border-color: darken(#F89108, 5%);
+      }
+    }
+    &:last-child {
+      border: none;
+    }
+  }
+}
 .msw_swagger_label {
   margin-bottom: 5px;
 }

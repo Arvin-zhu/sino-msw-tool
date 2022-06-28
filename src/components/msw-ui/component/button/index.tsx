@@ -6,16 +6,25 @@ import clsx from 'clsx';
 export const Button: React.FC<{
   isLoading?: boolean;
   disabled?: boolean;
+  size?: 'small' | 'middle';
   className?: string;
   style?: React.CSSProperties;
   onClick: (e: React.MouseEvent<HTMLElement>) => void;
 }> = props => {
-  const { isLoading, disabled, className, onClick, style = {} } = props;
+  const {
+    isLoading,
+    disabled,
+    className,
+    onClick,
+    style = {},
+    size = 'middle'
+  } = props;
   return (
     <button
       style={{ ...style }}
       className={clsx('msw_btn', className || '', {
-        msw_btn_disabled: isLoading || disabled
+        msw_btn_disabled: isLoading || disabled,
+        small: size === 'small'
       })}
       onClick={e => {
         !disabled && !isLoading && onClick(e);

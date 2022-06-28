@@ -2,6 +2,7 @@
 import swagger from 'swagger-client';
 import primitives from './primitive';
 import utils from './utils';
+import {omitBy} from "lodash";
 var memoizee = require('memoizee')
 // var swagger = require('swagger-client');
 // var swaggerTools = require('swagger-tools').specs.v1
@@ -105,7 +106,7 @@ function renameTypeKey (obj, models) {
     })
 }
 
-export function parser (url, opts) {
+export function parser (url, opts, pathname) {
     opts = opts || {}
 
     if (typeof url === 'string') {
@@ -140,9 +141,11 @@ export function parser (url, opts) {
             //     })
             // })
         } else {
-            for (var path in spec.paths) {
-                for (var method in spec.paths[path]) {
-                    var api = spec.paths[path][method]
+            const pathsAll = omitBy(spec.paths, (value, key) => !key.includes(pathname));
+            spec.paths = pathsAll;
+            for (var path in pathsAll) {
+                for (var method in pathsAll[path]) {
+                    var api = pathsAll[path][method]
                     var schema
                     for (var code in api.responses) {
                         var response = api.responses[code]

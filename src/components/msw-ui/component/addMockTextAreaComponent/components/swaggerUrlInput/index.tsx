@@ -6,6 +6,7 @@ import { mswReqType } from '../../../../handlesType';
 import './index.less';
 import mockJs from 'mockjs';
 import { useStores } from '../../../../handles';
+import { Button } from '../../../button';
 
 export const SwaggerUrlInputModal = (props: {
   visible: boolean;
@@ -19,6 +20,25 @@ export const SwaggerUrlInputModal = (props: {
   const [mockUrl, setMockUrl] = useState(request?.url.pathname);
   const [error, setError] = useState('');
   const [swaggerUrl, setSwaggerUrl] = useState(storageSwagger);
+  const [urlPaths, setUrlPaths] = useState<Record<string, any>>({});
+
+  const selectSwagger = useCallback(path => {
+    const api = path['post'];
+    const example = api.responses['200'].example;
+    if (example) {
+      try {
+        const mockData = mockJs.mock(JSON.parse(example));
+        setTextJson(mockData);
+        setError('');
+        setVisible(false);
+      } catch (e) {
+        setError('swagger数据解析出错');
+      }
+    } else {
+      setError('未找到swagger相关example');
+    }
+  }, []);
+
   const getParserFromSwagger = useCallback(() => {
     return new Promise((resolve, reject) => {
       if (!swaggerUrl) {
@@ -31,7 +51,7 @@ export const SwaggerUrlInputModal = (props: {
         reject('');
         return;
       }
-      parser(swaggerUrl)
+      parser(swaggerUrl, undefined, mockUrl)
         .then((docs: any) => {
           const requestPath = mockUrl;
           if (!requestPath) {
@@ -48,18 +68,21 @@ export const SwaggerUrlInputModal = (props: {
             return;
           }
           if (findPath.length > 1) {
-            setError('匹配到多个地址，请确认mock地址唯一性');
+            setError('匹配到多个地址，请选择');
+            setUrlPaths(docs.paths);
             reject('');
             return;
           }
+          setUrlPaths({});
           const api = docs.paths[findPath[0]]['post'];
           const example = api.responses['200'].example;
           if (example) {
             try {
               const mockData = mockJs.mock(JSON.parse(example));
               setTextJson(mockData);
-              resolve('');
+              setError('');
               setVisible(false);
+              resolve('');
             } catch (e) {
               setError('swagger数据解析出错');
               reject('');
@@ -77,6 +100,7 @@ export const SwaggerUrlInputModal = (props: {
   }, [swaggerUrl, mockUrl, setTextJson]);
   useEffect(() => {
     setError('');
+    setUrlPaths({});
   }, [mockUrl, swaggerUrl]);
   useEffect(() => {
     setSwaggerUrl(storageSwagger);
@@ -105,6 +129,32 @@ export const SwaggerUrlInputModal = (props: {
             value={swaggerUrl}
             onChange={e => setSwaggerUrl(e.target.value)}
           />
+          {Object.keys(urlPaths)?.length > 1 && (
+            <div>
+              <div className={'msw_swagger_match_multi_label'}>
+                匹配到多个地址，请选择其中一个
+              </div>
+              <div className={'msw_swagger_url_itemWrap'}>
+                {Object.keys(urlPaths).map(path => {
+                  return (
+                    <div key={path} className={'msw_swagger_url_item'}>
+                      <span title={path} className={'msw_swagger_url_path'}>
+                        {path}
+                      </span>
+                      <Button
+                        onClick={() => {
+                          selectSwagger(urlPaths[path]);
+                        }}
+                        size={'small'}
+                      >
+                        使用
+                      </Button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       }
       onOk={getParserFromSwagger}
