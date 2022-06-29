@@ -1,3 +1,5 @@
+- 1.1.18
+  - 更新package.json依赖
 - 1.1.17
   - 优化解析swagger,增加swagger匹配多个url选择功能
 - 1.1.15
