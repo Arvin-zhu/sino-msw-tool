@@ -3,7 +3,7 @@ import { DefaultRequestBody, MockedRequest, rest, RestHandler } from 'msw';
 import { groupsRequestType, IGroupDataItem, mswReqType } from './handlesType';
 
 export function filterRequest(req: mswReqType) {
-  return !req.destination && req.url.host !== window.location.host;
+  return !req.destination
 }
 
 export function existRequest(req: mswReqType, reqs: mswReqType[]) {
