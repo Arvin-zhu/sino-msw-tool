@@ -2,7 +2,6 @@ import { Provider } from 'mobx-react';
 import { SetupWorkerApi } from 'msw';
 
 import React, { useLayoutEffect, useState } from 'react';
-import './component/index.less';
 
 import { MockPanel } from './component/mockPanel';
 import { handlerMock } from './handles';

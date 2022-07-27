@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { observer } from 'mobx-react';
 import React, { useCallback, useState } from 'react';
+import './index.less';
 
 import { useStores } from '../handles';
 import { mswPlacement } from '../MswUi';
