@@ -1,1 +1,42 @@
-{"request":{"id":"88ca7140-94f0-4df0-8ce1-857157c53200","cache":"reload","credentials":"same-origin","method":"GET","url":"http://localhost:8002/getFruitList","referrer":"http://localhost:8000/","referrerPolicy":"strict-origin-when-cross-origin","redirect":"follow","mode":"cors","params":{},"cookies":{},"integrity":"","keepalive":false,"destination":"","bodyUsed":false,"headers":{"_headers":{"accept":"*/*","sec-ch-ua":"\".Not/A)Brand\";v=\"99\", \"Google Chrome\";v=\"103\", \"Chromium\";v=\"103\"","sec-ch-ua-mobile":"?0","sec-ch-ua-platform":"\"macOS\"","user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"},"_names":{}},"responseJson":{"code":0,"result":[{"name":"banana","value":0}]}},"group":"","type":"basic","name":"","collection":""}
+{
+  "request": {
+    "id": "88ca7140-94f0-4df0-8ce1-857157c53200",
+    "cache": "reload",
+    "credentials": "same-origin",
+    "method": "GET",
+    "url": "http://localhost:8002/getFruitList",
+    "referrer": "http://localhost:8000/",
+    "referrerPolicy": "strict-origin-when-cross-origin",
+    "redirect": "follow",
+    "mode": "cors",
+    "params": {},
+    "cookies": {},
+    "integrity": "",
+    "keepalive": false,
+    "destination": "",
+    "bodyUsed": false,
+    "headers": {
+      "_headers": {
+        "accept": "*/*",
+        "sec-ch-ua": "\".Not/A)Brand\";v=\"99\", \"Google Chrome\";v=\"103\", \"Chromium\";v=\"103\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"macOS\"",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36"
+      },
+      "_names": {}
+    },
+    "responseJson": {
+      "code": 0,
+      "result": [
+        {
+          "name": "banana",
+          "value": 0
+        }
+      ]
+    }
+  },
+  "group": "",
+  "type": "basic",
+  "name": "",
+  "collection": ""
+}

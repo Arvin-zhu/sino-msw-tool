@@ -10,35 +10,46 @@ import { Confirm } from './confirm/confirm';
 import { Input } from './input/input';
 import { PanelLeft } from './panelLeft/panelLeft';
 import { PanelRight } from './panelRight/panelRight';
+import { useDrag } from './hooks/drag';
 //@ts-ignore
 import addBtn from '../images/add.png';
 
 export const MockPanel = observer((props: { placement?: mswPlacement }) => {
   const { placement } = props;
   const [showDetail, setShowDetail] = useState(false);
-
+  const { dragRef, pos } = useDrag();
+  console.log('===render', pos);
   return (
-    <div
-      className={clsx('msw_container', {
-        'msw_container-left': placement === 'leftBottom',
-        'msw_container-show': showDetail
-      })}
-    >
+    <>
       {!showDetail && (
         <div
           className={clsx('msw_container_circle', {
-            'msw_container_circle-leftBottom': placement === 'leftBottom'
+            'msw_container_circle-leftBottom': placement === 'leftBottom',
           })}
+          ref={dragRef}
+          style={{
+            left: pos ? pos.posX : placement === 'leftBottom' ? 10 : 'auto',
+            right: pos ? 'auto' : placement === 'leftBottom' ? 'auto' : 10,
+            top: pos ? pos.posY : 'unset',
+            bottom: pos ? 'unset' : 10,
+          }}
           onClick={() => setShowDetail(true)}
           data-testid="msw_circle"
         >
           M
         </div>
       )}
-      <div style={{ display: showDetail ? 'block' : 'none', height: '100%' }}>
-        <MockDetail setShowDetail={setShowDetail} />
+      <div
+        className={clsx('msw_container', {
+          'msw_container-left': placement === 'leftBottom',
+          'msw_container-show': showDetail,
+        })}
+      >
+        <div style={{ display: showDetail ? 'block' : 'none', height: '100%' }}>
+          <MockDetail setShowDetail={setShowDetail} />
+        </div>
       </div>
-    </div>
+    </>
   );
 });
 
@@ -62,17 +73,10 @@ export function MockDetail(props: {
     });
   }, [newCollectionName]);
   return (
-    <div
-      className="msw_detail_panel"
-      data-testid="msw_detail_container"
-      id="msw_detail_panel"
-    >
+    <div className="msw_detail_panel" data-testid="msw_detail_container" id="msw_detail_panel">
       <div className="msw_content">
         <div className="msw_content_left">
-          <div
-            className="msw_content_left_item"
-            style={{ zIndex: 5, padding: 10 }}
-          >
+          <div className="msw_content_left_item" style={{ zIndex: 5, padding: 10 }}>
             <span>模块</span>
             <Confirm
               onOk={addCollection}
@@ -84,15 +88,13 @@ export function MockDetail(props: {
                 <div>
                   <Input
                     value={newCollectionName}
-                    onChange={e => {
+                    onChange={(e) => {
                       setNewCollectionName(e.target.value);
                       setAddCollectionError('');
                     }}
                     placeholder="请输入模块名称"
                   />
-                  {addCollectionError && (
-                    <div className="errorField">{addCollectionError}</div>
-                  )}
+                  {addCollectionError && <div className="errorField">{addCollectionError}</div>}
                 </div>
               }
             >
