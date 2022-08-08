@@ -7,13 +7,23 @@ export const useDrag = (isClickCallback: () => void) => {
   const initPos = useRef<(posType & { offsetInitX?: number; offsetInitY?: number }) | null>(null);
   const isDragRef = useRef(false);
   const handlePosition = useCallback((e: any) => {
-    setPos((prePos) => ({
-      posX: e.pageX - initPos.current.posX + (prePos?.posX || initPos.current.offsetInitX),
-      posY: e.pageY - initPos.current.posY + (prePos?.posY || initPos.current.offsetInitY),
-    }));
+    setPos((prePos) => {
+      return {
+        posX:
+          e.pageX -
+          initPos.current.posX +
+          (prePos !== null ? prePos?.posX : initPos.current.offsetInitX),
+        posY:
+          e.pageY -
+          initPos.current.posY +
+          (prePos !== null ? prePos?.posY : initPos.current.offsetInitY),
+      };
+    });
     initPos.current = {
       posX: e.pageX,
       posY: e.pageY,
+      offsetInitX: initPos.current.offsetInitX,
+      offsetInitY: initPos.current.offsetInitY,
     };
   }, []);
   const onMouseDown = useCallback((e: any) => {
