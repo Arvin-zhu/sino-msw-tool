@@ -42,7 +42,7 @@ export const MockPanel = observer((props: { placement?: mswPlacement }) => {
   );
 });
 
-function MockDetail(props: {
+export function MockDetail(props: {
   setShowDetail: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { setShowDetail } = props;
