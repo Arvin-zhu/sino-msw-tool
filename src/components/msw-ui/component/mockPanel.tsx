@@ -17,28 +17,17 @@ import addBtn from '../images/add.png';
 export const MockPanel = observer((props: { placement?: mswPlacement }) => {
   const { placement } = props;
   const [showDetail, setShowDetail] = useState(false);
-  const { dragRef, pos } = useDrag();
-  console.log('===render', pos);
+  const { dragRef, pos } = useDrag(() => setShowDetail(true));
+
   return (
     <>
-      {!showDetail && (
-        <div
-          className={clsx('msw_container_circle', {
-            'msw_container_circle-leftBottom': placement === 'leftBottom',
-          })}
-          ref={dragRef}
-          style={{
-            left: pos ? pos.posX : placement === 'leftBottom' ? 10 : 'auto',
-            right: pos ? 'auto' : placement === 'leftBottom' ? 'auto' : 10,
-            top: pos ? pos.posY : 'unset',
-            bottom: pos ? 'unset' : 10,
-          }}
-          onClick={() => setShowDetail(true)}
-          data-testid="msw_circle"
-        >
-          M
-        </div>
-      )}
+      <MockLogo
+        dragRef={dragRef}
+        pos={pos}
+        showDetail={showDetail}
+        placement={placement}
+        setShowDetail={setShowDetail}
+      />
       <div
         className={clsx('msw_container', {
           'msw_container-left': placement === 'leftBottom',
@@ -52,6 +41,39 @@ export const MockPanel = observer((props: { placement?: mswPlacement }) => {
     </>
   );
 });
+
+export function MockLogo({
+  placement,
+  setShowDetail,
+  dragRef,
+  pos,
+  showDetail,
+}: {
+  showDetail: boolean;
+  pos: null | { posX: number; posY: number };
+  dragRef: React.MutableRefObject<HTMLDivElement>;
+  placement: mswPlacement;
+  setShowDetail: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+  return (
+    <div
+      className={clsx('msw_container_circle', {
+        'msw_container_circle-leftBottom': placement === 'leftBottom',
+        'msw_container_circle-hide': showDetail,
+      })}
+      ref={dragRef}
+      style={{
+        left: pos ? pos.posX : placement === 'leftBottom' ? 10 : 'auto',
+        right: pos ? 'unset' : placement === 'leftBottom' ? 'auto' : 10,
+        top: pos ? pos.posY : 'unset',
+        bottom: pos ? 'unset' : 10,
+      }}
+      data-testid="msw_circle"
+    >
+      M
+    </div>
+  );
+}
 
 export function MockDetail(props: {
   setShowDetail: React.Dispatch<React.SetStateAction<boolean>>;
