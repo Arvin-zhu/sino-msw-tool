@@ -1,11 +1,32 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 type posType = { posX: number; posY: number };
-export const useDrag = (isClickCallback: () => void) => {
+export const useDrag = (isClickCallback: () => void, projectName?: string) => {
   const dragRef = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState<posType | null>(null);
   const initPos = useRef<(posType & { offsetInitX?: number; offsetInitY?: number }) | null>(null);
   const isDragRef = useRef(false);
+  useEffect(() => {
+    if (pos) {
+      // 百分比存储
+      const storePercentPos = {
+        x: pos.posX / window.innerWidth,
+        y: pos.posY / window.innerHeight,
+      };
+      localStorage.setItem(projectName + '_msw-logoPos-storage', JSON.stringify(storePercentPos));
+    }
+  }, [pos, projectName]);
+  useEffect(() => {
+    //初始化时候读取本地msw位置
+    const localPos = localStorage.getItem(projectName + '_msw-logoPos-storage');
+    if (localPos) {
+      const localStoreData = JSON.parse(localPos);
+      setPos({
+        posX: window.innerWidth * localStoreData.x,
+        posY: window.innerHeight * localStoreData.y,
+      });
+    }
+  }, [projectName]);
   const handlePosition = useCallback((e: any) => {
     setPos((prePos) => {
       return {

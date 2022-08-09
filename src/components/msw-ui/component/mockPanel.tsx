@@ -16,9 +16,10 @@ import addBtn from '../images/add.png';
 
 export const MockPanel = observer((props: { placement?: mswPlacement }) => {
   const { placement } = props;
+  const { store } = useStores();
+  const { projectName } = store;
   const [showDetail, setShowDetail] = useState(false);
-  const { dragRef, pos } = useDrag(() => setShowDetail(true));
-
+  const { dragRef, pos } = useDrag(() => setShowDetail(true), projectName);
   return (
     <>
       <MockLogo
