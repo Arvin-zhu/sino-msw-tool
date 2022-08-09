@@ -5,6 +5,7 @@ export const useDrag = (isClickCallback: () => void, projectName?: string) => {
   const dragRef = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState<posType | null>(null);
   const initPos = useRef<(posType & { offsetInitX?: number; offsetInitY?: number }) | null>(null);
+  const timeoutRef = useRef<any>();
   const isDragRef = useRef(false);
   useEffect(() => {
     if (pos) {
@@ -28,6 +29,7 @@ export const useDrag = (isClickCallback: () => void, projectName?: string) => {
     }
   }, [projectName]);
   const handlePosition = useCallback((e: any) => {
+    clearTimeout(timeoutRef.current);
     setPos((prePos) => {
       return {
         posX:
@@ -41,7 +43,7 @@ export const useDrag = (isClickCallback: () => void, projectName?: string) => {
       };
     });
     //react 18 useRef更新机制问题修复
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       initPos.current = {
         posX: e.pageX,
         posY: e.pageY,
@@ -49,6 +51,9 @@ export const useDrag = (isClickCallback: () => void, projectName?: string) => {
         offsetInitY: initPos.current.offsetInitY,
       };
     }, 0);
+    return () => {
+      clearTimeout(timeoutRef.current);
+    };
   }, []);
   const onMouseDown = useCallback((e: any) => {
     initPos.current = {
