@@ -40,12 +40,15 @@ export const useDrag = (isClickCallback: () => void, projectName?: string) => {
           (prePos !== null ? prePos?.posY : initPos.current.offsetInitY),
       };
     });
-    initPos.current = {
-      posX: e.pageX,
-      posY: e.pageY,
-      offsetInitX: initPos.current.offsetInitX,
-      offsetInitY: initPos.current.offsetInitY,
-    };
+    //react 18 useRef更新机制问题修复
+    setTimeout(() => {
+      initPos.current = {
+        posX: e.pageX,
+        posY: e.pageY,
+        offsetInitX: initPos.current.offsetInitX,
+        offsetInitY: initPos.current.offsetInitY,
+      };
+    }, 0);
   }, []);
   const onMouseDown = useCallback((e: any) => {
     initPos.current = {
