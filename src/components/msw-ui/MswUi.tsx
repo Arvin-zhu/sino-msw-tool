@@ -22,12 +22,13 @@ export type mswPlacement = 'rightBottom' | 'leftBottom';
 export const MswUi: React.FC<{
   placement?: mswPlacement;
   projectName: string;
+  includesLocal?: boolean; //是否拦截本地请求
   children: any;
-}> = props => {
-  const { placement = 'rightBottom', projectName } = props;
+}> = (props) => {
+  const { placement = 'rightBottom', projectName, includesLocal } = props;
   const [loading, setLoading] = useState(true);
   useLayoutEffect(() => {
-    initMsw(projectName).then(() => {
+    initMsw(projectName, includesLocal).then(() => {
       setLoading(false);
     });
   }, [projectName]);
@@ -42,9 +43,9 @@ export const MswUi: React.FC<{
     </>
   );
 };
-export const initMsw = (projectName: string) => {
+export const initMsw = (projectName: string, includesLocal?: boolean) => {
   if (process.env.NODE_ENV === 'development') {
-    return handlerMock.init(projectName).catch(e => {
+    return handlerMock.init(projectName, includesLocal).catch((e) => {
       throw new Error('mswError:' + e);
     });
   }

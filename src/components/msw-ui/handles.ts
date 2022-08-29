@@ -82,7 +82,7 @@ export class HandlerMock {
     return handledRequest;
   }
   //初始化
-  async init(projectName: string) {
+  async init(projectName: string, includesLocal?: boolean) {
     if (process.env.NODE_ENV !== 'development') {
       return Promise.reject('请在测试环境下使用msw mock 工具');
     }
@@ -92,7 +92,7 @@ export class HandlerMock {
     this.projectName = projectName;
     const worker = setupWorker();
     worker.events.on('request:unhandled', (req) => {
-      if (filterRequest(req)) {
+      if (filterRequest(req, includesLocal)) {
         if (!existRequest(req, this.handleAllRequest)) {
           this.handleAllRequest.unshift(req);
         } else {
