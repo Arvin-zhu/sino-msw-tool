@@ -126,8 +126,8 @@ export class HandlerMock {
       const storage = await yuxStorage.getItem(projectName + '_msw-ui-storage');
       let storageData = importStorageGroupData(storage || '');
       storageData = storageData ? versionDataTransfer(storageData) : undefined;
-      storageData && (this.groupRequest = storageData);
       storageData && this.resetHandlers(storageData);
+      storageData && (this.groupRequest = storageData);
       return Promise.resolve();
     } catch (e) {
       console.error('msw-tool 数据初始化失败:' + e);
