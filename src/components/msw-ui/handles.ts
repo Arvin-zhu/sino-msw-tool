@@ -36,7 +36,7 @@ export class HandlerMock {
   showConflictDetail = false;
   currentEditGroupRequest: IGroupDataItem | undefined = undefined;
   currentHostSwitch = false;
-  groupRequest: groupsRequestType = { collection: [], version: 2 };
+  groupRequest: groupsRequestType = { collection: [], version: 3 };
   storageSwagger = '';
   //获取未mock的接口
   get unHandleAllRequest() {
@@ -73,7 +73,7 @@ export class HandlerMock {
     collections.forEach((collectionItem) => {
       Object.values(collectionItem.data).forEach((requestGroupItem) => {
         requestGroupItem.data.forEach((requestItem) => {
-          if (!requestItem.disabled) {
+          if (!requestItem.disabled || (requestItem.disabled && requestItem.track)) {
             handledRequest.push(requestItem);
           }
         });
@@ -115,7 +115,9 @@ export class HandlerMock {
         console.log('==e', e);
       }
     });
-    worker.start();
+    worker.start({
+      onUnhandledRequest: 'bypass',
+    });
     window._msw_worker = worker;
     this.worker = worker;
     try {
@@ -218,8 +220,39 @@ export class HandlerMock {
       this.saveRequestGroup();
     }
   }
+  moveOutFromHandledTable(requestItem: IGroupDataItem) {
+    requestItem.disabled = true;
+    requestItem.track = false;
+    this.resetHandlers(this.groupRequest);
+    this.saveRequestGroup();
+  }
+  //清空拦截池
+  clearTableList() {
+    if (this.handleTableTab !== 'handled') return;
+    this.paginationMock?.forEach((item) => {
+      item.forEach((_item) => {
+        _item.disabled = true;
+        _item.track = false;
+      });
+    });
+    this.resetHandlers(this.groupRequest);
+    this.saveRequestGroup();
+  }
+  //暂停启动拦截池
+  batchChangeTableList(status: 'active' | 'disabled') {
+    if (this.handleTableTab !== 'handled') return;
+    this.paginationMock?.forEach((item) => {
+      item.forEach((_item) => {
+        _item.disabled = status !== 'active';
+      });
+    });
+    this.resetHandlers(this.groupRequest);
+    this.saveRequestGroup();
+  }
   changeGroupItemStatus(requestItem: IGroupDataItem, isEnable: boolean) {
     requestItem.disabled = !isEnable;
+    //当为激活的时候存放到拦截池
+    isEnable && (requestItem.track = true);
     this.resetHandlers(this.groupRequest);
     this.saveRequestGroup();
     const conflictData = getConflictRequest(this.groupRequest);

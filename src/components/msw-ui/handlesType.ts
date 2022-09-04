@@ -11,6 +11,7 @@ export interface IGroupDataItem {
   request: mswReqType;
   type: 'basic' | 'advanced';
   disabled?: boolean;
+  track?: boolean; //是否放到拦截池
   name: string;
   collection: string;
   delay?: string;

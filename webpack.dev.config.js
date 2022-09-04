@@ -19,7 +19,7 @@ module.exports = async function () {
     },
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, '..'),
+        '@': path.resolve(__dirname, 'src'),
       },
       extensions: ['.ts', '.tsx', '.jsx', '.js', '.json', '...'],
     },

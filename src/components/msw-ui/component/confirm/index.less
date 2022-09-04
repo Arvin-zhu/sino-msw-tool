@@ -22,12 +22,13 @@
     0 9px 28px 8px #0000000d;
   min-width: 200px;
   background-color: @dropDownBcg;
-  border-radius: 4px;
+  border-radius: 2px;
   z-index: 15;
   display: none;
   &.show {
     display: block;
   }
+  color: white;
   button {
     .btnAntd();
     min-width: 50px !important;
@@ -37,6 +38,7 @@
     border-radius: 2px !important;
     background-color: white;
     transition: all .3s ease;
+    opacity: 1 !important;
   }
   button.msw_confirm_ok_btn {
     background-color: @primary !important;
@@ -57,7 +59,7 @@
     border: 5px solid @dropDownBcg;
     border-left-color: transparent;
     border-right-color: transparent;
-    border-top-color: transparent; 
+    border-top-color: transparent;
   }
   &.msw_confirm_panel_right {
     left: 0;
@@ -85,5 +87,5 @@
     border-bottom-color: transparent;
     border-top-color: @dropDownBcg;
   }
-  
+
 }

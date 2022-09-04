@@ -1,12 +1,29 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { throttle } from 'lodash';
 
 type posType = { posX: number; posY: number };
 export const useDrag = (isClickCallback: () => void, projectName?: string) => {
   const dragRef = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState<posType | null>(null);
+  const clickTimeStamp = useRef(null);
   const initPos = useRef<(posType & { offsetInitX?: number; offsetInitY?: number }) | null>(null);
   const timeoutRef = useRef<any>();
   const isDragRef = useRef(false);
+
+  const resize = useCallback(
+    throttle(() => {
+      const localPos = localStorage.getItem(projectName + '_msw-logoPos-storage');
+      if (localPos) {
+        const localStoreData = JSON.parse(localPos);
+        setPos({
+          posX: window.innerWidth * localStoreData.x,
+          posY: window.innerHeight * localStoreData.y,
+        });
+      }
+    }, 100),
+    [projectName],
+  );
+
   useEffect(() => {
     if (pos) {
       // 百分比存储
@@ -17,17 +34,11 @@ export const useDrag = (isClickCallback: () => void, projectName?: string) => {
       localStorage.setItem(projectName + '_msw-logoPos-storage', JSON.stringify(storePercentPos));
     }
   }, [pos, projectName]);
+
   useEffect(() => {
     //初始化时候读取本地msw位置
-    const localPos = localStorage.getItem(projectName + '_msw-logoPos-storage');
-    if (localPos) {
-      const localStoreData = JSON.parse(localPos);
-      setPos({
-        posX: window.innerWidth * localStoreData.x,
-        posY: window.innerHeight * localStoreData.y,
-      });
-    }
-  }, [projectName]);
+    resize();
+  }, [resize]);
   const handlePosition = useCallback((e: any) => {
     clearTimeout(timeoutRef.current);
     setPos((prePos) => {
@@ -56,6 +67,7 @@ export const useDrag = (isClickCallback: () => void, projectName?: string) => {
     };
   }, []);
   const onMouseDown = useCallback((e: any) => {
+    clickTimeStamp.current = new Date().getTime();
     initPos.current = {
       posX: e.pageX,
       posY: e.pageY,
@@ -71,21 +83,33 @@ export const useDrag = (isClickCallback: () => void, projectName?: string) => {
     isDragRef.current = true;
     handlePosition(e);
   }, []);
-  const onMouseUp = useCallback((e?: any) => {
-    e?.target.className.includes('msw_container_circle') &&
-      !isDragRef.current &&
-      isClickCallback?.();
-    document.body.style.userSelect = 'auto';
-    isDragRef.current = false;
+  const unbindEvent = useCallback(() => {
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseleave', onMouseUp);
   }, []);
+  const onMouseUp = useCallback(
+    (e?: any) => {
+      // click 点击的时候有时候时候可能会小距离位移，所以光靠mouseMove加标志可能没有用
+      // 增加一点时间限制可以避免这种情况
+      const upTimeStamp = new Date().getTime();
+      const isClickCircle = e?.target.closest('.msw_container_circle');
+      if (isClickCircle && (!isDragRef.current || upTimeStamp - clickTimeStamp.current < 200)) {
+        isClickCallback?.();
+      }
+      document.body.style.userSelect = 'auto';
+      isDragRef.current = false;
+      unbindEvent();
+    },
+    [unbindEvent],
+  );
   useEffect(() => {
     dragRef.current?.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('resize', resize);
     return () => {
-      onMouseUp();
+      unbindEvent();
+      window.removeEventListener('resize', resize);
     };
-  }, []);
+  }, [resize]);
   return {
     dragRef,
     pos,

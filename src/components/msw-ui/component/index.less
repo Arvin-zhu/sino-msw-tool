@@ -105,7 +105,7 @@
     .inputAntd();
     height: 38px;
     line-height: 38px;
-    border-radius: 4px;
+    border-radius: 2px;
     appearance: none;
     outline: none;
     display: inline-block;
@@ -170,7 +170,7 @@
   }
   table.msw_request_table {
     margin-top: 10px;
-    border-radius: 4px;
+    border-radius: 2px;
     width: 100%;
     background-color: @main-bcg;
     color: white;
@@ -191,7 +191,7 @@
   }
   table.msw_request_table {
     border-collapse: collapse;
-    border-radius: 4px;
+    border-radius: 2px;
     &,
     tr,
     td,
@@ -226,15 +226,41 @@
         color: white;
       }
     }
+    .msw_confirm_ok_btn {
+      background-color: @primary !important;
+      border-color: @primary !important;
+      color: white !important;
+      margin-left: 5px;
+      &:hover {
+        background-color: @primary-dark !important;
+        border-color: @primary-dark !important;
+      }
+    }
     .msw_mock_canCelHandler_btn {
       background-color: rgb(255, 0, 133);
       border-color: rgb(255, 0, 133);
+      color: white !important;
       margin-left: 5px;
       &:hover {
         border-color: darken(rgb(255, 0, 133), 10%);
         background-color: darken(rgb(255, 0, 133), 10%);
         color: white;
       }
+    }
+
+    .msw_mock_enableHandler_btn {
+      background-color: #42AD00;
+      border-color:#42AD00;
+      margin-left: 5px;
+      &:hover {
+        border-color: darken(#42AD00, 10%);
+        background-color: darken(#42AD00, 10%);
+        color: white;
+      }
+    }
+    .msw_mock_moveOut_btn_disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
   }
 
@@ -250,7 +276,7 @@
   }
 
   .msw_mock_content {
-    border-radius: 4px;
+    border-radius: 2px;
     border-top-left-radius: 0;
     min-height: 300px;
     .msw_data_edit_header {

@@ -31,6 +31,7 @@ export function getResetHandlers(groupsRequest: groupsRequestType) {
     Object.keys(group).forEach((_groupKey) => {
       group[_groupKey]?.data.forEach((request) => {
         if (!request.disabled) {
+          request.track = true;
           const handler = rest[request.request.method.toLowerCase() as keyof typeof rest]?.(
             request.request.url.href,
             (req, res, ctx) => {
@@ -62,6 +63,8 @@ export function activeGroupRequest(
   if (group) {
     group.data = group.data?.map((im) => {
       im.disabled = !active;
+      //当为激活的时候存放到拦截池
+      active && (im.track = true);
       return im;
     });
   }
@@ -78,6 +81,8 @@ export function activeCollection(
       const groups = collection.data[groupKey];
       groups.data.forEach((im) => {
         im.disabled = !active;
+        //当为激活的时候存放到拦截池
+        active && (im.track = true);
       });
     });
   }
@@ -85,7 +90,7 @@ export function activeCollection(
 
 export function getRequestKey(req: mswReqType | undefined) {
   if (!req) return;
-  return req.method + req.url.host + req.url.pathname;
+  return req.method + req.url.origin + req.url.pathname;
 }
 
 export function getRequestKeyFormatShow(req: mswReqType | undefined, short?: string) {
@@ -213,16 +218,17 @@ export function collectionRepeat(name: string, groupRequest: groupsRequestType) 
 export function versionDataTransfer(data: groupsRequestType) {
   //数据不兼容处理
   if (!data?.version) {
-    return {
+    return ({
       collection: [
         {
           name: '未知模块',
           data,
         },
       ],
-      version: 2,
-    } as any as groupsRequestType;
+      version: 3,
+    } as any) as groupsRequestType;
   }
+  // 版本3对于版本2需要对本地开启的mock增加拦截池参数
   return data;
 }
 

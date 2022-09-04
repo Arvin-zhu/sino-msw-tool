@@ -4,6 +4,21 @@
 	text-overflow: ellipsis;
 	overflow: hidden;
 }
+.msw_mockTable_disabled_tr {
+	td {
+		color: rgba(255, 255, 255, 0.4);
+		.msw_table_method {
+			color: rgba(248, 145, 8, 0.4) !important;
+		}
+		button {
+			transition: opacity .3s ease;
+		}
+		button {
+			opacity: 0.4;
+		}
+	}
+	transition: color .3s ease;
+}
 .msw_table_module_handle {
 	width: 550px;
 }

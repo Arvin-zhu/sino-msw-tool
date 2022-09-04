@@ -2,13 +2,7 @@ import JSONEditor from 'jsoneditor';
 import 'jsoneditor/dist/jsoneditor.min.css';
 import { cloneDeep } from 'lodash';
 import { observer } from 'mobx-react';
-import React, {
-  ChangeEvent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState
-} from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 
 import { useStores } from '../handles';
 import { checkRequestDuplicateInGroup } from '../handlesFnc';
@@ -17,22 +11,12 @@ import { AddMockTextAreaComponent } from './addMockTextAreaComponent';
 import { SwaggerUrlInputModal } from './addMockTextAreaComponent/components/swaggerUrlInput';
 
 export const AddMockTextArea = observer((data: Partial<IGroupDataItem>) => {
-  const {
-    request,
-    group,
-    status,
-    collection,
-    name,
-    delay = '0',
-    disabled
-  } = data;
+  const { request, group, status, collection, name, delay = '0', disabled } = data;
   const { store } = useStores();
   const { addSimpleMock, setCurrentEditGroupRequest, groupRequest } = store;
   const editor = useRef<JSONEditor | null>(null);
   const editorContainer = useRef<HTMLDivElement | null>(null);
-  const [statusCode, setStatusCode] = useState<string | undefined>(
-    status || '200'
-  );
+  const [statusCode, setStatusCode] = useState<string | undefined>(status || '200');
   const [errorMsg, setErrorMsg] = useState('');
   const [groupName, setGroupName] = useState(group || '');
   const [collectionName, setCollectionName] = useState(collection || '');
@@ -58,7 +42,7 @@ export const AddMockTextArea = observer((data: Partial<IGroupDataItem>) => {
       editor.current = new JSONEditor(editorContainer.current, {
         mode: 'code',
         enableSort: false,
-        enableTransform: false
+        enableTransform: false,
       });
     }
     return () => {
@@ -110,13 +94,10 @@ export const AddMockTextArea = observer((data: Partial<IGroupDataItem>) => {
         name: requestAlias.trim(),
         disabled: false,
         request,
-        delay: delayRes
+        delay: delayRes,
       } as IGroupDataItem;
       //如果是保存副本或者是新增，检查保存到的地方是否有重复
-      if (
-        (isSaveAs || !isEdit) &&
-        checkRequestDuplicateInGroup(groupRequest, newRequestData)
-      ) {
+      if ((isSaveAs || !isEdit) && checkRequestDuplicateInGroup(groupRequest, newRequestData)) {
         setErrorMsg('分组下已存在相同命名的请求');
         return;
       }
@@ -140,6 +121,8 @@ export const AddMockTextArea = observer((data: Partial<IGroupDataItem>) => {
           requestSaveAs.responseJson = data;
           newRequestData.request = requestSaveAs;
           newRequestData.disabled = !!disabled;
+          //当为激活的时候存放到拦截池
+          !disabled && (newRequestData.track = true);
           addSimpleMock(newRequestData, false);
           setCurrentEditGroupRequest(undefined);
         } catch (e) {
@@ -154,6 +137,8 @@ export const AddMockTextArea = observer((data: Partial<IGroupDataItem>) => {
           newRequestData.request.url = new URL(urlInput);
           newRequestData.request.responseJson = data;
           newRequestData.disabled = isEdit ? !!disabled : false;
+          //当为激活的时候存放到拦截池
+          !newRequestData.disabled && (newRequestData.track = true);
           addSimpleMock(newRequestData, isEdit);
           setCurrentEditGroupRequest(undefined);
         } catch (e) {
@@ -174,10 +159,10 @@ export const AddMockTextArea = observer((data: Partial<IGroupDataItem>) => {
       disabled,
       collection,
       group,
-      name
-    ]
+      name,
+    ],
   );
-  const setTextJson = useCallback(data => {
+  const setTextJson = useCallback((data) => {
     editor.current?.set(data);
   }, []);
   useEffect(() => {

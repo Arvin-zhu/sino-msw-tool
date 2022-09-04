@@ -34,6 +34,7 @@ export const MockPanel = observer((props: { placement?: mswPlacement }) => {
           'msw_container-left': placement === 'leftBottom',
           'msw_container-show': showDetail,
         })}
+        style={{ display: showDetail ? 'block' : 'none' }}
       >
         <div style={{ display: showDetail ? 'block' : 'none', height: '100%' }}>
           <MockDetail setShowDetail={setShowDetail} />

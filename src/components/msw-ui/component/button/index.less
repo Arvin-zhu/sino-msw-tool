@@ -14,6 +14,25 @@
     font-size: 14px !important;
     border-radius: 2px !important;
   }
+  &.primary {
+    background-color: @primary !important;
+    border-color: @primary !important;
+    color: white !important;
+
+    &:hover {
+      background-color: @primary-dark !important;
+      border-color: @primary-dark !important;
+    }
+  }
+  &.ghost {
+    border: 1px solid @border;
+    color: white;
+    background-color: transparent;
+    border: 1px solid @border;
+    &:hover {
+      border-color: rgba(255, 255, 255, 0.5) !important;
+    }
+  }
 }
 .msw_btn_content_wrap {
   display: flex;

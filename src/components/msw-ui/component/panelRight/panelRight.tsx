@@ -1,18 +1,19 @@
-import clsx from "clsx";
-import { observer } from "mobx-react";
-import React from "react";
-import "./index.less";
+import clsx from 'clsx';
+import { observer } from 'mobx-react';
+import React from 'react';
+import './index.less';
 
-import { useStores } from "../../handles";
-import { exportGroupRequestData, getConflictRequest } from "../../handlesFnc";
-import { AddMockPanel } from "../addMockPanel";
-import { Upload } from "../upload/upload";
+import { useStores } from '../../handles';
+import { exportGroupRequestData, getConflictRequest } from '../../handlesFnc';
+import { AddMockPanel } from '../addMockPanel';
+import { Upload } from '../upload/upload';
 
-import { ConflictRequest } from "./components/conflictRequest/conflictRequest";
+import { ConflictRequest } from './components/conflictRequest/conflictRequest';
 //@ts-ignore
-import homeIcon from  "../../images/home.png";
+import homeIcon from '../../images/home.png';
 //@ts-ignore
-import transferPlat from "../../images/transferPlat.png";
+import transferPlat from '../../images/transferPlat.png';
+
 export const PanelRight = observer(
   (props: { setShowDetail: React.Dispatch<React.SetStateAction<boolean>> }) => {
     const { setShowDetail } = props;
@@ -40,19 +41,15 @@ export const PanelRight = observer(
               onClick={() => setCurrentEditGroupRequest(undefined)}
             >
               <img src={homeIcon} alt="" style={{ width: 16 }} />
-              <span style={{ verticalAlign: "middle", marginLeft: 5 }}>
-                首页
-              </span>
+              <span style={{ verticalAlign: 'middle', marginLeft: 5 }}>首页</span>
             </span>
             <span
-              className={clsx("msw_panel_statusBar_home")}
+              className={clsx('msw_panel_statusBar_home')}
               style={{ opacity: currentHostSwitch ? 1 : 0.5 }}
               onClick={() => setCurrentHostChange(true)}
             >
               <img src={transferPlat} alt="" style={{ width: 16 }} />
-              <span style={{ verticalAlign: "middle", marginLeft: 5 }}>
-                host切换
-              </span>
+              <span style={{ verticalAlign: 'middle', marginLeft: 5 }}>host切换</span>
             </span>
           </span>
           <div>
@@ -65,7 +62,7 @@ export const PanelRight = observer(
             <Upload
               size="small"
               callBack={(data) => importGroupData(data)}
-              btnText={"导入配置"}
+              btnText={'导入配置'}
               btnStyle={{ marginLeft: 10 }}
             />
             <button
@@ -81,7 +78,7 @@ export const PanelRight = observer(
           {getConflictRequest(groupRequest) &&
             !!Object.values(getConflictRequest(groupRequest)).length && (
               <div className="msw_request_conflict">
-                注意：存在多个相同的活动拦截，可能会导致覆盖问题,{" "}
+                注意：存在多个相同的活动拦截，可能会导致覆盖问题,{' '}
                 <span
                   className="msw_conflictDetail_btn"
                   onClick={() => setShowConflictDetail(true)}
@@ -90,36 +87,32 @@ export const PanelRight = observer(
                 </span>
               </div>
             )}
-          {showConflictDetail && (
-            <ConflictRequest data={getConflictRequest(groupRequest)} />
+          {showConflictDetail && <ConflictRequest data={getConflictRequest(groupRequest)} />}
+          {!currentEditGroupRequest && !currentHostSwitch && !showConflictDetail && (
+            <div className="msw_panelRight_top">
+              <button
+                className={clsx('msw_btn msw_btn-unHandle small', {
+                  active: handleTableTab === 'unHandle',
+                })}
+                onClick={() => changeHandleTabTab('unHandle')}
+              >
+                未拦截
+              </button>
+              <button
+                className={clsx('msw_btn msw_btn-handling small', {
+                  active: handleTableTab === 'handled',
+                })}
+                onClick={() => changeHandleTabTab('handled')}
+              >
+                拦截池
+              </button>
+            </div>
           )}
-          {!currentEditGroupRequest &&
-            !currentHostSwitch &&
-            !showConflictDetail && (
-              <div className="msw_panelRight_top">
-                <button
-                  className={clsx("msw_btn msw_btn-unHandle small", {
-                    active: handleTableTab === "unHandle",
-                  })}
-                  onClick={() => changeHandleTabTab("unHandle")}
-                >
-                  未拦截
-                </button>
-                <button
-                  className={clsx("msw_btn msw_btn-handling small", {
-                    active: handleTableTab === "handled",
-                  })}
-                  onClick={() => changeHandleTabTab("handled")}
-                >
-                  拦截中
-                </button>
-              </div>
-            )}
           <div className="msw_panelRight_main">
             <AddMockPanel tableTab={handleTableTab as any} />
           </div>
         </div>
       </>
     );
-  }
+  },
 );
