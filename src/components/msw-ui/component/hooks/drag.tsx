@@ -16,8 +16,10 @@ export const useDrag = (isClickCallback: () => void, projectName?: string) => {
       if (localPos) {
         const localStoreData = JSON.parse(localPos);
         setPos({
-          posX: window.innerWidth * localStoreData.x,
-          posY: window.innerHeight * localStoreData.y,
+          posX:
+            window.innerWidth * (Number(localStoreData.x) >= 0.9 ? 0.9 : Number(localStoreData.x)),
+          posY:
+            window.innerHeight * (Number(localStoreData.y) >= 0.9 ? 0.9 : Number(localStoreData.y)),
         });
       }
     }, 100),
