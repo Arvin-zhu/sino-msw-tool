@@ -121,5 +121,50 @@ describe('test mock detail', () => {
     const collection = handlerMock.groupRequest.collection.find(
       (collection) => collection.name === 'module',
     );
+    let haveDisabled = false;
+    Object.keys(collection.data).forEach((group) => {
+      collection.data[group].data.forEach((request) => {
+        if (request.disabled) {
+          haveDisabled = true;
+        }
+      });
+    });
+    expect(haveDisabled).toBeFalsy();
+    expect(mockResetHandlers).toBeCalledTimes(2);
+  });
+  test('测试关闭组', () => {
+    testPanelLeftGroupDataInit(handlerMock);
+    handlerMock.activeGroup('module', 'group', false);
+    const collection = handlerMock.groupRequest.collection.find(
+      (collection) => collection.name === 'module',
+    );
+    let haveEnable = false;
+    Object.keys(collection.data).forEach((group) => {
+      collection.data[group].data.forEach((request) => {
+        if (!request.disabled) {
+          haveEnable = true;
+        }
+      });
+    });
+    expect(haveEnable).toBeFalsy();
+    expect(mockResetHandlers).toBeCalledTimes(2);
+  });
+  test('测试request开启', () => {
+    testPanelLeftGroupDataInit(handlerMock);
+    const request = handlerMock.groupRequest.collection[0].data.group.data[0];
+    handlerMock.changeGroupItemStatus(request, true);
+    expect(request.disabled).toBeFalsy();
+  });
+  test('测试request关闭', () => {
+    testPanelLeftGroupDataInit(handlerMock);
+    const request = handlerMock.groupRequest.collection[0].data.group.data[0];
+    handlerMock.changeGroupItemStatus(request, false);
+    expect(request.disabled).toBeTruthy();
+  });
+  test('测试request删除', () => {
+    testPanelLeftGroupDataInit(handlerMock);
+    const request = handlerMock.groupRequest.collection[0].data.group.data[0];
+    handlerMock.deleteGroupItem(request);
+    expect(handlerMock.groupRequest.collection[0].data.group.data.length).toBe(0);
   });
 });
