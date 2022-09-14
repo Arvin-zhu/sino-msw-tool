@@ -37,7 +37,7 @@
     "es",
     "dist",
     "typings",
-    "**/__test__",
+//    "**/__test__",
     "test"
   ]
 }

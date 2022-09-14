@@ -6,7 +6,7 @@ import { App } from './App';
 const root = document.getElementById('root');
 
 ReactDOM.render(
-  <MswUi projectName="meetGame">
+  <MswUi projectName="msw_ui">
     <App />
   </MswUi>,
   root,

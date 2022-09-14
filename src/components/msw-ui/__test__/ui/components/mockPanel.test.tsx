@@ -6,7 +6,10 @@ import { handlerMock } from '../../../handles';
 import { MockPanel } from '../../../component/mockPanel';
 import '@testing-library/jest-dom';
 import { getEachInitConfig } from '../../utils/common';
+import userEvent from '@testing-library/user-event';
 
+jest.useFakeTimers();
+jest.spyOn(global, 'setTimeout');
 jest.mock('../../../yuxStorage/index.js', () => {
   return {
     getItem: () => '',
@@ -30,8 +33,8 @@ describe('test mock panel', () => {
       </Provider>,
     );
     const circle_logo = screen.getByTestId('msw_circle');
-    circle_logo.click();
-    expect(circle_logo).not.toBeInTheDocument();
+    userEvent.click(circle_logo);
+    expect(circle_logo).toHaveClass('msw_container_circle-hide');
     expect(screen.getByTestId('msw_detail_container')).toBeInTheDocument();
   });
 });
