@@ -22,7 +22,7 @@ export const SwaggerUrlInputModal = (props: {
   const [swaggerUrl, setSwaggerUrl] = useState(storageSwagger);
   const [urlPaths, setUrlPaths] = useState<Record<string, any>>({});
 
-  const selectSwagger = useCallback(path => {
+  const selectSwagger = useCallback((path) => {
     const api = path['post'];
     const example = api.responses['200'].example;
     if (example) {
@@ -59,9 +59,7 @@ export const SwaggerUrlInputModal = (props: {
             reject('');
             return;
           }
-          const findPath = Object.keys(docs.paths).filter((im: string) =>
-            im.includes(requestPath)
-          );
+          const findPath = Object.keys(docs.paths).filter((im: string) => im.includes(requestPath));
           if (!findPath?.length) {
             setError('swagger接口定义中未找到相关url,请确认地址是否正确');
             reject('');
@@ -112,30 +110,26 @@ export const SwaggerUrlInputModal = (props: {
       error={error}
       title={
         <div>
-          <div className={'msw_swagger_label'}>
-            mock pathname：(用于匹配swagger的path)
-          </div>
+          <div className={'msw_swagger_label'}>mock pathname：(用于匹配swagger的path)</div>
           <Input
             placeholder={'请输入mock的pathname'}
             value={mockUrl}
-            onChange={e => setMockUrl(e.target.value)}
+            onChange={(e) => setMockUrl(e.target.value)}
           />
           <div className={'msw_swagger_label'} style={{ marginTop: 5 }}>
             swagger地址：
           </div>
           <Input
-            onBlur={e => changeSwaggerUrl(swaggerUrl)}
-            placeholder={'请输入mock的pathname'}
+            onBlur={(e) => changeSwaggerUrl(swaggerUrl)}
+            placeholder={'请输入swagger地址'}
             value={swaggerUrl}
-            onChange={e => setSwaggerUrl(e.target.value)}
+            onChange={(e) => setSwaggerUrl(e.target.value)}
           />
           {Object.keys(urlPaths)?.length > 1 && (
             <div>
-              <div className={'msw_swagger_match_multi_label'}>
-                匹配到多个地址，请选择其中一个
-              </div>
+              <div className={'msw_swagger_match_multi_label'}>匹配到多个地址，请选择其中一个</div>
               <div className={'msw_swagger_url_itemWrap'}>
-                {Object.keys(urlPaths).map(path => {
+                {Object.keys(urlPaths).map((path) => {
                   return (
                     <div key={path} className={'msw_swagger_url_item'}>
                       <span title={path} className={'msw_swagger_url_path'}>

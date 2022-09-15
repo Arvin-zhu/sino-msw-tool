@@ -11,9 +11,12 @@ jest.mock('../../yuxStorage/index.js', () => {
 describe('test mock detail', () => {
   let handlerMock: typeof handlerMockInstance = null;
   let mockResetHandlers: any;
+  let mockSaveRequestHandlers: any;
   beforeEach(() => {
     mockResetHandlers = jest.fn();
+    mockSaveRequestHandlers = jest.fn();
     HandlerMock.prototype.resetHandlers = mockResetHandlers;
+    HandlerMock.prototype.saveRequestGroup = mockSaveRequestHandlers;
     handlerMock = new HandlerMock();
   });
   test('测试增加模块', () => {
@@ -31,12 +34,14 @@ describe('test mock detail', () => {
     );
     expect(handlerMock.groupRequest.collection[0].name).toBe('testNew');
     expect(mockResetHandlers).toBeCalledTimes(1);
+    expect(mockSaveRequestHandlers).toBeCalledTimes(2);
   });
   test('测试删除模块', async () => {
     handlerMock.addCollection('test');
     handlerMock.deleteCollection('test');
     expect(handlerMock.groupRequest.collection.length).toBe(0);
     expect(mockResetHandlers).toBeCalledTimes(1);
+    expect(mockSaveRequestHandlers).toBeCalledTimes(2);
   });
   test('测试复制模块', async () => {
     handlerMock.addCollection('test');
@@ -51,6 +56,7 @@ describe('test mock detail', () => {
       handlerMock.groupRequest.collection[1].data,
     );
     expect(mockResetHandlers).toBeCalledTimes(1);
+    expect(mockSaveRequestHandlers).toBeCalledTimes(2);
   });
   test('测试开启模块', () => {
     testPanelLeftGroupDataInit(handlerMock);
@@ -69,6 +75,7 @@ describe('test mock detail', () => {
     });
     expect(hasDisabled).toBeFalsy();
     expect(mockResetHandlers).toBeCalledTimes(2);
+    expect(mockSaveRequestHandlers).toBeCalledTimes(1);
   });
   test('测试关闭模块', () => {
     testPanelLeftGroupDataInit(handlerMock);
@@ -87,6 +94,7 @@ describe('test mock detail', () => {
     });
     expect(hasEnable).toBeFalsy();
     expect(mockResetHandlers).toBeCalledTimes(2);
+    expect(mockSaveRequestHandlers).toBeCalledTimes(1);
   });
 
   test('测试修改组名称', () => {
@@ -99,12 +107,14 @@ describe('test mock detail', () => {
     );
     expect(handlerMock.groupRequest.collection[0].data.hasOwnProperty('group2')).toBe(true);
     expect(mockResetHandlers).toBeCalledTimes(2);
+    expect(mockSaveRequestHandlers).toBeCalledTimes(1);
   });
   test('测试删除组', () => {
     testPanelLeftGroupDataInit(handlerMock);
     handlerMock.deleteGroup('module', 'group');
     expect(handlerMock.groupRequest.collection[0].data.hasOwnProperty('group')).toBe(false);
     expect(mockResetHandlers).toBeCalledTimes(2);
+    expect(mockSaveRequestHandlers).toBeCalledTimes(1);
   });
   test('测试复制组', () => {
     testPanelLeftGroupDataInit(handlerMock);
@@ -114,6 +124,7 @@ describe('test mock detail', () => {
     );
     expect(handlerMock.groupRequest.collection[0].data.hasOwnProperty('group2')).toBe(true);
     expect(mockResetHandlers).toBeCalledTimes(2);
+    expect(mockSaveRequestHandlers).toBeCalledTimes(1);
   });
   test('测试开启组', () => {
     testPanelLeftGroupDataInit(handlerMock);
@@ -131,6 +142,7 @@ describe('test mock detail', () => {
     });
     expect(haveDisabled).toBeFalsy();
     expect(mockResetHandlers).toBeCalledTimes(2);
+    expect(mockSaveRequestHandlers).toBeCalledTimes(1);
   });
   test('测试关闭组', () => {
     testPanelLeftGroupDataInit(handlerMock);
@@ -148,23 +160,27 @@ describe('test mock detail', () => {
     });
     expect(haveEnable).toBeFalsy();
     expect(mockResetHandlers).toBeCalledTimes(2);
+    expect(mockSaveRequestHandlers).toBeCalledTimes(1);
   });
   test('测试request开启', () => {
     testPanelLeftGroupDataInit(handlerMock);
     const request = handlerMock.groupRequest.collection[0].data.group.data[0];
     handlerMock.changeGroupItemStatus(request, true);
     expect(request.disabled).toBeFalsy();
+    expect(mockSaveRequestHandlers).toBeCalledTimes(1);
   });
   test('测试request关闭', () => {
     testPanelLeftGroupDataInit(handlerMock);
     const request = handlerMock.groupRequest.collection[0].data.group.data[0];
     handlerMock.changeGroupItemStatus(request, false);
     expect(request.disabled).toBeTruthy();
+    expect(mockSaveRequestHandlers).toBeCalledTimes(1);
   });
   test('测试request删除', () => {
     testPanelLeftGroupDataInit(handlerMock);
     const request = handlerMock.groupRequest.collection[0].data.group.data[0];
     handlerMock.deleteGroupItem(request);
     expect(handlerMock.groupRequest.collection[0].data.group.data.length).toBe(0);
+    expect(mockSaveRequestHandlers).toBeCalledTimes(1);
   });
 });
