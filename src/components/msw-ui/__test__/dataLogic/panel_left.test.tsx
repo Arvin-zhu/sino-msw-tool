@@ -8,7 +8,7 @@ jest.mock('../../yuxStorage/index.js', () => {
   };
 });
 
-describe('test mock detail', () => {
+describe('test mock panel-left', () => {
   let handlerMock: typeof handlerMockInstance = null;
   let mockResetHandlers: any;
   let mockSaveRequestHandlers: any;
