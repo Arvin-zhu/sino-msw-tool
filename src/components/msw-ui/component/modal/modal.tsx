@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.less';
-import {Button} from "../button";
+import { Button } from '../button';
 
 interface IModalProps {
   onCancel?: () => void;
@@ -13,29 +13,28 @@ interface IModalProps {
   error?: string | React.ReactNode;
 }
 export const Modal = (props: IModalProps) => {
-  const { onCancel, onOk, title, hide, visible = true, width=400, error: errorMsg } = props;
+  const { onCancel, onOk, title, hide, visible = true, width = 400, error: errorMsg } = props;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(errorMsg);
   useEffect(() => {
     setError(errorMsg);
-  }, [errorMsg])
+  }, [errorMsg]);
   return (
     <React.Fragment>
       {visible ? (
         <div className="msw_modal">
           <div className="msw_modal_mask" onClick={() => hide?.()}></div>
-          <div className="msw_modal_inner" style={{width}}>
+          <div className="msw_modal_inner" style={{ width }}>
             <div>{title}</div>
             <div className="msw_modal_btn_group">
-              {
-                error && <span className={'msw_modal_errorMsg'}>{error}</span>
-              }
+              {error && <span className={'msw_modal_errorMsg'}>{error}</span>}
               <Button
                 onClick={(e) => {
                   e.stopPropagation();
                   onCancel?.();
                   hide?.();
                 }}
+                data-testid="msw_modal_cancel_btn"
                 style={{
                   color: '#242424',
                   border: '1px solid #E5E6E9',
@@ -44,8 +43,9 @@ export const Modal = (props: IModalProps) => {
               >
                 取消
               </Button>
-              <Button isLoading={loading} onClick={
-                e => {
+              <Button
+                isLoading={loading}
+                onClick={(e) => {
                   e.stopPropagation();
                   const result = onOk?.();
                   if (result instanceof Promise) {
@@ -56,13 +56,14 @@ export const Modal = (props: IModalProps) => {
                       })
                       .catch((e) => {
                         console.log(e);
-                      }).finally(() => setLoading(false));
+                      })
+                      .finally(() => setLoading(false));
                   } else {
                     hide?.();
                   }
-                }
-              }
-              className="msw_modal_ok_btn"
+                }}
+                className="msw_modal_ok_btn"
+                data-testid="msw_modal_ok_btn"
               >
                 确定
               </Button>

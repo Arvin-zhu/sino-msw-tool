@@ -9,24 +9,19 @@ export const Button: React.FC<{
   size?: 'small' | 'middle';
   className?: string;
   style?: React.CSSProperties;
+  'data-testid'?: string;
   onClick: (e: React.MouseEvent<HTMLElement>) => void;
-}> = props => {
-  const {
-    isLoading,
-    disabled,
-    className,
-    onClick,
-    style = {},
-    size = 'middle'
-  } = props;
+}> = (props) => {
+  const { isLoading, disabled, className, onClick, style = {}, size = 'middle' } = props;
   return (
     <button
       style={{ ...style }}
+      data-testid={props['data-testid']}
       className={clsx('msw_btn', className || '', {
         msw_btn_disabled: isLoading || disabled,
-        small: size === 'small'
+        small: size === 'small',
       })}
-      onClick={e => {
+      onClick={(e) => {
         !disabled && !isLoading && onClick(e);
       }}
     >

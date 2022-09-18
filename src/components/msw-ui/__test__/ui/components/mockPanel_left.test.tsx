@@ -64,9 +64,16 @@ describe('test mock detail', () => {
   test('测试修改模块名称', async () => {
     testPanelLeftGroupDataInit(handlerMock);
     const leftItem = screen.getAllByTestId('msw_content_left_moduleItem')[0];
-    // userEvent.hover(leftItem);
-    // expect(screen.getAllByTestId('msw_content_left_moduleItem_moreIcon')[0]).toHaveStyle({
-    //   display: 'block',
-    // });
+    userEvent.hover(leftItem);
+    const moreIconWrap = screen.getAllByTestId('msw_content_left_moduleItem_moreIcon')[0];
+    userEvent.click(moreIconWrap);
+    userEvent.click(screen.getByText('修改名称'));
+    fireEvent.change(screen.getByPlaceholderText('请输入名称'), {
+      target: {
+        value: 'module2',
+      },
+    });
+    userEvent.click(screen.getByTestId('msw_modal_ok_btn'));
+    expect(handlerMock.groupRequest.collection[0].name).toBe('module2');
   });
 });
