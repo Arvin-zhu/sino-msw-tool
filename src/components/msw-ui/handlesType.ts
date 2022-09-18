@@ -18,7 +18,7 @@ export interface IGroupDataItem {
 }
 
 export type mswReqType = MockedRequest<DefaultRequestBody> & {
-  responseJson?: string;
+  responseJson?: object;
 };
 
 export type groupsRequestType = {

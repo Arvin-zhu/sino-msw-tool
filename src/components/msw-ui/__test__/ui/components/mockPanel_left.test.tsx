@@ -1,9 +1,19 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, RenderResult, screen } from '@testing-library/react';
 import { Provider } from 'mobx-react';
-import { handlerMock } from '../../../handles';
-import { MockDetail } from '../../../component/mockPanel';
+import { HandlerMock, handlerMock as handlerMockInstance } from '../../../handles';
+import { MockPanel } from '../../../component/mockPanel';
 import React from 'react';
-import { getEachInitConfig } from '../../utils/common';
+import '@testing-library/jest-dom';
+import { testPanelLeftGroupDataInit } from '@/components/msw-ui/__test__/dataLogic/utils';
+import userEvent from '@testing-library/user-event';
+import { configure } from 'mobx';
+
+configure({
+  enforceActions: 'never',
+});
+
+jest.useFakeTimers();
+jest.spyOn(global, 'setTimeout');
 
 jest.mock('../../../yuxStorage/index.js', () => {
   return {
@@ -13,14 +23,35 @@ jest.mock('../../../yuxStorage/index.js', () => {
 });
 
 describe('test mock detail', () => {
-  getEachInitConfig();
-  test('测试增加模块', async () => {
-    const setShowDetail = jest.fn();
-    const result = render(
+  let handlerMock: typeof handlerMockInstance = null;
+  let mockResetHandlers: any;
+  let mockSaveRequestHandlers: any;
+  let mockAddCollection: any;
+  const env = process.env;
+  let result: RenderResult;
+  beforeEach(() => {
+    mockResetHandlers = jest.fn();
+    mockSaveRequestHandlers = jest.fn();
+    mockAddCollection = jest.fn();
+    mockAddCollection.mockResolvedValue({ status: true, msg: '' });
+    HandlerMock.prototype.resetHandlers = mockResetHandlers;
+    HandlerMock.prototype.addCollection = mockAddCollection;
+    HandlerMock.prototype.saveRequestGroup = mockSaveRequestHandlers;
+    handlerMock = new HandlerMock();
+    process.env = { ...env };
+    (process.env as any).NODE_ENV = 'development';
+    result = render(
       <Provider store={handlerMock}>
-        <MockDetail setShowDetail={setShowDetail} />
+        <MockPanel />
       </Provider>,
     );
+    const circle_logo = screen.getByTestId('msw_circle');
+    userEvent.click(circle_logo);
+  });
+  afterEach(() => {
+    jest.resetModules();
+  });
+  test('测试增加模块', async () => {
     fireEvent.click(result.container.querySelector('.msw_add_btn'));
     fireEvent.change(screen.getByPlaceholderText('请输入模块名称'), {
       target: {
@@ -28,11 +59,14 @@ describe('test mock detail', () => {
       },
     });
     fireEvent.click(result.container.querySelector('.msw_confirm_ok_btn'));
-    await waitFor(() => {
-      expect(
-        result.container.querySelectorAll('.msw_content_left_item_wrap .msw_content_left_item')
-          ?.length,
-      ).toBe(1);
-    });
+    expect(mockAddCollection).toBeCalledTimes(1);
+  });
+  test('测试修改模块名称', async () => {
+    testPanelLeftGroupDataInit(handlerMock);
+    const leftItem = screen.getAllByTestId('msw_content_left_moduleItem')[0];
+    // userEvent.hover(leftItem);
+    // expect(screen.getAllByTestId('msw_content_left_moduleItem_moreIcon')[0]).toHaveStyle({
+    //   display: 'block',
+    // });
   });
 });
