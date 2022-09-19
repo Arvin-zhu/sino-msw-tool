@@ -178,6 +178,7 @@ const MswContentLeftGroupItem = observer(
           <LisItem
             setExpand={setExpand}
             expand={expand}
+            data-testid={'msw_content_left_groupItem'}
             name={
               <span className={clsx('msw_content_left_item_name')} title={groupName}>
                 <MswDot
