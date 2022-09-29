@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
 import { throttle } from 'lodash';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 type posType = { posX: number; posY: number };
 export const useDrag = (isClickCallback: () => void, projectName?: string) => {
@@ -7,7 +7,6 @@ export const useDrag = (isClickCallback: () => void, projectName?: string) => {
   const [pos, setPos] = useState<posType | null>(null);
   const clickTimeStamp = useRef(null);
   const initPos = useRef<(posType & { offsetInitX?: number; offsetInitY?: number }) | null>(null);
-  const timeoutRef = useRef<any>();
   const isDragRef = useRef(false);
 
   const resize = useCallback(
@@ -16,10 +15,8 @@ export const useDrag = (isClickCallback: () => void, projectName?: string) => {
       if (localPos) {
         const localStoreData = JSON.parse(localPos);
         setPos({
-          posX:
-            window.innerWidth * (Number(localStoreData.x) >= 0.9 ? 0.9 : Number(localStoreData.x)),
-          posY:
-            window.innerHeight * (Number(localStoreData.y) >= 0.9 ? 0.9 : Number(localStoreData.y)),
+          posX: window.innerWidth * Number(localStoreData.x),
+          posY: window.innerHeight * Number(localStoreData.y),
         });
       }
     }, 100),
@@ -42,40 +39,33 @@ export const useDrag = (isClickCallback: () => void, projectName?: string) => {
     resize();
   }, [resize]);
   const handlePosition = useCallback((e: any) => {
-    clearTimeout(timeoutRef.current);
-    setPos((prePos) => {
-      return {
-        posX:
-          e.pageX -
-          initPos.current.posX +
-          (prePos !== null ? prePos?.posX : initPos.current.offsetInitX),
-        posY:
-          e.pageY -
-          initPos.current.posY +
-          (prePos !== null ? prePos?.posY : initPos.current.offsetInitY),
-      };
+    const divRect = dragRef.current.offsetWidth;
+    const maxWidth = window.innerWidth - divRect;
+    const maxHeight = window.innerHeight - divRect;
+    setPos({
+      posX:
+        e.pageX <= initPos.current.offsetInitX
+          ? 0
+          : e.pageX >= maxWidth
+          ? maxWidth
+          : e.pageX - (initPos.current.offsetInitX || 0),
+      posY:
+        e.pageY <= initPos.current.offsetInitY
+          ? 0
+          : e.pageY > maxHeight
+          ? maxHeight
+          : e.pageY - (initPos.current.offsetInitY || 0),
     });
-    //react 18 useRef更新机制问题修复
-    timeoutRef.current = setTimeout(() => {
-      initPos.current = {
-        posX: e.pageX,
-        posY: e.pageY,
-        offsetInitX: initPos.current.offsetInitX,
-        offsetInitY: initPos.current.offsetInitY,
-      };
-    }, 0);
-    return () => {
-      clearTimeout(timeoutRef.current);
-    };
   }, []);
   const onMouseDown = useCallback((e: any) => {
     clickTimeStamp.current = new Date().getTime();
     initPos.current = {
-      posX: e.pageX,
-      posY: e.pageY,
-      offsetInitX: e.pageX - e.target.offsetWidth / 2,
-      offsetInitY: e.pageY - e.target.offsetHeight / 2,
+      posX: e.clientX,
+      posY: e.clientY,
+      offsetInitX: e.clientX - dragRef.current.getBoundingClientRect().left,
+      offsetInitY: e.clientY - dragRef.current.getBoundingClientRect().top,
     };
+    handlePosition(e);
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
     document.addEventListener('mouseleave', onMouseUp);
