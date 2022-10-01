@@ -12,7 +12,7 @@ import { PanelLeft } from './panelLeft/panelLeft';
 import { PanelRight } from './panelRight/panelRight';
 //@ts-ignore
 import addBtn from '../images/add.png';
-import { useDragPosition } from './hooks/darg2';
+import { useDragPosition } from './hooks/darg';
 
 export const MockPanel = observer((props: { placement?: mswPlacement }) => {
   const { placement } = props;
