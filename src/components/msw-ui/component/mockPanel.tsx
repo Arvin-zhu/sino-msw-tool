@@ -13,11 +13,15 @@ import { PanelRight } from './panelRight/panelRight';
 //@ts-ignore
 import addBtn from '../images/add.png';
 import { useDragPosition } from './hooks/drag';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 export const MockPanel = observer((props: { placement?: mswPlacement }) => {
   const { placement } = props;
   const [showDetail, setShowDetail] = useState(false);
-  
+  useHotkeys('ctrl+q', () => {
+    setShowDetail(false)
+  });
+
   return (
     <>
       <MockLogo
@@ -61,6 +65,7 @@ export function MockLogo({
       })}
       data-testid="msw_circle"
       {...props}
+      onClick={() => setShowDetail(true)}
     >
       M
     </div>
