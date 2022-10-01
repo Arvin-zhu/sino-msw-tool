@@ -14,7 +14,6 @@ const useStorage = <T,>(key: string, initialState?: T) => {
   const state = useState<T>(get);
   useLayoutEffect(() => {
     const value = JSON.stringify(state[0]);
-    console.log('darg2.tsx:16', value);
     localStorage.setItem(key, value);
   }, [state[0], key]);
   return state;
