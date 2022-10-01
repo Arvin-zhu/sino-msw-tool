@@ -25,8 +25,9 @@ import {
 import { groupsRequestType, IGroupDataItem, mswReqType } from './handlesType';
 
 export class HandlerMock {
-  constructor() {
+  constructor(projectName: string) {
     makeAutoObservable(this, {}, { autoBind: true });
+    this.projectName = projectName;
   }
   filterKeywords = '';
   projectName = '';
@@ -461,11 +462,19 @@ export class HandlerMock {
     this.resetHandlers(this.groupRequest);
     this.saveRequestGroup();
   }
+
+  static of(projectName: string) {
+    if (!instance) {
+      instance = new HandlerMock(projectName)
+    }
+    return instance
+  }
 }
 
-export const handlerMock = new HandlerMock();
+let instance: HandlerMock;
 
-window._msw_tool = handlerMock;
+export const handlerMock = (name: string) => new HandlerMock(name);
+
 
 function useStores(): { store: HandlerMock };
 function useStores() {

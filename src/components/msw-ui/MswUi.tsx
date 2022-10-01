@@ -1,17 +1,17 @@
 import { Provider } from 'mobx-react';
 import { SetupWorkerApi } from 'msw';
 
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useMemo, useState } from 'react';
 
 import { MockPanel } from './component/mockPanel';
-import { handlerMock } from './handles';
+import { HandlerMock } from './handles';
 
 import { configure } from 'mobx';
 
 declare global {
   interface Window {
     _msw_worker: SetupWorkerApi;
-    _msw_tool: typeof handlerMock;
+    _msw_tool: HandlerMock;
   }
 }
 
@@ -32,10 +32,15 @@ export const MswUi: React.FC<{
       setLoading(false);
     });
   }, [projectName]);
+  const store = useMemo(() => {
+    const instance = HandlerMock.of(projectName)
+    window._msw_tool = instance;
+    return instance
+  }, [projectName])
   return (
     <>
       {process.env.NODE_ENV === 'development' && (
-        <Provider store={handlerMock}>
+        <Provider store={store}>
           <MockPanel placement={placement} />
         </Provider>
       )}
@@ -45,7 +50,7 @@ export const MswUi: React.FC<{
 };
 export const initMsw = (projectName: string, includesLocal?: boolean) => {
   if (process.env.NODE_ENV === 'development') {
-    return handlerMock.init(projectName, includesLocal).catch((e) => {
+    return HandlerMock.of(projectName).init(projectName, includesLocal).catch((e) => {
       throw new Error('mswError:' + e);
     });
   }

@@ -1,4 +1,4 @@
-import { HandlerMock, handlerMock as handlerMockInstance } from '../../handles';
+import { HandlerMock } from '../../handles';
 import { IGroupDataItem, mswReqType } from '@/components/msw-ui/handlesType';
 import { setupServer } from 'msw/node';
 import axios from 'axios';
@@ -17,7 +17,7 @@ jest.mock('../../yuxStorage/index.js', () => {
 });
 
 describe('test mock panel-right', () => {
-  let handlerMock: typeof handlerMockInstance = null;
+  let handlerMock: HandlerMock = null;
   let mockResetHandlers: any;
   let mockSaveRequestHandlers: any;
   beforeEach(() => {
@@ -25,7 +25,7 @@ describe('test mock panel-right', () => {
     mockSaveRequestHandlers = jest.fn();
     HandlerMock.prototype.resetHandlers = mockResetHandlers;
     HandlerMock.prototype.saveRequestGroup = mockSaveRequestHandlers;
-    handlerMock = new HandlerMock();
+    handlerMock = HandlerMock.of('msw-ui');
   });
   beforeAll(() => server.listen());
   afterEach(() => server.resetHandlers());
