@@ -1,3 +1,4 @@
+import { mock } from 'mockjs';
 import { DefaultRequestBody, MockedRequest, rest, RestHandler } from 'msw';
 
 import { groupsRequestType, IGroupDataItem, mswReqType } from './handlesType';
@@ -35,10 +36,11 @@ export function getResetHandlers(groupsRequest: groupsRequestType) {
           const handler = rest[request.request.method.toLowerCase() as keyof typeof rest]?.(
             request.request.url.href,
             (req, res, ctx) => {
+              const { responseJson } = request.request
               return res(
                 ctx.status(+(request.status || 200)),
                 ctx.delay(request.delay && Number(request.delay) !== 0 ? Number(request.delay) : 0),
-                ctx.json(request.request.responseJson),
+                ctx.json(mock(responseJson)),
               );
             },
           );
