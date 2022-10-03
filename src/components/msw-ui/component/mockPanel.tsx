@@ -14,11 +14,12 @@ import { PanelRight } from './panelRight/panelRight';
 import addBtn from '../images/add.png';
 import { useDragPosition } from './hooks/drag';
 import { useHotkeys } from 'react-hotkeys-hook';
+import { HotKeys } from '../hotKeys';
 
 export const MockPanel = observer((props: { placement?: mswPlacement }) => {
   const { placement } = props;
   const [showDetail, setShowDetail] = useState(false);
-  useHotkeys('ctrl+q', () => {
+  useHotkeys(HotKeys.QUIT, () => {
     setShowDetail(false)
   });
 

@@ -1,7 +1,9 @@
 import React, { ChangeEvent, forwardRef } from 'react';
+import { useHotkeys } from 'react-hotkeys-hook';
 import { useStores } from '../../handles';
 import { getCollectionKeys, getGroupKeys } from '../../handlesFnc';
 import { mswReqType } from '../../handlesType';
+import { HotKeys } from '../../hotKeys';
 import { Input } from '../input/input';
 import { SelectData } from '../select/select';
 import { Upload } from '../upload/upload';
@@ -51,6 +53,7 @@ export const AddMockTextAreaComponent = forwardRef(
       changeAliasName,
       changeCollectionName
     } = props;
+    useHotkeys(HotKeys.SAVE, () => saveData())
     return (
       <div className={'msw_mock_detail_wrap'}>
         <div className="msw_mock_detail_wrap_top">
