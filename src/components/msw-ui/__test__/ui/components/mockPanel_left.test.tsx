@@ -1,6 +1,6 @@
 import { fireEvent, render, RenderResult, screen } from '@testing-library/react';
 import { Provider } from 'mobx-react';
-import { HandlerMock, handlerMock as handlerMockInstance } from '../../../handles';
+import { HandlerMock } from '../../../handles';
 import { MockPanel } from '../../../component/mockPanel';
 import React from 'react';
 import '@testing-library/jest-dom';
@@ -23,7 +23,7 @@ jest.mock('../../../yuxStorage/index.js', () => {
 });
 
 describe('test mock detail', () => {
-  let handlerMock: typeof handlerMockInstance = null;
+  let handlerMock: HandlerMock = null;
   let mockResetHandlers: any;
   let mockSaveRequestHandlers: any;
   let mockAddCollection: any;
@@ -37,7 +37,7 @@ describe('test mock detail', () => {
     HandlerMock.prototype.resetHandlers = mockResetHandlers;
     HandlerMock.prototype.addCollection = mockAddCollection;
     HandlerMock.prototype.saveRequestGroup = mockSaveRequestHandlers;
-    handlerMock = new HandlerMock();
+    handlerMock = HandlerMock.of('msw-ui');
     process.env = { ...env };
     (process.env as any).NODE_ENV = 'development';
     result = render(

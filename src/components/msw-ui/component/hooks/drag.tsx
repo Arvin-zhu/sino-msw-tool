@@ -1,109 +1,110 @@
-import { throttle } from 'lodash';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 
-type posType = { posX: number; posY: number };
-export const useDrag = (isClickCallback: () => void, projectName?: string) => {
-  const dragRef = useRef<HTMLDivElement>(null);
-  const [pos, setPos] = useState<posType | null>(null);
-  const clickTimeStamp = useRef(null);
-  const initPos = useRef<(posType & { offsetInitX?: number; offsetInitY?: number }) | null>(null);
-  const isDragRef = useRef(false);
-
-  const resize = useCallback(
-    throttle(() => {
-      const localPos = localStorage.getItem(projectName + '_msw-logoPos-storage');
-      if (localPos) {
-        const localStoreData = JSON.parse(localPos);
-        setPos({
-          posX: window.innerWidth * Number(localStoreData.x),
-          posY: window.innerHeight * Number(localStoreData.y),
-        });
-      }
-    }, 100),
-    [projectName],
-  );
-
-  useEffect(() => {
-    if (pos) {
-      // 百分比存储
-      const storePercentPos = {
-        x: pos.posX / window.innerWidth,
-        y: pos.posY / window.innerHeight,
-      };
-      localStorage.setItem(projectName + '_msw-logoPos-storage', JSON.stringify(storePercentPos));
+const useStorage = <T,>(key: string, initialState?: T) => {
+  const get = useCallback(() => {
+    const value = localStorage.getItem(key);
+    if (!value) return initialState;
+    try {
+      return JSON.parse(value) as T;
+    } catch (e) {
+      return initialState;
     }
-  }, [pos, projectName]);
+  }, [key]);
 
-  useEffect(() => {
-    //初始化时候读取本地msw位置
-    resize();
-  }, [resize]);
-  const handlePosition = useCallback((e: any) => {
-    const divRect = dragRef.current.offsetWidth;
-    const maxWidth = window.innerWidth - divRect;
-    const maxHeight = window.innerHeight - divRect;
-    setPos({
-      posX:
-        e.pageX <= initPos.current.offsetInitX
-          ? 0
-          : e.pageX >= maxWidth
-          ? maxWidth
-          : e.pageX - (initPos.current.offsetInitX || 0),
-      posY:
-        e.pageY <= initPos.current.offsetInitY
-          ? 0
-          : e.pageY > maxHeight
-          ? maxHeight
-          : e.pageY - (initPos.current.offsetInitY || 0),
-    });
-  }, []);
-  const onMouseDown = useCallback((e: any) => {
-    clickTimeStamp.current = new Date().getTime();
-    initPos.current = {
-      posX: e.clientX,
-      posY: e.clientY,
-      offsetInitX: e.clientX - dragRef.current.getBoundingClientRect().left,
-      offsetInitY: e.clientY - dragRef.current.getBoundingClientRect().top,
+  const state = useState<T>(get);
+  useLayoutEffect(() => {
+    const value = JSON.stringify(state[0]);
+    localStorage.setItem(key, value);
+  }, [state[0], key]);
+  return state;
+};
+
+interface PosProps {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+export const useDragPosition = (
+  projectName: string,
+): React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> => {
+  const [style, setStyle] = useStorage<React.CSSProperties>(`msw-logo-pos-${projectName}`);
+  const pos = useRef<PosProps>({
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+  });
+  const onDragStart: React.DragEventHandler<HTMLDivElement> = useCallback((e) => {
+    // 记录鼠标相对dom的偏移量
+    const targetRect = (e.target as HTMLDivElement).getBoundingClientRect();
+    const y = e.clientY - targetRect.top;
+    const x = e.clientX - targetRect.left;
+    pos.current = {
+      x,
+      y,
+      width: targetRect.width,
+      height: targetRect.height,
     };
-    handlePosition(e);
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-    document.addEventListener('mouseleave', onMouseUp);
   }, []);
-  const onMouseMove = useCallback((e: any) => {
-    document.body.style.userSelect = 'none';
-    isDragRef.current = true;
-    handlePosition(e);
-  }, []);
-  const unbindEvent = useCallback(() => {
-    document.removeEventListener('mousemove', onMouseMove);
-    document.removeEventListener('mouseleave', onMouseUp);
-  }, []);
-  const onMouseUp = useCallback(
-    (e?: any) => {
-      // click 点击的时候有时候时候可能会小距离位移，所以光靠mouseMove加标志可能没有用
-      // 增加一点时间限制可以避免这种情况
-      const upTimeStamp = new Date().getTime();
-      const isClickCircle = e?.target.closest('.msw_container_circle');
-      if (isClickCircle && (!isDragRef.current || upTimeStamp - clickTimeStamp.current < 200)) {
-        isClickCallback?.();
-      }
-      document.body.style.userSelect = 'auto';
-      isDragRef.current = false;
-      unbindEvent();
-    },
-    [unbindEvent],
-  );
-  useEffect(() => {
-    dragRef.current?.addEventListener('mousedown', onMouseDown);
-    window.addEventListener('resize', resize);
-    return () => {
-      unbindEvent();
-      window.removeEventListener('resize', resize);
+  const onDragEnd: React.DragEventHandler<HTMLDivElement> = useCallback((e) => {
+    e.preventDefault();
+    // 获取窗口中心点坐标
+    const { clientHeight, clientWidth } = document.documentElement;
+    const centerPos = {
+      x: clientWidth / 2,
+      y: clientHeight / 2,
     };
-  }, [resize]);
+    // 通过当前鼠标坐标反推target坐标
+    const targetPos = {
+      x: e.clientX - pos.current.x,
+      y: e.clientY - pos.current.y,
+    };
+    const left = Math.max(targetPos.x, 0);
+    const top = Math.max(targetPos.y, 0);
+    const right = Math.max(clientWidth - (targetPos.x + pos.current.width), 0);
+    const bottom = Math.max(clientHeight - (targetPos.y + pos.current.height), 0);
+    // 判断当前target的中心点在哪个象限
+    if (targetPos.x < centerPos.x && targetPos.y < centerPos.y) {
+      setStyle({
+        left,
+        top,
+      });
+    } else if (targetPos.x >= centerPos.x && targetPos.y < centerPos.y) {
+      setStyle({
+        right,
+        top,
+      });
+    } else if (targetPos.x < centerPos.x && targetPos.y >= centerPos.y) {
+      setStyle({
+        left,
+        bottom,
+      });
+    } else {
+      setStyle({
+        right,
+        bottom,
+      });
+    }
+  }, []);
+
+  useLayoutEffect(() => {
+    const preventHandler = (e: DragEvent) => {
+      e.preventDefault()
+      e.dataTransfer.effectAllowed = "copyMove";
+      e.dataTransfer.dropEffect = "copy";
+
+      document.documentElement.style.cursor = 'pointer'
+      document.documentElement.style.userSelect = 'none'
+    }
+    document.addEventListener('dragover', preventHandler);
+    return () => document.removeEventListener('dragover', preventHandler)
+  }, [])
+
   return {
-    dragRef,
-    pos,
+    onDragStart,
+    onDragEnd,
+    draggable: true,
+    style,
   };
 };
