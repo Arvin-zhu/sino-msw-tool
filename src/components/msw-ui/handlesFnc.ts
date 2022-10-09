@@ -36,7 +36,7 @@ export function getResetHandlers(groupsRequest: groupsRequestType) {
           const handler = rest[request.request.method.toLowerCase() as keyof typeof rest]?.(
             request.request.url.href,
             (req, res, ctx) => {
-              const { responseJson } = request.request
+              const { responseJson } = request.request;
               return res(
                 ctx.status(+(request.status || 200)),
                 ctx.delay(request.delay && Number(request.delay) !== 0 ? Number(request.delay) : 0),
@@ -220,7 +220,7 @@ export function collectionRepeat(name: string, groupRequest: groupsRequestType) 
 export function versionDataTransfer(data: groupsRequestType) {
   //数据不兼容处理
   if (!data?.version) {
-    return ({
+    return {
       collection: [
         {
           name: '未知模块',
@@ -228,7 +228,7 @@ export function versionDataTransfer(data: groupsRequestType) {
         },
       ],
       version: 3,
-    } as any) as groupsRequestType;
+    } as any as groupsRequestType;
   }
   // 版本3对于版本2需要对本地开启的mock增加拦截池参数
   return data;

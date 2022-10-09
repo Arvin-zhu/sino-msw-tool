@@ -1,5 +1,5 @@
-import { HandlerMock } from '../../handles';
 import { testPanelLeftGroupDataInit } from '@/components/msw-ui/__test__/dataLogic/utils';
+import { HandlerMock } from '../../handles';
 
 jest.mock('../../yuxStorage/index.js', () => {
   return {
@@ -17,7 +17,7 @@ describe('test mock panel-left', () => {
     mockSaveRequestHandlers = jest.fn();
     HandlerMock.prototype.resetHandlers = mockResetHandlers;
     HandlerMock.prototype.saveRequestGroup = mockSaveRequestHandlers;
-    handlerMock = HandlerMock.of('msw-ui');
+    handlerMock = new HandlerMock('mock-ui');
   });
   test('测试增加模块', () => {
     handlerMock.addCollection('test');

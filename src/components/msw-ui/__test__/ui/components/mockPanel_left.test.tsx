@@ -1,12 +1,12 @@
-import { fireEvent, render, RenderResult, screen } from '@testing-library/react';
-import { Provider } from 'mobx-react';
-import { HandlerMock } from '../../../handles';
-import { MockPanel } from '../../../component/mockPanel';
-import React from 'react';
 import '@testing-library/jest-dom';
-import { testPanelLeftGroupDataInit } from '@/components/msw-ui/__test__/dataLogic/utils';
+import { fireEvent, render, RenderResult, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { configure } from 'mobx';
+import { Provider } from 'mobx-react';
+import React from 'react';
+import { MockPanel } from '../../../component/mockPanel';
+import { HandlerMock } from '../../../handles';
+import { testPanelLeftGroupDataInit } from '../../dataLogic/utils';
 
 configure({
   enforceActions: 'never',

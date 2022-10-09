@@ -1,9 +1,9 @@
-import { HandlerMock } from '../../handles';
-import { IGroupDataItem, mswReqType } from '@/components/msw-ui/handlesType';
-import { setupServer } from 'msw/node';
-import axios from 'axios';
 import { getResetHandlers } from '@/components/msw-ui/handlesFnc';
+import { IGroupDataItem, mswReqType } from '@/components/msw-ui/handlesType';
 import { testPanelLeftGroupDataInit } from '@/components/msw-ui/__test__/dataLogic/utils';
+import axios from 'axios';
+import { setupServer } from 'msw/node';
+import { HandlerMock } from '../../handles';
 
 const mockJson = require('../utils/unhandleRequest.json');
 
@@ -25,7 +25,7 @@ describe('test mock panel-right', () => {
     mockSaveRequestHandlers = jest.fn();
     HandlerMock.prototype.resetHandlers = mockResetHandlers;
     HandlerMock.prototype.saveRequestGroup = mockSaveRequestHandlers;
-    handlerMock = HandlerMock.of('msw-ui');
+    handlerMock = new HandlerMock('msw-ui');
   });
   beforeAll(() => server.listen());
   afterEach(() => server.resetHandlers());

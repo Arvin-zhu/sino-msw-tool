@@ -2,11 +2,11 @@ import { render, screen } from '@testing-library/react';
 import { Provider } from 'mobx-react';
 import React from 'react';
 
-import { handlerMock } from '../../../handles';
-import { MockPanel } from '../../../component/mockPanel';
 import '@testing-library/jest-dom';
-import { getEachInitConfig } from '../../utils/common';
 import userEvent from '@testing-library/user-event';
+import { MockPanel } from '../../../component/mockPanel';
+import { handlerMock } from '../../../handles';
+import { getEachInitConfig } from '../../utils/common';
 
 jest.useFakeTimers();
 jest.spyOn(global, 'setTimeout');
@@ -20,7 +20,7 @@ describe('test mock panel', () => {
   getEachInitConfig();
   test('msw 图标加载', () => {
     render(
-      <Provider store={handlerMock}>
+      <Provider store={handlerMock('mock-ui')}>
         <MockPanel />
       </Provider>,
     );
@@ -28,7 +28,7 @@ describe('test mock panel', () => {
   });
   test('msw 配置层出现', () => {
     render(
-      <Provider store={handlerMock}>
+      <Provider store={handlerMock('mock-ui')}>
         <MockPanel />
       </Provider>,
     );

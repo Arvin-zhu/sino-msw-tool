@@ -169,7 +169,6 @@ const MswContentLeftGroupItem = observer(
       <>
         <div
           className="msw_content_left_item"
-          data-testid={'msw_content_left_groupItem'}
           style={{
             paddingLeft: 20,
             borderBottom: 'none',
