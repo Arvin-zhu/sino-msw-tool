@@ -5,11 +5,11 @@ import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useStores } from '../handles';
 import { IGroupDataItem } from '../handlesType';
 
+import { MswDot } from '../component/dot/dot';
+import { HandledBatchOptions } from '../component/panelRight/components/handledBatchOptions';
+import { HandledTableOptions } from '../component/panelRight/components/handledTableOptions';
 import { AddMockTextArea } from './addMockTextArea';
 import { HostChange } from './hostChange/hostChange';
-import { MswDot } from '../component/dot/dot';
-import { HandledTableOptions } from '../component/panelRight/components/handledTableOptions';
-import { HandledBatchOptions } from '../component/panelRight/components/handledBatchOptions';
 
 export const AddMockPanel = observer((props: { tableTab: 'unHandle' | 'handled' }) => {
   const { store } = useStores();
@@ -64,11 +64,7 @@ export const AddMockPanel = observer((props: { tableTab: 'unHandle' | 'handled' 
           <div style={{ padding: 10 }}>
             <div className={'msw_addMock_filter'}>
               <span>过滤: </span>
-              <input
-                value={filterKeywords}
-                onChange={filterChange}
-                placeholder={'过滤拦截的请求'}
-              />
+              <input value={filterKeywords} onChange={filterChange} placeholder={'过滤请求'} />
             </div>
             {tableTab === 'handled' && <HandledBatchOptions />}
             <table className="msw_request_table">

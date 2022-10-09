@@ -63,6 +63,10 @@ export const AddMockTextArea = observer((data: Partial<IGroupDataItem>) => {
         setErrorMsg('json 不合法');
         return;
       }
+      if (!collectionName.trim()) {
+        setErrorMsg('请输入模块名称!');
+        return;
+      }
       if (!groupName.trim()) {
         setErrorMsg('请输入分组名称!');
         return;

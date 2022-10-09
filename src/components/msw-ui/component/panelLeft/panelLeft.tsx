@@ -225,7 +225,6 @@ const MswContentLeftGroupRequestItem = observer((props: { item: IGroupDataItem }
   const { item } = props;
   const { store } = useStores();
   const { setCurrentEditGroupRequest, deleteGroupItem, changeGroupItemStatus } = store;
-  const [nameEditModal, setNameEditModal] = useState(false);
   const menuChange = useCallback(
     (value: string) => {
       if (value === 'delete') {
@@ -237,14 +236,15 @@ const MswContentLeftGroupRequestItem = observer((props: { item: IGroupDataItem }
       if (value === 'enable' || value === 'disable') {
         changeGroupItemStatus(item, value === 'enable');
       }
-      if (value === 'editName') {
-        setNameEditModal(true);
-      }
     },
     [item],
   );
   return (
-    <div className="msw_content_left_item" style={{ paddingLeft: 30, borderBottom: 'none' }}>
+    <div
+      className="msw_content_left_item msw_content_left_item_request"
+      style={{ paddingLeft: 30, borderBottom: 'none' }}
+      role="msw_left_request_item"
+    >
       <div className="msw_content_left_item_inner">
         <span
           onClick={() => setCurrentEditGroupRequest(item)}
@@ -273,18 +273,15 @@ const MswContentLeftGroupRequestItem = observer((props: { item: IGroupDataItem }
           content={<Menu options={operationRequestArr} onChange={menuChange} />}
         >
           <span className="msw_moreIcon_wrap">
-            <img src={moreIcon} alt="" className="msw_moreIcon" />
+            <img
+              src={moreIcon}
+              alt=""
+              className="msw_moreIcon"
+              role="msw_left_request_item_moreIcon"
+            />
           </span>
         </Dropdown>
       </div>
-      <NameEditModal
-        level="request"
-        collectionName={item.collection}
-        groupName={item.group}
-        visible={nameEditModal}
-        request={item}
-        setVisible={setNameEditModal}
-      />
     </div>
   );
 });

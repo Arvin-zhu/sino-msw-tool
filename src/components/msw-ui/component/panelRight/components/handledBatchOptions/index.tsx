@@ -1,7 +1,7 @@
-import React from 'react';
 import { Button } from '@/components/msw-ui/component/button';
-import './index.less';
 import { useStores } from '@/components/msw-ui/handles';
+import React from 'react';
+import './index.less';
 
 export const HandledBatchOptions = () => {
   const { store } = useStores();
@@ -9,11 +9,11 @@ export const HandledBatchOptions = () => {
   return (
     <div className={'msw_handled_batch_options'}>
       <span>列表：</span>
-      <Button className={'ghost'} onClick={clearTableList}>
+      <Button className={'ghost msw_batch_clear'} onClick={clearTableList}>
         清空
       </Button>
       <Button
-        className={'ghost'}
+        className={'ghost msw_batch_pause'}
         onClick={() => {
           batchChangeTableList('disabled');
         }}
@@ -21,7 +21,7 @@ export const HandledBatchOptions = () => {
         暂停
       </Button>
       <Button
-        className={'ghost'}
+        className={'ghost msw_batch_start'}
         onClick={() => {
           batchChangeTableList('active');
         }}

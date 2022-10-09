@@ -321,7 +321,7 @@ export class HandlerMock {
     },
     newName: string,
   ) {
-    const { level, collectionName, groupName } = data;
+    const { level, collectionName } = data;
     let repeat = false;
     if (level === 'collection' && newName) {
       const collectionNames = this.groupRequest.collection.map((im) => im.name);
@@ -337,17 +337,18 @@ export class HandlerMock {
         repeat = Object.keys(collection.data).includes(newName);
       }
     }
-    if (level === 'request' && collectionName && groupName && newName) {
-      const collection = this.groupRequest.collection.find(
-        (collection) => collection.name === collectionName,
-      );
-      const group = collection?.data?.[groupName];
-      const requestsName =
-        group?.data?.map((requestItem) => {
-          return requestItem.name;
-        }) || [];
-      repeat = requestsName.includes(newName);
-    }
+    // 暂不支持菜单中修改request名称
+    // if (level === 'request' && collectionName && groupName && newName) {
+    //   const collection = this.groupRequest.collection.find(
+    //     (collection) => collection.name === collectionName,
+    //   );
+    //   const group = collection?.data?.[groupName];
+    //   const requestsName =
+    //     group?.data?.map((requestItem) => {
+    //       return requestItem.name;
+    //     }) || [];
+    //   repeat = requestsName.includes(newName);
+    // }
     return repeat;
   }
 
@@ -360,7 +361,7 @@ export class HandlerMock {
     },
     newName: string,
   ) {
-    const { level, collectionName, groupName, request } = data;
+    const { level, collectionName, groupName } = data;
     if (level === 'collection' && collectionName) {
       const collection = this.groupRequest.collection.find(
         (collection) => collection.name === collectionName,
@@ -388,18 +389,19 @@ export class HandlerMock {
         collection.data[newName] = group;
       }
     }
-    if (level === 'request' && collectionName && groupName && request) {
-      const collection = this.groupRequest.collection.find(
-        (collection) => collection.name === collectionName,
-      );
-      const group = collection?.data[groupName];
-      const request: IGroupDataItem | undefined = group?.data.find(
-        (requestItem) => requestItem.name === request?.name,
-      );
-      if (request && group) {
-        request.name = newName;
-      }
-    }
+    // 请求名称暂不放在菜单中
+    // if (level === 'request' && collectionName && groupName && request) {
+    //   const collection = this.groupRequest.collection.find(
+    //     (collection) => collection.name === collectionName,
+    //   );
+    //   const group = collection?.data[groupName];
+    //   const request: IGroupDataItem | undefined = group?.data.find(
+    //     (requestItem) => requestItem.name === request?.name,
+    //   );
+    //   if (request && group) {
+    //     request.name = newName;
+    //   }
+    // }
     this.resetHandlers(this.groupRequest);
     this.saveRequestGroup();
   }
@@ -412,7 +414,7 @@ export class HandlerMock {
     },
     newName: string,
   ) {
-    const { level, collectionName, groupName, request } = data;
+    const { level, collectionName, groupName } = data;
     if (level === 'collection' && collectionName) {
       const collection = this.groupRequest.collection.find(
         (collection) => collection.name === collectionName,
@@ -444,37 +446,37 @@ export class HandlerMock {
         collection.data[newName] = cpGroup;
       }
     }
-    if (level === 'request' && collectionName && groupName && request) {
-      const collection = this.groupRequest.collection.find(
-        (collection) => collection.name === collectionName,
-      );
-      const group = collection?.data[groupName];
-      const request: IGroupDataItem | undefined = group?.data.find(
-        (requestItem) => requestItem.name === request?.name,
-      );
-      if (request && group) {
-        const cpRequest = cloneDeep(request);
-        cpRequest.name = newName;
-        cpRequest.disabled = true;
-        group.data.push(cpRequest);
-      }
-    }
+    // request的copy通过另存为实现
+    // if (level === 'request' && collectionName && groupName && request) {
+    //   const collection = this.groupRequest.collection.find(
+    //     (collection) => collection.name === collectionName,
+    //   );
+    //   const group = collection?.data[groupName];
+    //   const request: IGroupDataItem | undefined = group?.data.find(
+    //     (requestItem) => requestItem.name === request?.name,
+    //   );
+    //   if (request && group) {
+    //     const cpRequest = cloneDeep(request);
+    //     cpRequest.name = newName;
+    //     cpRequest.disabled = true;
+    //     group.data.push(cpRequest);
+    //   }
+    // }
     this.resetHandlers(this.groupRequest);
     this.saveRequestGroup();
   }
 
   static of(projectName: string) {
     if (!instance) {
-      instance = new HandlerMock(projectName)
+      instance = new HandlerMock(projectName);
     }
-    return instance
+    return instance;
   }
 }
 
 let instance: HandlerMock;
 
 export const handlerMock = (name: string) => new HandlerMock(name);
-
 
 function useStores(): { store: HandlerMock };
 function useStores() {

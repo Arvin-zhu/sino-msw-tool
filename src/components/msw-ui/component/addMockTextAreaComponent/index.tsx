@@ -30,7 +30,7 @@ export const AddMockTextAreaComponent = forwardRef(
       setShowSwaggerModal: React.Dispatch<React.SetStateAction<boolean>>;
       setTextJson: (data: string) => void;
     },
-    ref
+    ref,
   ) => {
     const { store } = useStores();
     const {
@@ -51,9 +51,9 @@ export const AddMockTextAreaComponent = forwardRef(
       setUrlInput,
       changeGroupName,
       changeAliasName,
-      changeCollectionName
+      changeCollectionName,
     } = props;
-    useHotkeys(HotKeys.SAVE, () => saveData())
+    useHotkeys(HotKeys.SAVE, () => saveData());
     return (
       <div className={'msw_mock_detail_wrap'}>
         <div className="msw_mock_detail_wrap_top">
@@ -62,10 +62,7 @@ export const AddMockTextAreaComponent = forwardRef(
               {request?.method.toUpperCase()}
             </div>
             <div className="msw_mock_detail_wrap_top_url_href">
-              <Input
-                value={urlInput}
-                onChange={e => setUrlInput(e.target.value)}
-              />
+              <Input value={urlInput} onChange={(e) => setUrlInput(e.target.value)} />
             </div>
           </div>
         </div>
@@ -73,20 +70,18 @@ export const AddMockTextAreaComponent = forwardRef(
         <div style={{ padding: 10 }}>
           <div className="msw_mock_detail_wrap_config">
             <div className="msw_mock_detail_wrap_config_inner">
-              <div className={'msw_group_input_wrap'}>
+              <div className={'msw_group_input_wrap msw_group_config_module'}>
                 <span>模块</span>
                 <div className="msw_detailConfig_item">
                   <SelectData
                     placeholder="选择或输入新增"
-                    data={Array.from(
-                      new Set([...getCollectionKeys(store.groupRequest)])
-                    )}
+                    data={Array.from(new Set([...getCollectionKeys(store.groupRequest)]))}
                     onChange={changeCollectionName}
                     value={collectionName}
                   />
                 </div>
               </div>
-              <div className={'msw_group_input_wrap'}>
+              <div className={'msw_group_input_wrap msw_group_config_group'}>
                 <span>组名：</span>
                 <div className="msw_detailConfig_item">
                   <SelectData
@@ -97,18 +92,18 @@ export const AddMockTextAreaComponent = forwardRef(
                   />
                 </div>
               </div>
-              <div className={'msw_group_input_wrap'}>
+              <div className={'msw_group_input_wrap msw_group_config_alias'}>
                 <span>请求别名：</span>
                 <div className="msw_detailConfig_item">
                   <Input
                     placeholder="请输入请求别名"
-                    onChange={e => changeAliasName(e.target.value)}
+                    onChange={(e) => changeAliasName(e.target.value)}
                     value={requestAlias}
                   />
                 </div>
               </div>
               <div
-                className={'msw_group_input_wrap'}
+                className={'msw_group_input_wrap msw_group_config_code'}
                 style={{ marginLeft: 0, marginTop: 10 }}
               >
                 <span>状态：</span>
@@ -120,32 +115,35 @@ export const AddMockTextAreaComponent = forwardRef(
                   />
                 </div>
               </div>
-              <div className={'msw_group_input_wrap'} style={{ marginTop: 10 }}>
+              <div
+                className={'msw_group_input_wrap msw_group_config_delay'}
+                style={{ marginTop: 10 }}
+              >
                 <span>延迟：</span>
                 <div className="msw_detailConfig_item">
                   <Input
                     placeholder="请输入延迟毫秒数"
-                    onChange={e => setDelayRes(e.target.value)}
+                    onChange={(e) => setDelayRes(e.target.value)}
                     value={delayRes}
                   />
                 </div>
               </div>
-              <div className={'msw_group_input_wrap'} style={{ marginTop: 10 }}>
+              <div
+                className={'msw_group_input_wrap msw_group_config_upload'}
+                style={{ marginTop: 10 }}
+              >
                 <span>上传数据：</span>
                 <div className="msw_detailConfig_item">
-                  <Upload callBack={jsonData => setTextJson(jsonData)} />
+                  <Upload callBack={(jsonData) => setTextJson(jsonData)} />
                 </div>
               </div>
               <div
-                className={'msw_group_input_wrap'}
+                className={'msw_group_input_wrap msw_group_config_importFromSwagger'}
                 style={{ marginTop: 10, marginLeft: 0 }}
               >
                 <span>导入：</span>
                 <div className="msw_detailConfig_item">
-                  <button
-                    className={'msw_config_btn'}
-                    onClick={() => setShowSwaggerModal(true)}
-                  >
+                  <button className={'msw_config_btn'} onClick={() => setShowSwaggerModal(true)}>
                     从swagger导入
                   </button>
                 </div>
@@ -159,14 +157,9 @@ export const AddMockTextAreaComponent = forwardRef(
             {request && (
               <div className={'msw_jsonEditor_wrap'}>
                 <div ref={ref as any} style={{ height: 550 }} />
-                <div
-                  style={{ marginTop: 10, textAlign: 'right' }}
-                  className={'msw_save_btn_wrap'}
-                >
+                <div style={{ marginTop: 10, textAlign: 'right' }} className={'msw_save_btn_wrap'}>
                   {errorMsg && <span style={{ color: 'red' }}>{errorMsg}</span>}
-                  {isEdit && (
-                    <button onClick={() => saveData(true)}>另存副本</button>
-                  )}
+                  {isEdit && <button onClick={() => saveData(true)}>另存副本</button>}
                   <button onClick={() => saveData()}>保存</button>
                 </div>
               </div>
@@ -175,5 +168,5 @@ export const AddMockTextAreaComponent = forwardRef(
         </div>
       </div>
     );
-  }
+  },
 );

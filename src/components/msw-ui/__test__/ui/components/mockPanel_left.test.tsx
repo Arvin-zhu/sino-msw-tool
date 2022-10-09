@@ -37,7 +37,7 @@ describe('test mock detail', () => {
     HandlerMock.prototype.resetHandlers = mockResetHandlers;
     HandlerMock.prototype.addCollection = mockAddCollection;
     HandlerMock.prototype.saveRequestGroup = mockSaveRequestHandlers;
-    handlerMock = HandlerMock.of('msw-ui');
+    handlerMock = new HandlerMock('msw-ui');
     process.env = { ...env };
     (process.env as any).NODE_ENV = 'development';
     result = render(
@@ -111,11 +111,11 @@ describe('test mock detail', () => {
     );
     fireEvent.change(screen.getByPlaceholderText('请输入名称'), {
       target: {
-        value: 'group2',
+        value: 'group_copy',
       },
     });
     userEvent.click(screen.getByTestId('msw_modal_ok_btn'));
-    expect(Object.keys(handlerMock.groupRequest.collection[0].data)).toContain('group2');
+    expect(Object.keys(handlerMock.groupRequest.collection[0].data)).toContain('group_copy');
   });
   test('测试删除组', () => {
     initLeftGroup(handlerMock);
@@ -125,31 +125,60 @@ describe('test mock detail', () => {
       )[3],
     );
     userEvent.click(screen.getByTestId('msw_modal_ok_btn'));
-    // expect(Object.keys(handlerMock.groupRequest.collection[0].data)).toContain('group2');
+    expect(Object.keys(handlerMock.groupRequest.collection[0].data).length).toBe(0);
   });
-  // test('复制模块', () => {
-  //   initLeftModule(handlerMock);
-  //   userEvent.click(screen.getByText('复制'));
-  //   fireEvent.change(screen.getByPlaceholderText('请输入名称'), {
-  //     target: {
-  //       value: 'module_copy',
-  //     },
-  //   });
-  //   userEvent.click(screen.getByTestId('msw_modal_ok_btn'));
-  //   expect(handlerMock.groupRequest.collection[1].name).toBe('module_copy');
-  //   const dot = result.container.querySelector('[title=module_copy]>span.msw_dot');
-  //   expect(dot).toHaveStyle('background: rgb(240, 64, 66)');
-  // });
-  // test('测试关闭/开启模块', () => {
-  //   initLeftModule(handlerMock);
-  //   userEvent.click(screen.getByText('全部关闭'));
-  //   const dotClose = result.container.querySelector('[title=module]>span.msw_dot');
-  //   expect(dotClose).toHaveStyle('background: rgb(240, 64, 66)');
-
-  //   userEvent.click(screen.getByText('全部开启'));
-  //   const dot = result.container.querySelector('[title=module]>span.msw_dot');
-  //   expect(dot).toHaveStyle('background: rgb(66, 173, 0)');
-  // });
+  test('测试复制组', () => {
+    initLeftGroup(handlerMock);
+    userEvent.click(
+      result.container.querySelectorAll(
+        '[data-testid=msw_content_left_groupItem] .msw_menu_item',
+      )[4],
+    );
+    fireEvent.change(screen.getByPlaceholderText('请输入名称'), {
+      target: {
+        value: 'group_copy',
+      },
+    });
+    userEvent.click(screen.getByTestId('msw_modal_ok_btn'));
+    expect(handlerMock.groupRequest.collection[0].data).toHaveProperty('group_copy');
+    const dot = result.container.querySelector('[title=group_copy]>span.msw_dot');
+    expect(dot).toHaveStyle('background: rgb(240, 64, 66)');
+  });
+  test('测试关闭/开启组', () => {
+    initLeftGroup(handlerMock);
+    userEvent.click(
+      result.container.querySelectorAll(
+        '[data-testid=msw_content_left_groupItem] .msw_menu_item',
+      )[2],
+    );
+    const dotClose = result.container.querySelector('[title=group]>span.msw_dot');
+    expect(dotClose).toHaveStyle('background: rgb(240, 64, 66)');
+    userEvent.click(
+      result.container.querySelectorAll(
+        '[data-testid=msw_content_left_groupItem] .msw_menu_item',
+      )[1],
+    );
+    const dot = result.container.querySelector('[title=group]>span.msw_dot');
+    expect(dot).toHaveStyle('background: rgb(66, 173, 0)');
+  });
+  test('测试开启/关闭request', () => {
+    initLeftRequest(handlerMock);
+    const requestItem = result.queryByRole('msw_left_request_item');
+    const menuList = requestItem.querySelectorAll('.msw_menu_item');
+    userEvent.click(menuList[0]);
+    const dot = requestItem.querySelector('.msw_dot');
+    expect(dot).toHaveStyle('background: rgb(66, 173, 0)');
+    userEvent.click(menuList[1]);
+    expect(dot).toHaveStyle('background: rgb(240, 64, 66)');
+  });
+  test('测试删除request', () => {
+    initLeftRequest(handlerMock);
+    const requestItem = result.queryByRole('msw_left_request_item');
+    const menuList = requestItem.querySelectorAll('.msw_menu_item');
+    userEvent.click(menuList[2]);
+    userEvent.click(result.container.querySelector('.msw_modal_inner .msw_modal_ok_btn'));
+    expect(handlerMock.groupRequest.collection[0].data.group.data.length).toBe(0);
+  });
 });
 
 function initLeftModule(handlerMock: HandlerMock) {
@@ -166,5 +195,15 @@ function initLeftGroup(handlerMock: HandlerMock) {
   const leftItem = screen.getAllByTestId('msw_content_left_groupItem')[0];
   userEvent.hover(leftItem);
   const moreIconWrap = screen.getAllByTestId('msw_content_left_groupItem_moreIcon')[0];
+  userEvent.click(moreIconWrap);
+}
+
+function initLeftRequest(handlerMock: HandlerMock) {
+  testPanelLeftGroupDataInit(handlerMock);
+  userEvent.click(screen.getByText('module'));
+  userEvent.click(screen.getByText('group'));
+  const leftItem = screen.getByRole('msw_left_request_item');
+  userEvent.hover(leftItem);
+  const moreIconWrap = screen.getByRole('msw_left_request_item_moreIcon');
   userEvent.click(moreIconWrap);
 }
