@@ -41,16 +41,19 @@ describe('test mock detail', () => {
   let mockResetHandlers: any;
   let mockSaveRequestHandlers: any;
   let mockAddCollection: any;
+  let mockImportData: any;
   const env = process.env;
   let result: RenderResult;
   beforeEach(() => {
     mockResetHandlers = jest.fn();
     mockSaveRequestHandlers = jest.fn();
     mockAddCollection = jest.fn();
+    mockImportData = jest.fn();
     mockAddCollection.mockResolvedValue({ status: true, msg: '' });
     HandlerMock.prototype.resetHandlers = mockResetHandlers;
     HandlerMock.prototype.addCollection = mockAddCollection;
     HandlerMock.prototype.saveRequestGroup = mockSaveRequestHandlers;
+    HandlerMock.prototype.importGroupData = mockImportData;
     handlerMock = new HandlerMock('msw-ui');
     process.env = { ...env };
     (process.env as any).NODE_ENV = 'development';
