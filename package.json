@@ -15,11 +15,20 @@
     "prepare": "husky install"
   },
   "publishConfig": {
-    "registry": "http://192.168.1.55:8081/repository/npm-in/"
+    "registry": "https://registry.npmjs.org/"
   },
   "files": [
     "dist"
   ],
+  "keywords": [
+    "msw-tool",
+    "msw",
+    "mock"
+  ],
+  "repository": {
+		"type": "git",
+		"url": "https://github.com/Arvin-zhu/sino-msw-tool"
+	},
   "author": "arvin",
   "license": "ISC",
   "peerDependencies": {
