@@ -1,5 +1,5 @@
 {
-  "name": "@sino/msw-tool",
+  "name": "sino-msw-tool",
   "version": "1.1.33",
   "description": "tool for mock",
   "module": "dist/index.js",
