@@ -9,8 +9,9 @@
     "doc:build": "father doc build",
     "doc:deploy": "father doc deploy",
     "build": "father build",
-    "test": "father test",
-    "test:coverage": "father test --coverage"
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "precommit": "npm run test"
   },
   "publishConfig": {
     "registry": "http://192.168.1.55:8081/repository/npm-in/"

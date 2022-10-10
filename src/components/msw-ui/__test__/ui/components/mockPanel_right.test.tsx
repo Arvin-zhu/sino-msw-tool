@@ -1,11 +1,10 @@
 import '@testing-library/jest-dom';
-import { render, RenderResult, screen } from '@testing-library/react';
+import { render, RenderResult, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import _ from 'lodash';
 import { configure } from 'mobx';
 import { Provider } from 'mobx-react';
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import { MockPanel } from '../../../component/mockPanel';
 import { HandlerMock } from '../../../handles';
 import { testPanelLeftGroupDataInit } from '../../dataLogic/utils';
@@ -102,38 +101,39 @@ describe('test mock detail', () => {
   });
   test('保存request', async () => {
     clickMockBtnInit(handlerMock, result);
-    await act(() => {
-      userEvent.click(result.container.querySelector('.msw_save_btn_wrap button'));
+    userEvent.click(result.container.querySelector('.msw_save_btn_wrap button'));
+    await waitFor(() => {
+      expect(result.container.querySelector('.msw_save_btn_wrap span')).toHaveTextContent(
+        '请输入模块名称!',
+      );
     });
-    expect(result.container.querySelector('.msw_save_btn_wrap span')).toHaveTextContent(
-      '请输入模块名称!',
-    );
     const moduleInput = result.container.querySelector('.msw_group_config_module input');
     userEvent.type(moduleInput, 'module2');
-    await act(() => {
-      userEvent.click(result.container.querySelector('.msw_save_btn_wrap button'));
+    userEvent.click(result.container.querySelector('.msw_save_btn_wrap button'));
+    await waitFor(() => {
+      expect(result.container.querySelector('.msw_save_btn_wrap span')).toHaveTextContent(
+        '请输入分组名称!',
+      );
     });
-    expect(result.container.querySelector('.msw_save_btn_wrap span')).toHaveTextContent(
-      '请输入分组名称!',
-    );
     const groupInput = result.container.querySelector('.msw_group_config_group input');
     userEvent.type(groupInput, 'group2');
-    await act(() => {
-      userEvent.click(result.container.querySelector('.msw_save_btn_wrap button'));
+    userEvent.click(result.container.querySelector('.msw_save_btn_wrap button'));
+    await waitFor(() => {
+      expect(result.container.querySelector('.msw_save_btn_wrap span')).toHaveTextContent(
+        '请输入请求别名！',
+      );
     });
-    expect(result.container.querySelector('.msw_save_btn_wrap span')).toHaveTextContent(
-      '请输入请求别名！',
-    );
+
     const aliasInput = result.container.querySelector('.msw_group_config_alias input');
     userEvent.type(aliasInput, 'alias2');
-    await act(() => {
-      userEvent.click(result.container.querySelector('.msw_save_btn_wrap button'));
+    userEvent.click(result.container.querySelector('.msw_save_btn_wrap button'));
+    await waitFor(() => {
+      expect(result.container.querySelector('.msw_handle_noRequest')).toBeInTheDocument();
+      expect(_.map(handlerMock.groupRequest.collection, _.property('name'))).toContain('module2');
+      const module2 = _.find(handlerMock.groupRequest.collection, ['name', 'module2']);
+      expect(module2.data).toHaveProperty('group2');
+      expect(_.map(module2.data['group2'].data, _.property('name'))).toContain('alias2');
     });
-    expect(result.container.querySelector('.msw_handle_noRequest')).toBeInTheDocument();
-    expect(_.map(handlerMock.groupRequest.collection, _.property('name'))).toContain('module2');
-    const module2 = _.find(handlerMock.groupRequest.collection, ['name', 'module2']);
-    expect(module2.data).toHaveProperty('group2');
-    expect(_.map(module2.data['group2'].data, _.property('name'))).toContain('alias2');
   });
   test('拦截池操作', () => {
     const handlerPoolBtn = screen.getByText('拦截池');
