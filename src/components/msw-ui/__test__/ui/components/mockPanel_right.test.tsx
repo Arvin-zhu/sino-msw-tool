@@ -186,7 +186,6 @@ describe('test mock detail', () => {
       'https://o-test-adsmgt-api.sinoclick.com/v2/api-docs',
     );
     userEvent.click(result.container.querySelector('.msw_modal_ok_btn'));
-    result.debug(result.container.querySelector('.msw_modal_inner'));
     await waitFor(() => {
       expect(result.container.querySelector('.msw_modal_errorMsg')).toHaveTextContent(
         '请输入mock地址',
