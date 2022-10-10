@@ -1,12 +1,15 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Input } from '../../../input/input';
-import { parser } from '../../../../swaggerParseMock/index';
-import { Modal } from '../../../modal/modal';
-import { mswReqType } from '../../../../handlesType';
-import './index.less';
 import mockJs from 'mockjs';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useStores } from '../../../../handles';
+import { mswReqType } from '../../../../handlesType';
+import { parser } from '../../../../swaggerParseMock/index';
 import { Button } from '../../../button';
+import { Input } from '../../../input/input';
+import { Modal } from '../../../modal/modal';
+import { SelectData } from '../../../select/select';
+import './index.less';
+
+const requestMethod = ['get', 'post', 'delete', 'put'];
 
 export const SwaggerUrlInputModal = (props: {
   visible: boolean;
@@ -17,27 +20,35 @@ export const SwaggerUrlInputModal = (props: {
   const { store } = useStores();
   const { changeSwaggerUrl, storageSwagger } = store;
   const { visible, setVisible, request, setTextJson } = props;
+  const [method, setMethod] = useState(request?.method.toLowerCase() || 'post');
   const [mockUrl, setMockUrl] = useState(request?.url.pathname);
   const [error, setError] = useState('');
   const [swaggerUrl, setSwaggerUrl] = useState(storageSwagger);
   const [urlPaths, setUrlPaths] = useState<Record<string, any>>({});
 
-  const selectSwagger = useCallback((path) => {
-    const api = path['post'];
-    const example = api.responses['200'].example;
-    if (example) {
-      try {
-        const mockData = mockJs.mock(JSON.parse(example));
-        setTextJson(mockData);
-        setError('');
-        setVisible(false);
-      } catch (e) {
-        setError('swagger数据解析出错');
+  const selectSwagger = useCallback(
+    (path) => {
+      const api = path[method];
+      if (!api) {
+        setError(`找不到该接口的${method}方法，请重新确认`);
+        return;
       }
-    } else {
-      setError('未找到swagger相关example');
-    }
-  }, []);
+      const example = api?.responses['200']?.example;
+      if (example) {
+        try {
+          const mockData = mockJs.mock(JSON.parse(example));
+          setTextJson(mockData);
+          setError('');
+          setVisible(false);
+        } catch (e) {
+          setError('swagger数据解析出错');
+        }
+      } else {
+        setError('未找到swagger相关example');
+      }
+    },
+    [method],
+  );
 
   const getParserFromSwagger = useCallback(() => {
     return new Promise((resolve, reject) => {
@@ -72,8 +83,13 @@ export const SwaggerUrlInputModal = (props: {
             return;
           }
           setUrlPaths({});
-          const api = docs.paths[findPath[0]]['post'];
-          const example = api.responses['200'].example;
+          const api = docs.paths[findPath[0]][method];
+          if (!api) {
+            setError(`找不到该接口的${method}方法，请重新确认`);
+            reject('');
+            return;
+          }
+          const example = api.responses['200']?.example;
           if (example) {
             try {
               const mockData = mockJs.mock(JSON.parse(example));
@@ -95,7 +111,7 @@ export const SwaggerUrlInputModal = (props: {
           reject('');
         });
     });
-  }, [swaggerUrl, mockUrl, setTextJson]);
+  }, [swaggerUrl, mockUrl, setTextJson, method]);
   useEffect(() => {
     setError('');
     setUrlPaths({});
@@ -111,11 +127,21 @@ export const SwaggerUrlInputModal = (props: {
       title={
         <div>
           <div className={'msw_swagger_label'}>mock pathname：(用于匹配swagger的path)</div>
-          <Input
-            placeholder={'请输入mock的pathname'}
-            value={mockUrl}
-            onChange={(e) => setMockUrl(e.target.value)}
-          />
+          <div className="msw_swagger_mockPathName_wrap">
+            <div className="msw_swagger_method">
+              <SelectData
+                placeholder="请求方法"
+                value={method}
+                onChange={(e) => setMethod(e)}
+                data={requestMethod}
+              />
+            </div>
+            <Input
+              placeholder={'请输入mock的pathname'}
+              value={mockUrl}
+              onChange={(e) => setMockUrl(e.target.value)}
+            />
+          </div>
           <div className={'msw_swagger_label'} style={{ marginTop: 5 }}>
             swagger地址：
           </div>

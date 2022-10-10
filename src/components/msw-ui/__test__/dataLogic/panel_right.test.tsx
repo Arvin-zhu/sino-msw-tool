@@ -114,4 +114,9 @@ describe('test mock panel-right', () => {
     expect(handlerMock.currentHostSwitch).toBeFalsy();
     expect(handlerMock.showConflictDetail).toBeFalsy();
   });
+  test('测试导入', () => {
+    handlerMock.importGroupData(mockJson);
+    expect(mockResetHandlers).toBeCalledTimes(1);
+    expect(mockSaveRequestHandlers).toBeCalledTimes(1);
+  });
 });

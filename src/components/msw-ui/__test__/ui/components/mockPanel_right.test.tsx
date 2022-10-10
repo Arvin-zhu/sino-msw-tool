@@ -1,13 +1,14 @@
 import '@testing-library/jest-dom';
 import { render, RenderResult, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import _ from 'lodash';
+import _, { omitBy } from 'lodash';
 import { configure } from 'mobx';
 import { Provider } from 'mobx-react';
 import React from 'react';
 import { MockPanel } from '../../../component/mockPanel';
 import { HandlerMock } from '../../../handles';
 import { testPanelLeftGroupDataInit } from '../../dataLogic/utils';
+const mockParseJson = require('../../utils/mockParse.json');
 
 configure({
   enforceActions: 'never',
@@ -15,6 +16,18 @@ configure({
 
 jest.useFakeTimers();
 jest.spyOn(global, 'setTimeout');
+
+jest.mock('../../../swaggerParseMock/index.js', () => {
+  return {
+    parser: () => {
+      mockParseJson.paths = omitBy(
+        mockParseJson.paths,
+        (value, key) => !key.includes('/promote/google/smart/campaign/keyword'),
+      );
+      return Promise.resolve(mockParseJson);
+    },
+  };
+});
 
 jest.mock('../../../yuxStorage/index.js', () => {
   return {
@@ -157,6 +170,70 @@ describe('test mock detail', () => {
     expect(result.container.querySelector('tbody')).not.toBeEmptyDOMElement();
     userEvent.click(screen.getByText('清空'));
     expect(result.container.querySelector('.msw_handle_noRequest')).toBeInTheDocument();
+  });
+  test('测试从swagger导入', async () => {
+    clickMockBtnInit(handlerMock, result);
+    userEvent.click(result.container.querySelector('.msw_group_config_importFromSwagger button'));
+    userEvent.clear(screen.getByPlaceholderText('请输入mock的pathname'));
+    userEvent.click(result.container.querySelector('.msw_modal_ok_btn'));
+    await waitFor(() => {
+      expect(result.container.querySelector('.msw_modal_errorMsg')).toHaveTextContent(
+        '请输入swaggerUrl地址',
+      );
+    });
+    userEvent.type(
+      screen.getByPlaceholderText('请输入swagger地址'),
+      'https://o-test-adsmgt-api.sinoclick.com/v2/api-docs',
+    );
+    userEvent.click(result.container.querySelector('.msw_modal_ok_btn'));
+    result.debug(result.container.querySelector('.msw_modal_inner'));
+    await waitFor(() => {
+      expect(result.container.querySelector('.msw_modal_errorMsg')).toHaveTextContent(
+        '请输入mock地址',
+      );
+    });
+    userEvent.type(
+      screen.getByPlaceholderText('请输入mock的pathname'),
+      '/promote/google/smart/campaign/keyword',
+    );
+    userEvent.click(result.container.querySelector('.msw_modal_ok_btn'));
+    await waitFor(() => {
+      expect(result.container.querySelector('.msw_modal_errorMsg')).toHaveTextContent(
+        /匹配到多个地址，请选择/,
+      );
+    });
+    userEvent.click(result.container.querySelector('.msw_swagger_mockPathName_wrap .msw_select'));
+    userEvent.click(
+      result.container.querySelector('.msw_swagger_url_itemWrap .msw_swagger_url_item button'),
+    );
+    expect(result.container.querySelector('.msw_modal_errorMsg')).toHaveTextContent('找不到该接口');
+    userEvent.click(
+      result.container.querySelectorAll(
+        '.msw_swagger_mockPathName_wrap .msw_select_dropdown .msw_select_dropdown_item',
+      )[1],
+    );
+    userEvent.click(
+      result.container.querySelector('.msw_swagger_url_itemWrap .msw_swagger_url_item button'),
+    );
+    expect(result.container.querySelector('.msw_modal_errorMsg')).not.toHaveTextContent(
+      '找不到该接口',
+    );
+  });
+  test('测试冲突', () => {
+    handlerMock.saveCopy(
+      {
+        level: 'collection',
+        collectionName: 'module',
+      },
+      'module2',
+    );
+    handlerMock.changeCollectionStatus('module', true);
+    handlerMock.changeCollectionStatus('module2', true);
+    expect(result.container.querySelector('.msw_request_conflict')).toBeInTheDocument();
+    userEvent.click(result.container.querySelector('.msw_conflictDetail_btn'));
+    expect(result.container.querySelectorAll('tbody tr')).toHaveLength(2);
+    userEvent.click(screen.getAllByText('取消拦截')[0]);
+    expect(handlerMock.groupRequest.collection[0].data['group'].data[0].disabled).toBeTruthy();
   });
 });
 
