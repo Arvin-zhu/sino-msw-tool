@@ -86,20 +86,22 @@ export const useDragPosition = (
         bottom,
       });
     }
+    document.documentElement.style.cursor = 'auto';
+    document.documentElement.style.userSelect = 'auto';
   }, []);
 
   useLayoutEffect(() => {
     const preventHandler = (e: DragEvent) => {
-      e.preventDefault()
-      e.dataTransfer.effectAllowed = "copyMove";
-      e.dataTransfer.dropEffect = "copy";
+      e.preventDefault();
+      e.dataTransfer.effectAllowed = 'copyMove';
+      e.dataTransfer.dropEffect = 'copy';
 
-      document.documentElement.style.cursor = 'pointer'
-      document.documentElement.style.userSelect = 'none'
-    }
+      document.documentElement.style.cursor = 'pointer';
+      document.documentElement.style.userSelect = 'none';
+    };
     document.addEventListener('dragover', preventHandler);
-    return () => document.removeEventListener('dragover', preventHandler)
-  }, [])
+    return () => document.removeEventListener('dragover', preventHandler);
+  }, []);
 
   return {
     onDragStart,
