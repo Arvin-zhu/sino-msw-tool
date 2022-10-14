@@ -1,6 +1,6 @@
 {
   "name": "@sino/msw-tool",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "tool for mock",
   "module": "dist/index.esm.js",
   "types": "dist/src/index.d.ts",

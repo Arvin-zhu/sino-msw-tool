@@ -1,8 +1,13 @@
 /// <reference path="../typings/yuxStorage.d.ts" />
-import { MswUiType } from './MswUi';
+import { mswPlacement, MswUiType } from './MswUi';
 export const MswUi: MswUiType =
   process.env.NODE_ENV !== 'development'
-    ? function () {
-        return null;
+    ? function (props: {
+        placement?: mswPlacement;
+        projectName: string;
+        includesLocal?: boolean; //是否拦截本地请求
+        children: any;
+      }) {
+        return props.children;
       }
     : require('./MswUi').MswUi;
