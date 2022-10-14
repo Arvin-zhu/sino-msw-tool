@@ -3,33 +3,30 @@ import { observer } from 'mobx-react';
 import React, { DetailedHTMLProps, useCallback, useState } from 'react';
 import './index.less';
 
+import { mswPlacement } from '../../../MswUi';
 import { useStores } from '../handles';
-import { mswPlacement } from '../MswUi';
 
 import { Confirm } from './confirm/confirm';
 import { Input } from './input/input';
 import { PanelLeft } from './panelLeft/panelLeft';
 import { PanelRight } from './panelRight/panelRight';
 //@ts-ignore
-import addBtn from '../images/add.png';
-import { useDragPosition } from './hooks/drag';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { HotKeys } from '../hotKeys';
+//@ts-ignore
+import addBtn from '../images/add.png';
+import { useDragPosition } from './hooks/drag';
 
 export const MockPanel = observer((props: { placement?: mswPlacement }) => {
   const { placement } = props;
   const [showDetail, setShowDetail] = useState(false);
   useHotkeys(HotKeys.QUIT, () => {
-    setShowDetail(false)
+    setShowDetail(false);
   });
 
   return (
     <>
-      <MockLogo
-        showDetail={showDetail}
-        placement={placement}
-        setShowDetail={setShowDetail}
-      />
+      <MockLogo showDetail={showDetail} placement={placement} setShowDetail={setShowDetail} />
       <div
         className={clsx('msw_container', {
           'msw_container-left': placement === 'leftBottom',
@@ -45,19 +42,16 @@ export const MockPanel = observer((props: { placement?: mswPlacement }) => {
   );
 });
 
-interface MockLogoProps extends DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+interface MockLogoProps
+  extends DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   showDetail: boolean;
   placement: mswPlacement;
   setShowDetail: React.Dispatch<React.SetStateAction<boolean>>;
 }
-export function MockLogo({
-  placement,
-  setShowDetail,
-  showDetail,
-}: MockLogoProps) {
+export function MockLogo({ placement, setShowDetail, showDetail }: MockLogoProps) {
   const { store } = useStores();
   const { projectName } = store;
-  const props = useDragPosition(projectName)
+  const props = useDragPosition(projectName);
   return (
     <div
       className={clsx('msw_container_circle', {

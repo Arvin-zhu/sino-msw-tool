@@ -3,8 +3,8 @@ import { SetupWorkerApi } from 'msw';
 
 import React, { useLayoutEffect, useMemo, useState } from 'react';
 
-import { MockPanel } from './component/mockPanel';
-import { HandlerMock } from './handles';
+import { MockPanel } from './components/msw-ui/component/mockPanel';
+import { HandlerMock } from './components/msw-ui/handles';
 
 import { configure } from 'mobx';
 
@@ -13,11 +13,14 @@ declare global {
     _msw_worker: SetupWorkerApi;
     _msw_tool: HandlerMock;
   }
+  var MSW_PATH: any;
 }
 
 configure({ isolateGlobalState: true });
 
 export type mswPlacement = 'rightBottom' | 'leftBottom';
+
+export type MswUiType = typeof MswUi;
 
 export const MswUi: React.FC<{
   placement?: mswPlacement;
@@ -33,10 +36,10 @@ export const MswUi: React.FC<{
     });
   }, [projectName]);
   const store = useMemo(() => {
-    const instance = HandlerMock.of(projectName)
+    const instance = HandlerMock.of(projectName);
     window._msw_tool = instance;
-    return instance
-  }, [projectName])
+    return instance;
+  }, [projectName]);
   return (
     <>
       {process.env.NODE_ENV === 'development' && (
@@ -50,9 +53,11 @@ export const MswUi: React.FC<{
 };
 export const initMsw = (projectName: string, includesLocal?: boolean) => {
   if (process.env.NODE_ENV === 'development') {
-    return HandlerMock.of(projectName).init(projectName, includesLocal).catch((e) => {
-      throw new Error('mswError:' + e);
-    });
+    return HandlerMock.of(projectName)
+      .init(projectName, includesLocal)
+      .catch((e) => {
+        throw new Error('mswError:' + e);
+      });
   }
   return Promise.resolve();
 };
