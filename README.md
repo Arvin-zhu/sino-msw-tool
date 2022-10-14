@@ -3,13 +3,13 @@ msw-tool 是基于msw(Mock Service Worker)而开发的插件，旨在提高开�
 
 # 使用
 - 安装msw-tool
-	- yarn add @sino/msw-tool --dev
+	- yarn add sino-msw-tool --dev
 - 执行msw初始化([文档](https://mswjs.io/docs/getting-started/integrate/browser)),PUBLIC_DIR 为public文件夹路径，目的是将worker的js代码放到public文件夹下面
   - npx msw init <PUBLIC_DIR> --save （umi项目需要新建public目录）
   - 在开发模式下引入
     ```
     //在create-react-app中
-    import { MswUi } from "@sino/msw-tool";
+    import { MswUi } from "sino-msw-tool";
     ......
     ......
     //projectName为项目名称，作为存储唯一key
@@ -25,7 +25,7 @@ msw-tool 是基于msw(Mock Service Worker)而开发的插件，旨在提高开�
     ```
     //在umi中
     //app.tsx
-    import { MswUi } from '@sino/msw-tool';
+    import { MswUi } from 'sino-msw-tool';
 
     export function rootContainer(container) {
       return <MswUi projectName="creation_front">{container}</MswUi>;
